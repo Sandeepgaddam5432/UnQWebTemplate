@@ -1,0 +1,1472 @@
+     1→     1→You are given a task to integrate an existing React component in the codebase
+     2→     2→
+     3→     3→The codebase should support:
+     4→     4→- shadcn project structure  
+     5→     5→- Tailwind CSS
+     6→     6→- Typescript
+     7→     7→
+     8→     8→If it doesn't, provide instructions on how to setup project via shadcn CLI, install Tailwind or Typescript.
+     9→     9→
+    10→    10→Determine the default path for components and styles. 
+    11→    11→If default path for components is not /components/ui, provide instructions on why it's important to create this folder
+    12→    12→Copy-paste this component to /components/ui folder:
+    13→    13→```tsx
+    14→    14→ai-gen.tsx
+    15→    15→"use client"
+    16→    16→
+    17→    17→import type React from "react"
+    18→    18→import { useState, useEffect } from "react"
+    19→    19→import Image from "next/image"
+    20→    20→import {
+    21→    21→  MessageCircle,
+    22→    22→  Sparkles,
+    23→    23→  Wand2,
+    24→    24→  Loader2,
+    25→    25→  Play,
+    26→    26→  Pause,
+    27→    27→  RotateCw,
+    28→    28→  History,
+    29→    29→  AlertCircle,
+    30→    30→  Palette,
+    31→    31→  ImageIcon,
+    32→    32→  Sun,
+    33→    33→  User,
+    34→    34→  Monitor,
+    35→    35→  Cpu,
+    36→    36→  RatioIcon as AspectRatio,
+    37→    37→  Film,
+    38→    38→  CuboidIcon as Cube,
+    39→    39→  ArrowLeft,
+    40→    40→  Clock,
+    41→    41→  Search,
+    42→    42→} from "lucide-react"
+    43→    43→
+    44→    44→import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+    45→    45→import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+    46→    46→import { Textarea } from "@/components/ui/textarea"
+    47→    47→import { Slider } from "@/components/ui/slider"
+    48→    48→import { Switch } from "@/components/ui/switch"
+    49→    49→import { Label } from "@/components/ui/label"
+    50→    50→import { Button } from "@/components/ui/button"
+    51→    51→import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+    52→    52→import { Card, CardContent } from "@/components/ui/card"
+    53→    53→import { Input } from "@/components/ui/input"
+    54→    54→
+    55→    55→type GenerationMode = "image" | "video" | "avatar"
+    56→    56→
+    57→    57→interface GenerationSettings {
+    58→    58→  style: string
+    59→    59→  backgroundColor: string
+    60→    60→  lighting: string
+    61→    61→  pose: string
+    62→    62→  aspectRatio: string
+    63→    63→  aiModel: string
+    64→    64→  resolution: string
+    65→    65→  prompt: string
+    66→    66→  negativePrompt: string
+    67→    67→  seed?: number
+    68→    68→  steps?: number
+    69→    69→}
+    70→    70→
+    71→    71→interface HistoryItem {
+    72→    72→  id: string
+    73→    73→  type: GenerationMode
+    74→    74→  url: string
+    75→    75→  prompt: string
+    76→    76→  timestamp: Date
+    77→    77→}
+    78→    78→
+    79→    79→export { AIMultiModalGeneration }
+    80→    80→
+    81→    81→function AIMultiModalGeneration() {
+    82→    82→  const [mode, setMode] = useState<GenerationMode>("image")
+    83→    83→  const [showForm, setShowForm] = useState(true)
+    84→    84→  const [showHistory, setShowHistory] = useState(false)
+    85→    85→  const [error, setError] = useState<string | null>(null)
+    86→    86→  const [isLoading, setIsLoading] = useState(false)
+    87→    87→  const [advancedMode, setAdvancedMode] = useState(false)
+    88→    88→  const [promptSuggestions, setPromptSuggestions] = useState<string[]>([])
+    89→    89→  const [searchQuery, setSearchQuery] = useState("")
+    90→    90→  const [isPlaying, setIsPlaying] = useState(false)
+    91→    91→  const [isRotating, setIsRotating] = useState(false)
+    92→    92→  const [currentTextIndex, setCurrentTextIndex] = useState(0)
+    93→    93→  const [progress, setProgress] = useState(0)
+    94→    94→
+    95→    95→  const [generatedItems, setGeneratedItems] = useState<HistoryItem[]>([
+    96→    96→    {
+    97→    97→      id: "1",
+    98→    98→      type: "image",
+    99→    99→      url: "https://ferf1mheo22r9ira.public.blob.vercel-storage.com/profile-mjss82WnWBRO86MHHGxvJ2TVZuyrDv.jpeg",
+   100→   100→      prompt: "Portrait of a woman with orange background",
+   101→   101→      timestamp: new Date(Date.now() - 1000 * 60 * 5),
+   102→   102→    },
+   103→   103→    {
+   104→   104→      id: "2",
+   105→   105→      type: "image",
+   106→   106→      url: "https://ferf1mheo22r9ira.public.blob.vercel-storage.com/profile-mjss82WnWBRO86MHHGxvJ2TVZuyrDv.jpeg",
+   107→   107→      prompt: "Professional headshot with blue background",
+   108→   108→      timestamp: new Date(Date.now() - 1000 * 60 * 30),
+   109→   109→    },
+   110→   110→  ])
+   111→   111→
+   112→   112→  const [settings, setSettings] = useState<GenerationSettings>({
+   113→   113→    style: "artistic",
+   114→   114→    backgroundColor: "studio",
+   115→   115→    lighting: "studio",
+   116→   116→    pose: "profile",
+   117→   117→    aspectRatio: "4:5",
+   118→   118→    aiModel: "stable-diffusion-xl",
+   119→   119→    resolution: "1024x1024",
+   120→   120→    prompt: "",
+   121→   121→    negativePrompt: "blurry, low quality, distorted features",
+   122→   122→  })
+   123→   123→
+   124→   124→  // Different placeholder prompts based on the mode
+   125→   125→  const placeholderPrompts = {
+   126→   126→    image: "Professional portrait with blue background, studio lighting",
+   127→   127→    video: "Short video of a person walking in a park, cinematic lighting",
+   128→   128→    avatar: "3D avatar of a young professional with glasses, detailed face",
+   129→   129→  }
+   130→   130→
+   131→   131→  // Different loading texts based on the mode
+   132→   132→  const loadingTexts = {
+   133→   133→    image: ["Creating your masterpiece...", "Finding the perfect colors...", "Adding the final touches..."],
+   134→   134→    video: ["Generating video frames...", "Applying motion effects...", "Rendering your video..."],
+   135→   135→    avatar: ["Building 3D mesh...", "Applying textures...", "Finalizing your avatar..."],
+   136→   136→  }
+   137→   137→
+   138→   138→  // Different AI models based on the mode
+   139→   139→  const aiModels = {
+   140→   140→    image: [
+   141→   141→      { value: "stable-diffusion-xl", label: "Stable Diffusion XL" },
+   142→   142→      { value: "midjourney-v5", label: "Midjourney v5" },
+   143→   143→      { value: "dalle-3", label: "DALL-E 3" },
+   144→   144→      { value: "imagen", label: "Imagen" },
+   145→   145→    ],
+   146→   146→    video: [
+   147→   147→      { value: "gen-2", label: "Gen-2" },
+   148→   148→      { value: "runway-gen-2", label: "Runway Gen-2" },
+   149→   149→      { value: "pika-labs", label: "Pika Labs" },
+   150→   150→      { value: "sora", label: "Sora" },
+   151→   151→    ],
+   152→   152→    avatar: [
+   153→   153→      { value: "dreamshaper-3d", label: "DreamShaper 3D" },
+   154→   154→      { value: "3d-diffusion", label: "3D Diffusion" },
+   155→   155→      { value: "meshy", label: "Meshy" },
+   156→   156→      { value: "luma", label: "Luma AI" },
+   157→   157→    ],
+   158→   158→  }
+   159→   159→
+   160→   160→  // Different resolutions based on the mode
+   161→   161→  const resolutions = {
+   162→   162→    image: [
+   163→   163→      { value: "512x512", label: "512×512" },
+   164→   164→      { value: "768x768", label: "768×768" },
+   165→   165→      { value: "1024x1024", label: "1024×1024" },
+   166→   166→      { value: "1536x1536", label: "1536×1536" },
+   167→   167→    ],
+   168→   168→    video: [
+   169→   169→      { value: "512x512", label: "512×512" },
+   170→   170→      { value: "768x768", label: "768×768" },
+   171→   171→      { value: "1024x576", label: "1024×576 (16:9)" },
+   172→   172→      { value: "1280x720", label: "1280×720 (HD)" },
+   173→   173→    ],
+   174→   174→    avatar: [
+   175→   175→      { value: "512x512", label: "512×512" },
+   176→   176→      { value: "768x768", label: "768×768" },
+   177→   177→      { value: "1024x1024", label: "1024×1024" },
+   178→   178→      { value: "2048x2048", label: "2048×2048" },
+   179→   179→    ],
+   180→   180→  }
+   181→   181→
+   182→   182→  // Suggestions based on the mode
+   183→   183→  useEffect(() => {
+   184→   184→    if (mode === "image") {
+   185→   185→      setPromptSuggestions([
+   186→   186→        "Professional headshot with neutral background",
+   187→   187→        "Artistic portrait with dramatic lighting",
+   188→   188→        "Casual portrait in natural outdoor setting",
+   189→   189→      ])
+   190→   190→    } else if (mode === "video") {
+   191→   191→      setPromptSuggestions([
+   192→   192→        "Person walking in urban environment, cinematic lighting",
+   193→   193→        "Close-up of face with changing expressions",
+   194→   194→        "Rotating view of subject in studio setting",
+   195→   195→      ])
+   196→   196→    } else {
+   197→   197→      setPromptSuggestions([
+   198→   198→        "Realistic 3D avatar with professional attire",
+   199→   199→        "Stylized cartoon character with expressive features",
+   200→   200→        "Detailed 3D bust with photorealistic textures",
+   201→   201→      ])
+   202→   202→    }
+   203→   203→  }, [mode])
+   204→   204→
+   205→   205→  // Loading progress effect
+   206→   206→  useEffect(() => {
+   207→   207→    if (!isLoading) {
+   208→   208→      setProgress(0)
+   209→   209→      return
+   210→   210→    }
+   211→   211→
+   212→   212→    const interval = setInterval(() => {
+   213→   213→      setProgress((prev) => {
+   214→   214→        if (prev >= 100) {
+   215→   215→          clearInterval(interval)
+   216→   216→          return 100
+   217→   217→        }
+   218→   218→        return prev + (mode === "image" ? 1.5 : mode === "video" ? 0.8 : 0.5)
+   219→   219→      })
+   220→   220→    }, 30)
+   221→   221→
+   222→   222→    return () => clearInterval(interval)
+   223→   223→  }, [isLoading, mode])
+   224→   224→
+   225→   225→  // Loading text rotation effect
+   226→   226→  useEffect(() => {
+   227→   227→    if (!isLoading) return
+   228→   228→
+   229→   229→    const interval = setInterval(() => {
+   230→   230→      setCurrentTextIndex((prev) => (prev + 1) % loadingTexts[mode].length)
+   231→   231→    }, 1500)
+   232→   232→
+   233→   233→    return () => clearInterval(interval)
+   234→   234→  }, [isLoading, mode])
+   235→   235→
+   236→   236→  const handleSubmit = async (e: React.FormEvent) => {
+   237→   237→    e.preventDefault()
+   238→   238→    setShowForm(false)
+   239→   239→    setIsLoading(true)
+   240→   240→    setError(null)
+   241→   241→
+   242→   242→    try {
+   243→   243→      // Simulate API call with different loading times based on mode
+   244→   244→      const loadingTime = mode === "image" ? 3000 : mode === "video" ? 5000 : 7000
+   245→   245→      await new Promise((resolve) => setTimeout(resolve, loadingTime))
+   246→   246→
+   247→   247→      // Add the new generated item to the list
+   248→   248→      const newItem = {
+   249→   249→        id: Date.now().toString(),
+   250→   250→        type: mode,
+   251→   251→        url:
+   252→   252→          mode === "image"
+   253→   253→            ? "https://cdn.pixabay.com/photo/2023/08/03/09/57/ai-generated-8166705_1280.png"
+   254→   254→            : mode === "video"
+   255→   255→              ? "https://cdn.pixabay.com/photo/2023/08/03/09/57/ai-generated-8166705_1280.png"
+   256→   256→              : "https://cdn.pixabay.com/photo/2023/08/03/09/57/ai-generated-8166705_1280.png",
+   257→   257→        prompt: settings.prompt || "AI generated content",
+   258→   258→        timestamp: new Date(),
+   259→   259→      }
+   260→   260→
+   261→   261→      setGeneratedItems((prev) => [newItem, ...prev])
+   262→   262→      setShowForm(false)
+   263→   263→    } catch (err) {
+   264→   264→      setError(`Failed to generate ${mode}. Please try again.`)
+   265→   265→    } finally {
+   266→   266→      setIsLoading(false)
+   267→   267→    }
+   268→   268→  }
+   269→   269→
+   270→   270→  const handleBackToSettings = () => {
+   271→   271→    setShowForm(true)
+   272→   272→    setShowHistory(false)
+   273→   273→    setError(null)
+   274→   274→  }
+   275→   275→
+   276→   276→  const handleModeChange = (newMode: GenerationMode) => {
+   277→   277→    setMode(newMode)
+   278→   278→    setShowForm(true)
+   279→   279→    setShowHistory(false)
+   280→   280→    setError(null)
+   281→   281→  }
+   282→   282→
+   283→   283→  const handleViewHistory = () => {
+   284→   284→    setShowForm(false)
+   285→   285→    setShowHistory(true)
+   286→   286→  }
+   287→   287→
+   288→   288→  const handleSelectHistoryItem = (id: string) => {
+   289→   289→    const item = generatedItems.find((item) => item.id === id)
+   290→   290→    if (item) {
+   291→   291→      setMode(item.type)
+   292→   292→      setShowHistory(false)
+   293→   293→      setShowForm(false)
+   294→   294→    }
+   295→   295→  }
+   296→   296→
+   297→   297→  const handlePromptChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+   298→   298→    setSettings({
+   299→   299→      ...settings,
+   300→   300→      prompt: e.target.value,
+   301→   301→    })
+   302→   302→  }
+   303→   303→
+   304→   304→  const handleNegativePromptChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+   305→   305→    setSettings({
+   306→   306→      ...settings,
+   307→   307→      negativePrompt: e.target.value,
+   308→   308→    })
+   309→   309→  }
+   310→   310→
+   311→   311→  const handleSeedChange = (value: number[]) => {
+   312→   312→    setSettings({
+   313→   313→      ...settings,
+   314→   314→      seed: value[0],
+   315→   315→    })
+   316→   316→  }
+   317→   317→
+   318→   318→  const handleStepsChange = (value: number[]) => {
+   319→   319→    setSettings({
+   320→   320→      ...settings,
+   321→   321→      steps: value[0],
+   322→   322→    })
+   323→   323→  }
+   324→   324→
+   325→   325→  const applyPromptSuggestion = (suggestion: string) => {
+   326→   326→    setSettings({
+   327→   327→      ...settings,
+   328→   328→      prompt: suggestion,
+   329→   329→    })
+   330→   330→  }
+   331→   331→
+   332→   332→  const togglePlay = () => {
+   333→   333→    setIsPlaying(!isPlaying)
+   334→   334→  }
+   335→   335→
+   336→   336→  const toggleRotate = () => {
+   337→   337→    setIsRotating(!isRotating)
+   338→   338→  }
+   339→   339→
+   340→   340→  const formatDate = (date: Date) => {
+   341→   341→    const now = new Date()
+   342→   342→    const diffMs = now.getTime() - date.getTime()
+   343→   343→    const diffMins = Math.round(diffMs / 60000)
+   344→   344→
+   345→   345→    if (diffMins < 1) return "Just now"
+   346→   346→    if (diffMins < 60) return `${diffMins}m ago`
+   347→   347→
+   348→   348→    const diffHours = Math.floor(diffMins / 60)
+   349→   349→    if (diffHours < 24) return `${diffHours}h ago`
+   350→   350→
+   351→   351→    return date.toLocaleDateString()
+   352→   352→  }
+   353→   353→
+   354→   354→  const filteredItems = generatedItems.filter((item) => item.prompt.toLowerCase().includes(searchQuery.toLowerCase()))
+   355→   355→
+   356→   356→  // Render Header Component
+   357→   357→  const renderHeader = () => (
+   358→   358→    <div className="p-4 flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800">
+   359→   359→      <div className="flex items-center gap-3">
+   360→   360→        <div>
+   361→   361→          <h3 className="text-sm font-medium text-zinc-900 dark:text-zinc-100">AI Multi-Modal Generation</h3>
+   362→   362→          <p className="text-xs text-zinc-500 dark:text-zinc-400">Create stunning AI-generated content</p>
+   363→   363→        </div>
+   364→   364→      </div>
+   365→   365→      <button
+   366→   366→        onClick={handleViewHistory}
+   367→   367→        className="p-2 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+   368→   368→      >
+   369→   369→        <History className="w-4 h-4 text-zinc-500" />
+   370→   370→      </button>
+   371→   371→    </div>
+   372→   372→  )
+   373→   373→
+   374→   374→  // Render Error Component
+   375→   375→  const renderError = () =>
+   376→   376→    error && (
+   377→   377→      <div className="m-4 px-4 py-3 flex items-center gap-2 text-sm text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/10 rounded-xl">
+   378→   378→        <AlertCircle className="w-4 h-4 flex-shrink-0" />
+   379→   379→        <p>{error}</p>
+   380→   380→      </div>
+   381→   381→    )
+   382→   382→
+   383→   383→  // Render Form Component
+   384→   384→  const renderForm = () => (
+   385→   385→    <form onSubmit={handleSubmit} className="flex flex-col gap-3 flex-1 p-4 justify-between">
+   386→   386→      <div className="space-y-3">
+   387→   387→        <div className="space-y-2">
+   388→   388→          <div className="flex items-center justify-between">
+   389→   389→            <div className="flex items-center gap-2">
+   390→   390→              <MessageCircle className="w-4 h-4 text-zinc-500" />
+   391→   391→              <span className="text-sm text-zinc-500">Prompt</span>
+   392→   392→            </div>
+   393→   393→            <Popover>
+   394→   394→              <PopoverTrigger asChild>
+   395→   395→                <Button variant="ghost" size="sm" className="h-7 px-2">
+   396→   396→                  <Wand2 className="w-3.5 h-3.5 text-zinc-500" />
+   397→   397→                </Button>
+   398→   398→              </PopoverTrigger>
+   399→   399→              <PopoverContent className="w-72 p-2">
+   400→   400→                <div className="space-y-1">
+   401→   401→                  <h4 className="text-xs font-medium text-zinc-500">Suggestions</h4>
+   402→   402→                  <div className="space-y-1">
+   403→   403→                    {promptSuggestions.map((suggestion, index) => (
+   404→   404→                      <button
+   405→   405→                        key={index}
+   406→   406→                        type="button"
+   407→   407→                        onClick={() => applyPromptSuggestion(suggestion)}
+   408→   408→                        className="w-full text-left p-2 text-xs hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-md transition-colors"
+   409→   409→                      >
+   410→   410→                        {suggestion}
+   411→   411→                      </button>
+   412→   412→                    ))}
+   413→   413→                  </div>
+   414→   414→                </div>
+   415→   415→              </PopoverContent>
+   416→   416→            </Popover>
+   417→   417→          </div>
+   418→   418→          <Textarea
+   419→   419→            value={settings.prompt}
+   420→   420→            onChange={handlePromptChange}
+   421→   421→            placeholder={placeholderPrompts[mode]}
+   422→   422→            className="w-full min-h-[80px] bg-zinc-100 dark:bg-zinc-800 text-sm text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-500 rounded-xl focus:outline-none focus-visible:ring-offset-0 focus-visible:ring-0 focus-visible:border-zinc-900 dark:focus-visible:border-zinc-100"
+   423→   423→          />
+   424→   424→        </div>
+   425→   425→
+   426→   426→        <div className="flex items-center space-x-2">
+   427→   427→          <Switch id="advanced-mode" checked={advancedMode} onCheckedChange={setAdvancedMode} />
+   428→   428→          <Label htmlFor="advanced-mode" className="text-xs text-zinc-500">
+   429→   429→            Advanced Mode
+   430→   430→          </Label>
+   431→   431→        </div>
+   432→   432→
+   433→   433→        {advancedMode && (
+   434→   434→          <div className="space-y-3 p-3 bg-zinc-50 dark:bg-zinc-800/30 rounded-xl">
+   435→   435→            <div className="space-y-2">
+   436→   436→              <label className="text-xs text-zinc-500">Negative Prompt</label>
+   437→   437→              <Textarea
+   438→   438→                value={settings.negativePrompt}
+   439→   439→                onChange={handleNegativePromptChange}
+   440→   440→                placeholder="Elements to avoid in generation"
+   441→   441→                className="w-full min-h-[60px] bg-white dark:bg-zinc-800 text-xs text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-500 rounded-xl"
+   442→   442→              />
+   443→   443→            </div>
+   444→   444→
+   445→   445→            <div className="space-y-1">
+   446→   446→              <div className="flex items-center justify-between">
+   447→   447→                <label className="text-xs text-zinc-500">Seed</label>
+   448→   448→                <span className="text-xs text-zinc-700 dark:text-zinc-300">{settings.seed || 0}</span>
+   449→   449→              </div>
+   450→   450→              <Slider defaultValue={[settings.seed || 0]} max={1000000} step={1} onValueChange={handleSeedChange} />
+   451→   451→            </div>
+   452→   452→
+   453→   453→            <div className="space-y-1">
+   454→   454→              <div className="flex items-center justify-between">
+   455→   455→                <label className="text-xs text-zinc-500">Steps</label>
+   456→   456→                <span className="text-xs text-zinc-700 dark:text-zinc-300">{settings.steps || 30}</span>
+   457→   457→              </div>
+   458→   458→              <Slider
+   459→   459→                defaultValue={[settings.steps || 30]}
+   460→   460→                min={10}
+   461→   461→                max={150}
+   462→   462→                step={1}
+   463→   463→                onValueChange={handleStepsChange}
+   464→   464→              />
+   465→   465→            </div>
+   466→   466→          </div>
+   467→   467→        )}
+   468→   468→      </div>
+   469→   469→
+   470→   470→      <div className="space-y-3">
+   471→   471→        {renderSettings()}
+   472→   472→
+   473→   473→        <button
+   474→   474→          type="submit"
+   475→   475→          className="w-full h-10 flex items-center justify-center gap-2 bg-gradient-to-r from-fuchsia-500 to-violet-500 hover:from-fuchsia-600 hover:to-violet-600 text-white text-sm font-medium rounded-xl transition-colors self-end"
+   476→   476→        >
+   477→   477→          <Sparkles className="w-4 h-4" />
+   478→   478→          Generate {mode === "image" ? "Portrait" : mode === "video" ? "Video" : "Avatar"}
+   479→   479→        </button>
+   480→   480→      </div>
+   481→   481→    </form>
+   482→   482→  )
+   483→   483→
+   484→   484→  // Render Settings Component
+   485→   485→  const renderSettings = () => (
+   486→   486→    <div className="space-y-3 p-4 rounded-xl bg-zinc-50 dark:bg-zinc-800/50">
+   487→   487→      {/* AI Model Select */}
+   488→   488→      <div className="flex items-center justify-between gap-4">
+   489→   489→        <div className="flex items-center gap-2">
+   490→   490→          <Cpu className="w-4 h-4 text-zinc-500" />
+   491→   491→          <span className="text-sm text-zinc-500">AI Model</span>
+   492→   492→        </div>
+   493→   493→        <Select value={settings.aiModel} onValueChange={(value) => setSettings({ ...settings, aiModel: value })}>
+   494→   494→          <SelectTrigger className="w-[160px] h-8 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700">
+   495→   495→            <SelectValue />
+   496→   496→          </SelectTrigger>
+   497→   497→          <SelectContent>
+   498→   498→            {aiModels[mode].map((model) => (
+   499→   499→              <SelectItem key={model.value} value={model.value}>
+   500→   500→                {model.label}
+   501→   501→              </SelectItem>
+   502→   502→            ))}
+   503→   503→          </SelectContent>
+   504→   504→        </Select>
+   505→   505→      </div>
+   506→   506→
+   507→   507→      {/* Resolution Select */}
+   508→   508→      <div className="flex items-center justify-between gap-4">
+   509→   509→        <div className="flex items-center gap-2">
+   510→   510→          <Monitor className="w-4 h-4 text-zinc-500" />
+   511→   511→          <span className="text-sm text-zinc-500">Resolution</span>
+   512→   512→        </div>
+   513→   513→        <Select value={settings.resolution} onValueChange={(value) => setSettings({ ...settings, resolution: value })}>
+   514→   514→          <SelectTrigger className="w-[160px] h-8 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700">
+   515→   515→            <SelectValue />
+   516→   516→          </SelectTrigger>
+   517→   517→          <SelectContent>
+   518→   518→            {resolutions[mode].map((res) => (
+   519→   519→              <SelectItem key={res.value} value={res.value}>
+   520→   520→                {res.label}
+   521→   521→              </SelectItem>
+   522→   522→            ))}
+   523→   523→          </SelectContent>
+   524→   524→        </Select>
+   525→   525→      </div>
+   526→   526→
+   527→   527→      {/* Style Select */}
+   528→   528→      <div className="flex items-center justify-between gap-4">
+   529→   529→        <div className="flex items-center gap-2">
+   530→   530→          <Palette className="w-4 h-4 text-zinc-500" />
+   531→   531→          <span className="text-sm text-zinc-500">Style</span>
+   532→   532→        </div>
+   533→   533→        <Select value={settings.style} onValueChange={(value) => setSettings({ ...settings, style: value })}>
+   534→   534→          <SelectTrigger className="w-[160px] h-8 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700">
+   535→   535→            <SelectValue />
+   536→   536→          </SelectTrigger>
+   537→   537→          <SelectContent>
+   538→   538→            <SelectItem value="professional">Professional</SelectItem>
+   539→   539→            <SelectItem value="artistic">Artistic</SelectItem>
+   540→   540→            <SelectItem value="casual">Casual</SelectItem>
+   541→   541→            <SelectItem value="vintage">Vintage</SelectItem>
+   542→   542→            {mode === "avatar" && <SelectItem value="cartoon">Cartoon</SelectItem>}
+   543→   543→            {mode === "avatar" && <SelectItem value="anime">Anime</SelectItem>}
+   544→   544→            {mode === "video" && <SelectItem value="cinematic">Cinematic</SelectItem>}
+   545→   545→          </SelectContent>
+   546→   546→        </Select>
+   547→   547→      </div>
+   548→   548→
+   549→   549→      {/* Background Select */}
+   550→   550→      <div className="flex items-center justify-between gap-4">
+   551→   551→        <div className="flex items-center gap-2">
+   552→   552→          <ImageIcon className="w-4 h-4 text-zinc-500" />
+   553→   553→          <span className="text-sm text-zinc-500">Background</span>
+   554→   554→        </div>
+   555→   555→        <Select
+   556→   556→          value={settings.backgroundColor}
+   557→   557→          onValueChange={(value) =>
+   558→   558→            setSettings({
+   559→   559→              ...settings,
+   560→   560→              backgroundColor: value,
+   561→   561→            })
+   562→   562→          }
+   563→   563→        >
+   564→   564→          <SelectTrigger className="w-[160px] h-8 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700">
+   565→   565→            <SelectValue />
+   566→   566→          </SelectTrigger>
+   567→   567→          <SelectContent>
+   568→   568→            <SelectItem value="studio">Studio</SelectItem>
+   569→   569→            <SelectItem value="gradient">Gradient</SelectItem>
+   570→   570→            <SelectItem value="solid">Solid Color</SelectItem>
+   571→   571→            <SelectItem value="transparent">Transparent</SelectItem>
+   572→   572→            {mode !== "avatar" && <SelectItem value="outdoor">Outdoor</SelectItem>}
+   573→   573→            {mode !== "avatar" && <SelectItem value="office">Office</SelectItem>}
+   574→   574→          </SelectContent>
+   575→   575→        </Select>
+   576→   576→      </div>
+   577→   577→
+   578→   578→      {/* Lighting Select */}
+   579→   579→      <div className="flex items-center justify-between gap-4">
+   580→   580→        <div className="flex items-center gap-2">
+   581→   581→          <Sun className="w-4 h-4 text-zinc-500" />
+   582→   582→          <span className="text-sm text-zinc-500">Lighting</span>
+   583→   583→        </div>
+   584→   584→        <Select value={settings.lighting} onValueChange={(value) => setSettings({ ...settings, lighting: value })}>
+   585→   585→          <SelectTrigger className="w-[160px] h-8 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700">
+   586→   586→            <SelectValue />
+   587→   587→          </SelectTrigger>
+   588→   588→          <SelectContent>
+   589→   589→            <SelectItem value="soft">Soft</SelectItem>
+   590→   590→            <SelectItem value="dramatic">Dramatic</SelectItem>
+   591→   591→            <SelectItem value="natural">Natural</SelectItem>
+   592→   592→            <SelectItem value="studio">Studio</SelectItem>
+   593→   593→            {mode === "video" && <SelectItem value="cinematic">Cinematic</SelectItem>}
+   594→   594→            {mode === "video" && <SelectItem value="golden-hour">Golden Hour</SelectItem>}
+   595→   595→          </SelectContent>
+   596→   596→        </Select>
+   597→   597→      </div>
+   598→   598→
+   599→   599→      {/* Aspect Ratio Select */}
+   600→   600→      <div className="flex items-center justify-between gap-4">
+   601→   601→        <div className="flex items-center gap-2">
+   602→   602→          <AspectRatio className="w-4 h-4 text-zinc-500" />
+   603→   603→          <span className="text-sm text-zinc-500">Aspect Ratio</span>
+   604→   604→        </div>
+   605→   605→        <Select
+   606→   606→          value={settings.aspectRatio}
+   607→   607→          onValueChange={(value) => setSettings({ ...settings, aspectRatio: value })}
+   608→   608→        >
+   609→   609→          <SelectTrigger className="w-[160px] h-8 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700">
+   610→   610→            <SelectValue />
+   611→   611→          </SelectTrigger>
+   612→   612→          <SelectContent>
+   613→   613→            <SelectItem value="1:1">1:1 Square</SelectItem>
+   614→   614→            <SelectItem value="4:5">4:5 Portrait</SelectItem>
+   615→   615→            <SelectItem value="3:4">3:4 Portrait</SelectItem>
+   616→   616→            <SelectItem value="16:9">16:9 Landscape</SelectItem>
+   617→   617→            {mode === "video" && <SelectItem value="9:16">9:16 Vertical</SelectItem>}
+   618→   618→          </SelectContent>
+   619→   619→        </Select>
+   620→   620→      </div>
+   621→   621→
+   622→   622→      {/* Pose Select - Only for image and avatar */}
+   623→   623→      {mode !== "video" && (
+   624→   624→        <div className="flex items-center justify-between gap-4">
+   625→   625→          <div className="flex items-center gap-2">
+   626→   626→            <User className="w-4 h-4 text-zinc-500" />
+   627→   627→            <span className="text-sm text-zinc-500">Pose</span>
+   628→   628→          </div>
+   629→   629→          <Select value={settings.pose} onValueChange={(value) => setSettings({ ...settings, pose: value })}>
+   630→   630→            <SelectTrigger className="w-[160px] h-8 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700">
+   631→   631→              <SelectValue />
+   632→   632→            </SelectTrigger>
+   633→   633→            <SelectContent>
+   634→   634→              <SelectItem value="headshot">Headshot</SelectItem>
+   635→   635→              <SelectItem value="half-body">Half Body</SelectItem>
+   636→   636→              <SelectItem value="full-body">Full Body</SelectItem>
+   637→   637→              <SelectItem value="profile">Profile</SelectItem>
+   638→   638→              {mode === "avatar" && <SelectItem value="bust">Bust</SelectItem>}
+   639→   639→            </SelectContent>
+   640→   640→          </Select>
+   641→   641→        </div>
+   642→   642→      )}
+   643→   643→    </div>
+   644→   644→  )
+   645→   645→
+   646→   646→  // Render Preview Component
+   647→   647→  const renderPreview = () => (
+   648→   648→    <div className="p-4">
+   649→   649→      <div className="rounded-xl mb-4 flex items-center justify-center">
+   650→   650→        {isLoading ? (
+   651→   651→          <Card className="w-full max-w-md border-0 shadow-none bg-transparent">
+   652→   652→            <CardContent className="flex flex-col items-center gap-4 p-6">
+   653→   653→              <div className="relative w-16 h-16">
+   654→   654→                <Loader2 className="w-full h-full animate-spin text-fuchsia-500" />
+   655→   655→                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-transparent to-fuchsia-500/10 rounded-full animate-spin-slow" />
+   656→   656→              </div>
+   657→   657→              <div className="space-y-1 text-center">
+   658→   658→                <p className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+   659→   659→                  {loadingTexts[mode][currentTextIndex]}
+   660→   660→                </p>
+   661→   661→                <p className="text-xs text-zinc-500 dark:text-zinc-400">
+   662→   662→                  {mode === "image"
+   663→   663→                    ? "This usually takes 10-15 seconds"
+   664→   664→                    : mode === "video"
+   665→   665→                      ? "This usually takes 20-30 seconds"
+   666→   666→                      : "This usually takes 30-45 seconds"}
+   667→   667→                </p>
+   668→   668→              </div>
+   669→   669→              <div className="w-full h-2 bg-zinc-200 dark:bg-zinc-700 rounded-full overflow-hidden">
+   670→   670→                <div
+   671→   671→                  className="h-full bg-gradient-to-r from-fuchsia-500 to-violet-500 transition-all duration-300 ease-linear"
+   672→   672→                  style={{ width: `${progress}%` }}
+   673→   673→                />
+   674→   674→              </div>
+   675→   675→            </CardContent>
+   676→   676→          </Card>
+   677→   677→        ) : (
+   678→   678→          <div className="flex flex-col items-center gap-2 w-full">
+   679→   679→            <div className="relative w-full rounded-xl overflow-hidden">
+   680→   680→              <Image
+   681→   681→                src={generatedItems[0]?.url || "/placeholder.svg?height=400&width=400"}
+   682→   682→                width={400}
+   683→   683→                height={400}
+   684→   684→                alt={`AI generated ${mode}`}
+   685→   685→                className={`rounded-xl object-cover w-full h-full ${isRotating ? "animate-spin-slow" : ""}`}
+   686→   686→              />
+   687→   687→
+   688→   688→              {mode !== "image" && (
+   689→   689→                <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+   690→   690→                  <button
+   691→   691→                    onClick={togglePlay}
+   692→   692→                    className="w-12 h-12 flex items-center justify-center rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 transition-colors"
+   693→   693→                  >
+   694→   694→                    {isPlaying ? (
+   695→   695→                      <Pause className="w-6 h-6 text-white" />
+   696→   696→                    ) : (
+   697→   697→                      <Play className="w-6 h-6 text-white ml-1" />
+   698→   698→                    )}
+   699→   699→                  </button>
+   700→   700→                </div>
+   701→   701→              )}
+   702→   702→
+   703→   703→              {mode === "avatar" && (
+   704→   704→                <button
+   705→   705→                  onClick={toggleRotate}
+   706→   706→                  className="absolute bottom-3 right-3 w-8 h-8 flex items-center justify-center rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 transition-colors"
+   707→   707→                >
+   708→   708→                  <RotateCw className="w-4 h-4 text-white" />
+   709→   709→                </button>
+   710→   710→              )}
+   711→   711→            </div>
+   712→   712→          </div>
+   713→   713→        )}
+   714→   714→      </div>
+   715→   715→
+   716→   716→      {!isLoading && (
+   717→   717→        <div className="space-y-4">
+   718→   718→          <div className="p-3 space-y-2 bg-zinc-50 dark:bg-zinc-800/50 rounded-xl">
+   719→   719→            <div className="flex justify-between text-sm">
+   720→   720→              <span className="text-zinc-500">Quality</span>
+   721→   721→              <span className="text-zinc-900 dark:text-zinc-100">{settings.resolution}</span>
+   722→   722→            </div>
+   723→   723→            <div className="flex justify-between text-sm">
+   724→   724→              <span className="text-zinc-500">Model</span>
+   725→   725→              <span className="text-zinc-900 dark:text-zinc-100">{settings.aiModel}</span>
+   726→   726→            </div>
+   727→   727→            {mode === "video" && (
+   728→   728→              <div className="flex justify-between text-sm">
+   729→   729→                <span className="text-zinc-500">Duration</span>
+   730→   730→                <span className="text-zinc-900 dark:text-zinc-100">00:07</span>
+   731→   731→              </div>
+   732→   732→            )}
+   733→   733→          </div>
+   734→   734→
+   735→   735→          {renderGallery()}
+   736→   736→
+   737→   737→          <div className="flex items-center justify-between gap-2">
+   738→   738→            <button
+   739→   739→              type="button"
+   740→   740→              onClick={handleBackToSettings}
+   741→   741→              className="w-full h-9 flex items-center justify-center gap-2 border border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-zinc-100 text-sm font-medium rounded-xl hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
+   742→   742→            >
+   743→   743→              Back to Settings
+   744→   744→            </button>
+   745→   745→            <button
+   746→   746→              type="button"
+   747→   747→              className="w-full h-9 flex items-center justify-center gap-2 bg-zinc-900 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-100 dark:text-zinc-900 text-white text-sm font-medium rounded-xl transition-colors"
+   748→   748→            >
+   749→   749→              Download
+   750→   750→            </button>
+   751→   751→          </div>
+   752→   752→        </div>
+   753→   753→      )}
+   754→   754→    </div>
+   755→   755→  )
+   756→   756→
+   757→   757→  // Render Gallery Component
+   758→   758→  const renderGallery = () => {
+   759→   759→    const items = generatedItems.slice(0, 3)
+   760→   760→    if (items.length === 0) return null
+   761→   761→
+   762→   762→    return (
+   763→   763→      <div className="space-y-2">
+   764→   764→        <h4 className="text-xs font-medium text-zinc-500">Recent Generations</h4>
+   765→   765→        <div className="grid grid-cols-4 gap-2">
+   766→   766→          {items.map((item) => (
+   767→   767→            <div key={item.id} className="relative group aspect-square rounded-lg overflow-hidden">
+   768→   768→              <Image
+   769→   769→                src={item.url || "/placeholder.svg?height=100&width=100"}
+   770→   770→                alt={item.prompt}
+   771→   771→                width={100}
+   772→   772→                height={100}
+   773→   773→                className="object-cover w-full h-full"
+   774→   774→              />
+   775→   775→              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-1.5">
+   776→   776→                <div className="flex items-center gap-1">
+   777→   777→                  {item.type === "image" && <ImageIcon className="w-3 h-3 text-white" />}
+   778→   778→                  {item.type === "video" && <Film className="w-3 h-3 text-white" />}
+   779→   779→                  {item.type === "avatar" && <Cube className="w-3 h-3 text-white" />}
+   780→   780→                  <span className="text-[10px] text-white truncate">
+   781→   781→                    {new Date(item.timestamp).toLocaleDateString()}
+   782→   782→                  </span>
+   783→   783→                </div>
+   784→   784→              </div>
+   785→   785→            </div>
+   786→   786→          ))}
+   787→   787→        </div>
+   788→   788→      </div>
+   789→   789→    )
+   790→   790→  }
+   791→   791→
+   792→   792→  // Render History Component
+   793→   793→  const renderHistory = () => (
+   794→   794→    <div className="flex flex-col h-full p-4 space-y-4">
+   795→   795→      <div className="flex items-center gap-2">
+   796→   796→        <button
+   797→   797→          onClick={handleBackToSettings}
+   798→   798→          className="p-1.5 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+   799→   799→        >
+   800→   800→          <ArrowLeft className="w-4 h-4 text-zinc-500" />
+   801→   801→        </button>
+   802→   802→        <h3 className="text-sm font-medium text-zinc-900 dark:text-zinc-100">Generation History</h3>
+   803→   803→      </div>
+   804→   804→
+   805→   805→      <div className="relative">
+   806→   806→        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-zinc-500" />
+   807→   807→        <Input
+   808→   808→          type="text"
+   809→   809→          placeholder="Search by prompt..."
+   810→   810→          value={searchQuery}
+   811→   811→          onChange={(e) => setSearchQuery(e.target.value)}
+   812→   812→          className="pl-9 bg-zinc-100 dark:bg-zinc-800 border-none text-sm"
+   813→   813→        />
+   814→   814→      </div>
+   815→   815→
+   816→   816→      <div className="flex-1 overflow-y-auto space-y-2">
+   817→   817→        {filteredItems.length === 0 ? (
+   818→   818→          <div className="flex flex-col items-center justify-center h-full text-center p-4">
+   819→   819→            <Clock className="w-8 h-8 text-zinc-400 mb-2" />
+   820→   820→            <p className="text-sm text-zinc-500">No generations found</p>
+   821→   821→            {searchQuery && <p className="text-xs text-zinc-400 mt-1">Try a different search term</p>}
+   822→   822→          </div>
+   823→   823→        ) : (
+   824→   824→          filteredItems.map((item) => (
+   825→   825→            <div
+   826→   826→              key={item.id}
+   827→   827→              onClick={() => handleSelectHistoryItem(item.id)}
+   828→   828→              className="flex items-center gap-3 p-2 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer transition-colors"
+   829→   829→            >
+   830→   830→              <div className="relative w-12 h-12 rounded-md overflow-hidden flex-shrink-0">
+   831→   831→                <Image
+   832→   832→                  src={item.url || "/placeholder.svg?height=48&width=48"}
+   833→   833→                  alt={item.prompt}
+   834→   834→                  width={48}
+   835→   835→                  height={48}
+   836→   836→                  className="object-cover"
+   837→   837→                />
+   838→   838→              </div>
+   839→   839→              <div className="flex-1 min-w-0">
+   840→   840→                <p className="text-xs text-zinc-900 dark:text-zinc-100 truncate">{item.prompt}</p>
+   841→   841→                <div className="flex items-center gap-1 mt-1">
+   842→   842→                  <span className="text-[10px] text-zinc-500">{formatDate(item.timestamp)}</span>
+   843→   843→                  <span className="text-[10px] text-zinc-400">•</span>
+   844→   844→                  <span className="text-[10px] text-zinc-500 capitalize">{item.type}</span>
+   845→   845→                </div>
+   846→   846→              </div>
+   847→   847→            </div>
+   848→   848→          ))
+   849→   849→        )}
+   850→   850→      </div>
+   851→   851→    </div>
+   852→   852→  )
+   853→   853→
+   854→   854→  return (
+   855→   855→    <div className="group relative overflow-hidden w-full max-w-3xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:hover:shadow-[0_8px_30px_rgb(0,0,0,0.2)] min-h-[600px] flex flex-col justify-between gap-2">
+   856→   856→      {renderHeader()}
+   857→   857→
+   858→   858→      <Tabs value={mode} onValueChange={(value) => handleModeChange(value as GenerationMode)} className="w-full px-4">
+   859→   859→        <TabsList className="grid grid-cols-3 w-full">
+   860→   860→          <TabsTrigger value="image" className="flex items-center gap-2">
+   861→   861→            <ImageIcon className="w-4 h-4" />
+   862→   862→            <span>Image</span>
+   863→   863→          </TabsTrigger>
+   864→   864→          <TabsTrigger value="video" className="flex items-center gap-2">
+   865→   865→            <Film className="w-4 h-4" />
+   866→   866→            <span>Video</span>
+   867→   867→          </TabsTrigger>
+   868→   868→          <TabsTrigger value="avatar" className="flex items-center gap-2">
+   869→   869→            <Cube className="w-4 h-4" />
+   870→   870→            <span>3D Avatar</span>
+   871→   871→          </TabsTrigger>
+   872→   872→        </TabsList>
+   873→   873→      </Tabs>
+   874→   874→
+   875→   875→      <div className="flex-1 overflow-hidden flex flex-col">
+   876→   876→        {renderError()}
+   877→   877→
+   878→   878→        {showHistory ? renderHistory() : showForm ? renderForm() : renderPreview()}
+   879→   879→      </div>
+   880→   880→    </div>
+   881→   881→  )
+   882→   882→}
+   883→   883→
+   884→   884→demo.tsx
+   885→   885→import { AIMultiModalGeneration } from "@/components/ui/ai-gen"
+   886→   886→
+   887→   887→export function AI() {
+   888→   888→  return (
+   889→   889→    <main className="flex min-h-screen flex-col items-center justify-center p-4">
+   890→   890→      <AIMultiModalGeneration />
+   891→   891→    </main>
+   892→   892→  )
+   893→   893→}
+   894→   894→
+   895→   895→```
+   896→   896→
+   897→   897→Copy-paste these files for dependencies:
+   898→   898→```tsx
+   899→   899→shadcn/tabs
+   900→   900→"use client"
+   901→   901→
+   902→   902→import * as React from "react"
+   903→   903→import * as TabsPrimitive from "@radix-ui/react-tabs"
+   904→   904→
+   905→   905→import { cn } from "@/lib/utils"
+   906→   906→
+   907→   907→const Tabs = TabsPrimitive.Root
+   908→   908→
+   909→   909→const TabsList = React.forwardRef<
+   910→   910→  React.ElementRef<typeof TabsPrimitive.List>,
+   911→   911→  React.ComponentPropsWithoutRef<typeof TabsPrimitive.List>
+   912→   912→>(({ className, ...props }, ref) => (
+   913→   913→  <TabsPrimitive.List
+   914→   914→    ref={ref}
+   915→   915→    className={cn(
+   916→   916→      "inline-flex h-10 items-center justify-center rounded-md bg-muted p-1 text-muted-foreground",
+   917→   917→      className,
+   918→   918→    )}
+   919→   919→    {...props}
+   920→   920→  />
+   921→   921→))
+   922→   922→TabsList.displayName = TabsPrimitive.List.displayName
+   923→   923→
+   924→   924→const TabsTrigger = React.forwardRef<
+   925→   925→  React.ElementRef<typeof TabsPrimitive.Trigger>,
+   926→   926→  React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger>
+   927→   927→>(({ className, ...props }, ref) => (
+   928→   928→  <TabsPrimitive.Trigger
+   929→   929→    ref={ref}
+   930→   930→    className={cn(
+   931→   931→      "inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm",
+   932→   932→      className,
+   933→   933→    )}
+   934→   934→    {...props}
+   935→   935→  />
+   936→   936→))
+   937→   937→TabsTrigger.displayName = TabsPrimitive.Trigger.displayName
+   938→   938→
+   939→   939→const TabsContent = React.forwardRef<
+   940→   940→  React.ElementRef<typeof TabsPrimitive.Content>,
+   941→   941→  React.ComponentPropsWithoutRef<typeof TabsPrimitive.Content>
+   942→   942→>(({ className, ...props }, ref) => (
+   943→   943→  <TabsPrimitive.Content
+   944→   944→    ref={ref}
+   945→   945→    className={cn(
+   946→   946→      "mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+   947→   947→      className,
+   948→   948→    )}
+   949→   949→    {...props}
+   950→   950→  />
+   951→   951→))
+   952→   952→TabsContent.displayName = TabsPrimitive.Content.displayName
+   953→   953→
+   954→   954→export { Tabs, TabsList, TabsTrigger, TabsContent }
+   955→   955→
+   956→   956→```
+   957→   957→```tsx
+   958→   958→shadcn/button
+   959→   959→import * as React from "react"
+   960→   960→import { Slot } from "@radix-ui/react-slot"
+   961→   961→import { cva, type VariantProps } from "class-variance-authority"
+   962→   962→
+   963→   963→import { cn } from "@/lib/utils"
+   964→   964→
+   965→   965→const buttonVariants = cva(
+   966→   966→  "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+   967→   967→  {
+   968→   968→    variants: {
+   969→   969→      variant: {
+   970→   970→        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+   971→   971→        destructive:
+   972→   972→          "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+   973→   973→        outline:
+   974→   974→          "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+   975→   975→        secondary:
+   976→   976→          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+   977→   977→        ghost: "hover:bg-accent hover:text-accent-foreground",
+   978→   978→        link: "text-primary underline-offset-4 hover:underline",
+   979→   979→      },
+   980→   980→      size: {
+   981→   981→        default: "h-10 px-4 py-2",
+   982→   982→        sm: "h-9 rounded-md px-3",
+   983→   983→        lg: "h-11 rounded-md px-8",
+   984→   984→        icon: "h-10 w-10",
+   985→   985→      },
+   986→   986→    },
+   987→   987→    defaultVariants: {
+   988→   988→      variant: "default",
+   989→   989→      size: "default",
+   990→   990→    },
+   991→   991→  },
+   992→   992→)
+   993→   993→
+   994→   994→export interface ButtonProps
+   995→   995→  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+   996→   996→    VariantProps<typeof buttonVariants> {
+   997→   997→  asChild?: boolean
+   998→   998→}
+   999→   999→
+  1000→  1000→const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  1001→  1001→  ({ className, variant, size, asChild = false, ...props }, ref) => {
+  1002→  1002→    const Comp = asChild ? Slot : "button"
+  1003→  1003→    return (
+  1004→  1004→      <Comp
+  1005→  1005→        className={cn(buttonVariants({ variant, size, className }))}
+  1006→  1006→        ref={ref}
+  1007→  1007→        {...props}
+  1008→  1008→      />
+  1009→  1009→    )
+  1010→  1010→  },
+  1011→  1011→)
+  1012→  1012→Button.displayName = "Button"
+  1013→  1013→
+  1014→  1014→export { Button, buttonVariants }
+  1015→  1015→
+  1016→  1016→```
+  1017→  1017→```tsx
+  1018→  1018→shadcn/card
+  1019→  1019→import * as React from "react"
+  1020→  1020→
+  1021→  1021→import { cn } from "@/lib/utils"
+  1022→  1022→
+  1023→  1023→const Card = React.forwardRef<
+  1024→  1024→  HTMLDivElement,
+  1025→  1025→  React.HTMLAttributes<HTMLDivElement>
+  1026→  1026→>(({ className, ...props }, ref) => (
+  1027→  1027→  <div
+  1028→  1028→    ref={ref}
+  1029→  1029→    className={cn(
+  1030→  1030→      "rounded-lg border bg-card text-card-foreground shadow-sm",
+  1031→  1031→      className,
+  1032→  1032→    )}
+  1033→  1033→    {...props}
+  1034→  1034→  />
+  1035→  1035→))
+  1036→  1036→Card.displayName = "Card"
+  1037→  1037→
+  1038→  1038→const CardHeader = React.forwardRef<
+  1039→  1039→  HTMLDivElement,
+  1040→  1040→  React.HTMLAttributes<HTMLDivElement>
+  1041→  1041→>(({ className, ...props }, ref) => (
+  1042→  1042→  <div
+  1043→  1043→    ref={ref}
+  1044→  1044→    className={cn("flex flex-col space-y-1.5 p-6", className)}
+  1045→  1045→    {...props}
+  1046→  1046→  />
+  1047→  1047→))
+  1048→  1048→CardHeader.displayName = "CardHeader"
+  1049→  1049→
+  1050→  1050→const CardTitle = React.forwardRef<
+  1051→  1051→  HTMLParagraphElement,
+  1052→  1052→  React.HTMLAttributes<HTMLHeadingElement>
+  1053→  1053→>(({ className, ...props }, ref) => (
+  1054→  1054→  <h3
+  1055→  1055→    ref={ref}
+  1056→  1056→    className={cn(
+  1057→  1057→      "text-2xl font-semibold leading-none tracking-tight",
+  1058→  1058→      className,
+  1059→  1059→    )}
+  1060→  1060→    {...props}
+  1061→  1061→  />
+  1062→  1062→))
+  1063→  1063→CardTitle.displayName = "CardTitle"
+  1064→  1064→
+  1065→  1065→const CardDescription = React.forwardRef<
+  1066→  1066→  HTMLParagraphElement,
+  1067→  1067→  React.HTMLAttributes<HTMLParagraphElement>
+  1068→  1068→>(({ className, ...props }, ref) => (
+  1069→  1069→  <p
+  1070→  1070→    ref={ref}
+  1071→  1071→    className={cn("text-sm text-muted-foreground", className)}
+  1072→  1072→    {...props}
+  1073→  1073→  />
+  1074→  1074→))
+  1075→  1075→CardDescription.displayName = "CardDescription"
+  1076→  1076→
+  1077→  1077→const CardContent = React.forwardRef<
+  1078→  1078→  HTMLDivElement,
+  1079→  1079→  React.HTMLAttributes<HTMLDivElement>
+  1080→  1080→>(({ className, ...props }, ref) => (
+  1081→  1081→  <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
+  1082→  1082→))
+  1083→  1083→CardContent.displayName = "CardContent"
+  1084→  1084→
+  1085→  1085→const CardFooter = React.forwardRef<
+  1086→  1086→  HTMLDivElement,
+  1087→  1087→  React.HTMLAttributes<HTMLDivElement>
+  1088→  1088→>(({ className, ...props }, ref) => (
+  1089→  1089→  <div
+  1090→  1090→    ref={ref}
+  1091→  1091→    className={cn("flex items-center p-6 pt-0", className)}
+  1092→  1092→    {...props}
+  1093→  1093→  />
+  1094→  1094→))
+  1095→  1095→CardFooter.displayName = "CardFooter"
+  1096→  1096→
+  1097→  1097→export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }
+  1098→  1098→
+  1099→  1099→```
+  1100→  1100→```tsx
+  1101→  1101→shadcn/input
+  1102→  1102→import * as React from "react"
+  1103→  1103→
+  1104→  1104→import { cn } from "@/lib/utils"
+  1105→  1105→
+  1106→  1106→export interface InputProps
+  1107→  1107→  extends React.InputHTMLAttributes<HTMLInputElement> {}
+  1108→  1108→
+  1109→  1109→const Input = React.forwardRef<HTMLInputElement, InputProps>(
+  1110→  1110→  ({ className, type, ...props }, ref) => {
+  1111→  1111→    return (
+  1112→  1112→      <input
+  1113→  1113→        type={type}
+  1114→  1114→        className={cn(
+  1115→  1115→          "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+  1116→  1116→          className
+  1117→  1117→        )}
+  1118→  1118→        ref={ref}
+  1119→  1119→        {...props}
+  1120→  1120→      />
+  1121→  1121→    )
+  1122→  1122→  }
+  1123→  1123→)
+  1124→  1124→Input.displayName = "Input"
+  1125→  1125→
+  1126→  1126→export { Input }
+  1127→  1127→
+  1128→  1128→```
+  1129→  1129→```tsx
+  1130→  1130→shadcn/label
+  1131→  1131→"use client"
+  1132→  1132→
+  1133→  1133→import * as React from "react"
+  1134→  1134→import * as LabelPrimitive from "@radix-ui/react-label"
+  1135→  1135→import { cva, type VariantProps } from "class-variance-authority"
+  1136→  1136→
+  1137→  1137→import { cn } from "@/lib/utils"
+  1138→  1138→
+  1139→  1139→const labelVariants = cva(
+  1140→  1140→  "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
+  1141→  1141→)
+  1142→  1142→
+  1143→  1143→const Label = React.forwardRef<
+  1144→  1144→  React.ElementRef<typeof LabelPrimitive.Root>,
+  1145→  1145→  React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root> &
+  1146→  1146→    VariantProps<typeof labelVariants>
+  1147→  1147→>(({ className, ...props }, ref) => (
+  1148→  1148→  <LabelPrimitive.Root
+  1149→  1149→    ref={ref}
+  1150→  1150→    className={cn(labelVariants(), className)}
+  1151→  1151→    {...props}
+  1152→  1152→  />
+  1153→  1153→))
+  1154→  1154→Label.displayName = LabelPrimitive.Root.displayName
+  1155→  1155→
+  1156→  1156→export { Label }
+  1157→  1157→
+  1158→  1158→```
+  1159→  1159→```tsx
+  1160→  1160→shadcn/select
+  1161→  1161→"use client"
+  1162→  1162→
+  1163→  1163→import * as React from "react"
+  1164→  1164→import * as SelectPrimitive from "@radix-ui/react-select"
+  1165→  1165→import { Check, ChevronDown, ChevronUp } from "lucide-react"
+  1166→  1166→
+  1167→  1167→import { cn } from "@/lib/utils"
+  1168→  1168→
+  1169→  1169→const Select = SelectPrimitive.Root
+  1170→  1170→
+  1171→  1171→const SelectGroup = SelectPrimitive.Group
+  1172→  1172→
+  1173→  1173→const SelectValue = SelectPrimitive.Value
+  1174→  1174→
+  1175→  1175→const SelectTrigger = React.forwardRef<
+  1176→  1176→  React.ElementRef<typeof SelectPrimitive.Trigger>,
+  1177→  1177→  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>
+  1178→  1178→>(({ className, children, ...props }, ref) => (
+  1179→  1179→  <SelectPrimitive.Trigger
+  1180→  1180→    ref={ref}
+  1181→  1181→    className={cn(
+  1182→  1182→      "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
+  1183→  1183→      className,
+  1184→  1184→    )}
+  1185→  1185→    {...props}
+  1186→  1186→  >
+  1187→  1187→    {children}
+  1188→  1188→    <SelectPrimitive.Icon asChild>
+  1189→  1189→      <ChevronDown className="h-4 w-4 opacity-50" />
+  1190→  1190→    </SelectPrimitive.Icon>
+  1191→  1191→  </SelectPrimitive.Trigger>
+  1192→  1192→))
+  1193→  1193→SelectTrigger.displayName = SelectPrimitive.Trigger.displayName
+  1194→  1194→
+  1195→  1195→const SelectScrollUpButton = React.forwardRef<
+  1196→  1196→  React.ElementRef<typeof SelectPrimitive.ScrollUpButton>,
+  1197→  1197→  React.ComponentPropsWithoutRef<typeof SelectPrimitive.ScrollUpButton>
+  1198→  1198→>(({ className, ...props }, ref) => (
+  1199→  1199→  <SelectPrimitive.ScrollUpButton
+  1200→  1200→    ref={ref}
+  1201→  1201→    className={cn(
+  1202→  1202→      "flex cursor-default items-center justify-center py-1",
+  1203→  1203→      className,
+  1204→  1204→    )}
+  1205→  1205→    {...props}
+  1206→  1206→  >
+  1207→  1207→    <ChevronUp className="h-4 w-4" />
+  1208→  1208→  </SelectPrimitive.ScrollUpButton>
+  1209→  1209→))
+  1210→  1210→SelectScrollUpButton.displayName = SelectPrimitive.ScrollUpButton.displayName
+  1211→  1211→
+  1212→  1212→const SelectScrollDownButton = React.forwardRef<
+  1213→  1213→  React.ElementRef<typeof SelectPrimitive.ScrollDownButton>,
+  1214→  1214→  React.ComponentPropsWithoutRef<typeof SelectPrimitive.ScrollDownButton>
+  1215→  1215→>(({ className, ...props }, ref) => (
+  1216→  1216→  <SelectPrimitive.ScrollDownButton
+  1217→  1217→    ref={ref}
+  1218→  1218→    className={cn(
+  1219→  1219→      "flex cursor-default items-center justify-center py-1",
+  1220→  1220→      className,
+  1221→  1221→    )}
+  1222→  1222→    {...props}
+  1223→  1223→  >
+  1224→  1224→    <ChevronDown className="h-4 w-4" />
+  1225→  1225→  </SelectPrimitive.ScrollDownButton>
+  1226→  1226→))
+  1227→  1227→SelectScrollDownButton.displayName =
+  1228→  1228→  SelectPrimitive.ScrollDownButton.displayName
+  1229→  1229→
+  1230→  1230→const SelectContent = React.forwardRef<
+  1231→  1231→  React.ElementRef<typeof SelectPrimitive.Content>,
+  1232→  1232→  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content>
+  1233→  1233→>(({ className, children, position = "popper", ...props }, ref) => (
+  1234→  1234→  <SelectPrimitive.Portal>
+  1235→  1235→    <SelectPrimitive.Content
+  1236→  1236→      ref={ref}
+  1237→  1237→      className={cn(
+  1238→  1238→        "relative z-50 max-h-96 min-w-[8rem] overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+  1239→  1239→        position === "popper" &&
+  1240→  1240→          "data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1",
+  1241→  1241→        className,
+  1242→  1242→      )}
+  1243→  1243→      position={position}
+  1244→  1244→      {...props}
+  1245→  1245→    >
+  1246→  1246→      <SelectScrollUpButton />
+  1247→  1247→      <SelectPrimitive.Viewport
+  1248→  1248→        className={cn(
+  1249→  1249→          "p-1",
+  1250→  1250→          position === "popper" &&
+  1251→  1251→            "h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)]",
+  1252→  1252→        )}
+  1253→  1253→      >
+  1254→  1254→        {children}
+  1255→  1255→      </SelectPrimitive.Viewport>
+  1256→  1256→      <SelectScrollDownButton />
+  1257→  1257→    </SelectPrimitive.Content>
+  1258→  1258→  </SelectPrimitive.Portal>
+  1259→  1259→))
+  1260→  1260→SelectContent.displayName = SelectPrimitive.Content.displayName
+  1261→  1261→
+  1262→  1262→const SelectLabel = React.forwardRef<
+  1263→  1263→  React.ElementRef<typeof SelectPrimitive.Label>,
+  1264→  1264→  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Label>
+  1265→  1265→>(({ className, ...props }, ref) => (
+  1266→  1266→  <SelectPrimitive.Label
+  1267→  1267→    ref={ref}
+  1268→  1268→    className={cn("py-1.5 pl-8 pr-2 text-sm font-semibold", className)}
+  1269→  1269→    {...props}
+  1270→  1270→  />
+  1271→  1271→))
+  1272→  1272→SelectLabel.displayName = SelectPrimitive.Label.displayName
+  1273→  1273→
+  1274→  1274→const SelectItem = React.forwardRef<
+  1275→  1275→  React.ElementRef<typeof SelectPrimitive.Item>,
+  1276→  1276→  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Item>
+  1277→  1277→>(({ className, children, ...props }, ref) => (
+  1278→  1278→  <SelectPrimitive.Item
+  1279→  1279→    ref={ref}
+  1280→  1280→    className={cn(
+  1281→  1281→      "relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+  1282→  1282→      className,
+  1283→  1283→    )}
+  1284→  1284→    {...props}
+  1285→  1285→  >
+  1286→  1286→    <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
+  1287→  1287→      <SelectPrimitive.ItemIndicator>
+  1288→  1288→        <Check className="h-4 w-4" />
+  1289→  1289→      </SelectPrimitive.ItemIndicator>
+  1290→  1290→    </span>
+  1291→  1291→
+  1292→  1292→    <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
+  1293→  1293→  </SelectPrimitive.Item>
+  1294→  1294→))
+  1295→  1295→SelectItem.displayName = SelectPrimitive.Item.displayName
+  1296→  1296→
+  1297→  1297→const SelectSeparator = React.forwardRef<
+  1298→  1298→  React.ElementRef<typeof SelectPrimitive.Separator>,
+  1299→  1299→  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Separator>
+  1300→  1300→>(({ className, ...props }, ref) => (
+  1301→  1301→  <SelectPrimitive.Separator
+  1302→  1302→    ref={ref}
+  1303→  1303→    className={cn("-mx-1 my-1 h-px bg-muted", className)}
+  1304→  1304→    {...props}
+  1305→  1305→  />
+  1306→  1306→))
+  1307→  1307→SelectSeparator.displayName = SelectPrimitive.Separator.displayName
+  1308→  1308→
+  1309→  1309→export {
+  1310→  1310→  Select,
+  1311→  1311→  SelectGroup,
+  1312→  1312→  SelectValue,
+  1313→  1313→  SelectTrigger,
+  1314→  1314→  SelectContent,
+  1315→  1315→  SelectLabel,
+  1316→  1316→  SelectItem,
+  1317→  1317→  SelectSeparator,
+  1318→  1318→  SelectScrollUpButton,
+  1319→  1319→  SelectScrollDownButton,
+  1320→  1320→}
+  1321→  1321→
+  1322→  1322→```
+  1323→  1323→```tsx
+  1324→  1324→shadcn/textarea
+  1325→  1325→import * as React from "react"
+  1326→  1326→
+  1327→  1327→import { cn } from "@/lib/utils"
+  1328→  1328→
+  1329→  1329→export interface TextareaProps
+  1330→  1330→  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
+  1331→  1331→
+  1332→  1332→const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
+  1333→  1333→  ({ className, ...props }, ref) => {
+  1334→  1334→    return (
+  1335→  1335→      <textarea
+  1336→  1336→        className={cn(
+  1337→  1337→          "flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+  1338→  1338→          className
+  1339→  1339→        )}
+  1340→  1340→        ref={ref}
+  1341→  1341→        {...props}
+  1342→  1342→      />
+  1343→  1343→    )
+  1344→  1344→  }
+  1345→  1345→)
+  1346→  1346→Textarea.displayName = "Textarea"
+  1347→  1347→
+  1348→  1348→export { Textarea }
+  1349→  1349→
+  1350→  1350→```
+  1351→  1351→```tsx
+  1352→  1352→shadcn/slider
+  1353→  1353→"use client"
+  1354→  1354→
+  1355→  1355→import * as React from "react"
+  1356→  1356→import * as SliderPrimitive from "@radix-ui/react-slider"
+  1357→  1357→
+  1358→  1358→import { cn } from "@/lib/utils"
+  1359→  1359→
+  1360→  1360→const Slider = React.forwardRef<
+  1361→  1361→  React.ElementRef<typeof SliderPrimitive.Root>,
+  1362→  1362→  React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root>
+  1363→  1363→>(({ className, ...props }, ref) => (
+  1364→  1364→  <SliderPrimitive.Root
+  1365→  1365→    ref={ref}
+  1366→  1366→    className={cn(
+  1367→  1367→      "relative flex w-full touch-none select-none items-center",
+  1368→  1368→      className,
+  1369→  1369→    )}
+  1370→  1370→    {...props}
+  1371→  1371→  >
+  1372→  1372→    <SliderPrimitive.Track className="relative h-2 w-full grow overflow-hidden rounded-full bg-secondary">
+  1373→  1373→      <SliderPrimitive.Range className="absolute h-full bg-primary" />
+  1374→  1374→    </SliderPrimitive.Track>
+  1375→  1375→    <SliderPrimitive.Thumb className="block h-5 w-5 rounded-full border-2 border-primary bg-background ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50" />
+  1376→  1376→  </SliderPrimitive.Root>
+  1377→  1377→))
+  1378→  1378→Slider.displayName = SliderPrimitive.Root.displayName
+  1379→  1379→
+  1380→  1380→export { Slider }
+  1381→  1381→
+  1382→  1382→```
+  1383→  1383→```tsx
+  1384→  1384→shadcn/switch
+  1385→  1385→"use client"
+  1386→  1386→
+  1387→  1387→import * as React from "react"
+  1388→  1388→import * as SwitchPrimitives from "@radix-ui/react-switch"
+  1389→  1389→
+  1390→  1390→import { cn } from "@/lib/utils"
+  1391→  1391→
+  1392→  1392→const Switch = React.forwardRef<
+  1393→  1393→  React.ElementRef<typeof SwitchPrimitives.Root>,
+  1394→  1394→  React.ComponentPropsWithoutRef<typeof SwitchPrimitives.Root>
+  1395→  1395→>(({ className, ...props }, ref) => (
+  1396→  1396→  <SwitchPrimitives.Root
+  1397→  1397→    className={cn(
+  1398→  1398→      "peer inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=unchecked]:bg-input",
+  1399→  1399→      className,
+  1400→  1400→    )}
+  1401→  1401→    {...props}
+  1402→  1402→    ref={ref}
+  1403→  1403→  >
+  1404→  1404→    <SwitchPrimitives.Thumb
+  1405→  1405→      className={cn(
+  1406→  1406→        "pointer-events-none block h-5 w-5 rounded-full bg-background shadow-lg ring-0 transition-transform data-[state=checked]:translate-x-5 data-[state=unchecked]:translate-x-0",
+  1407→  1407→      )}
+  1408→  1408→    />
+  1409→  1409→  </SwitchPrimitives.Root>
+  1410→  1410→))
+  1411→  1411→Switch.displayName = SwitchPrimitives.Root.displayName
+  1412→  1412→
+  1413→  1413→export { Switch }
+  1414→  1414→
+  1415→  1415→```
+  1416→  1416→```tsx
+  1417→  1417→shadcn/popover
+  1418→  1418→"use client"
+  1419→  1419→
+  1420→  1420→import * as React from "react"
+  1421→  1421→import * as PopoverPrimitive from "@radix-ui/react-popover"
+  1422→  1422→
+  1423→  1423→import { cn } from "@/lib/utils"
+  1424→  1424→
+  1425→  1425→const Popover = PopoverPrimitive.Root
+  1426→  1426→
+  1427→  1427→const PopoverTrigger = PopoverPrimitive.Trigger
+  1428→  1428→
+  1429→  1429→const PopoverContent = React.forwardRef<
+  1430→  1430→  React.ElementRef<typeof PopoverPrimitive.Content>,
+  1431→  1431→  React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Content>
+  1432→  1432→>(({ className, align = "center", sideOffset = 4, ...props }, ref) => (
+  1433→  1433→  <PopoverPrimitive.Portal>
+  1434→  1434→    <PopoverPrimitive.Content
+  1435→  1435→      ref={ref}
+  1436→  1436→      align={align}
+  1437→  1437→      sideOffset={sideOffset}
+  1438→  1438→      className={cn(
+  1439→  1439→        "z-50 w-72 rounded-md border bg-popover p-4 text-popover-foreground shadow-md outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+  1440→  1440→        className
+  1441→  1441→      )}
+  1442→  1442→      {...props}
+  1443→  1443→    />
+  1444→  1444→  </PopoverPrimitive.Portal>
+  1445→  1445→))
+  1446→  1446→PopoverContent.displayName = PopoverPrimitive.Content.displayName
+  1447→  1447→
+  1448→  1448→export { Popover, PopoverTrigger, PopoverContent }
+  1449→  1449→
+  1450→  1450→```
+  1451→  1451→
+  1452→  1452→Install NPM dependencies:
+  1453→  1453→```bash
+  1454→  1454→lucide-react, @radix-ui/react-tabs, @radix-ui/react-slot, class-variance-authority, @radix-ui/react-label, @radix-ui/react-select, @radix-ui/react-slider, @radix-ui/react-switch, @radix-ui/react-popover
+  1455→  1455→```
+  1456→  1456→
+  1457→  1457→Implementation Guidelines
+  1458→  1458→ 1. Analyze the component structure and identify all required dependencies
+  1459→  1459→ 2. Review the component's argumens and state
+  1460→  1460→ 3. Identify any required context providers or hooks and install them
+  1461→  1461→ 4. Questions to Ask
+  1462→  1462→ - What data/props will be passed to this component?
+  1463→  1463→ - Are there any specific state management requirements?
+  1464→  1464→ - Are there any required assets (images, icons, etc.)?
+  1465→  1465→ - What is the expected responsive behavior?
+  1466→  1466→ - What is the best place to use this component in the app?
+  1467→  1467→
+  1468→  1468→Steps to integrate
+  1469→  1469→ 0. Copy paste all the code above in the correct directories
+  1470→  1470→ 1. Install external dependencies
+  1471→  1471→ 2. Fill image assets with Unsplash stock images you know exist
+  1472→  1472→ 3. Use lucide-react icons for svgs or logos if component requires them

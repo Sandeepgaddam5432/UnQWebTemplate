@@ -1,0 +1,1033 @@
+     1→You are given a task to integrate an existing React component in the codebase
+     2→
+     3→The codebase should support:
+     4→- shadcn project structure  
+     5→- Tailwind CSS
+     6→- Typescript
+     7→
+     8→If it doesn't, provide instructions on how to setup project via shadcn CLI, install Tailwind or Typescript.
+     9→
+    10→Determine the default path for components and styles. 
+    11→If default path for components is not /components/ui, provide instructions on why it's important to create this folder
+    12→Copy-paste this component to /components/ui folder:
+    13→```tsx
+    14→hero-195-1.tsx
+    15→import * as React from "react"
+    16→
+    17→import { cn } from "@/lib/utils"
+    18→
+    19→const Card = React.forwardRef<
+    20→  HTMLDivElement,
+    21→  React.HTMLAttributes<HTMLDivElement>
+    22→>(({ className, ...props }, ref) => (
+    23→  <div
+    24→    ref={ref}
+    25→    className={cn(
+    26→      "rounded-lg border bg-card text-card-foreground shadow-sm",
+    27→      className,
+    28→    )}
+    29→    {...props}
+    30→  />
+    31→))
+    32→Card.displayName = "Card"
+    33→
+    34→const CardHeader = React.forwardRef<
+    35→  HTMLDivElement,
+    36→  React.HTMLAttributes<HTMLDivElement>
+    37→>(({ className, ...props }, ref) => (
+    38→  <div
+    39→    ref={ref}
+    40→    className={cn("flex flex-col space-y-1.5 p-6", className)}
+    41→    {...props}
+    42→  />
+    43→))
+    44→CardHeader.displayName = "CardHeader"
+    45→
+    46→const CardTitle = React.forwardRef<
+    47→  HTMLParagraphElement,
+    48→  React.HTMLAttributes<HTMLHeadingElement>
+    49→>(({ className, ...props }, ref) => (
+    50→  <h3
+    51→    ref={ref}
+    52→    className={cn(
+    53→      "text-2xl font-semibold leading-none tracking-tight",
+    54→      className,
+    55→    )}
+    56→    {...props}
+    57→  />
+    58→))
+    59→CardTitle.displayName = "CardTitle"
+    60→
+    61→const CardDescription = React.forwardRef<
+    62→  HTMLParagraphElement,
+    63→  React.HTMLAttributes<HTMLParagraphElement>
+    64→>(({ className, ...props }, ref) => (
+    65→  <p
+    66→    ref={ref}
+    67→    className={cn("text-sm text-muted-foreground", className)}
+    68→    {...props}
+    69→  />
+    70→))
+    71→CardDescription.displayName = "CardDescription"
+    72→
+    73→const CardContent = React.forwardRef<
+    74→  HTMLDivElement,
+    75→  React.HTMLAttributes<HTMLDivElement>
+    76→>(({ className, ...props }, ref) => (
+    77→  <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
+    78→))
+    79→CardContent.displayName = "CardContent"
+    80→
+    81→const CardFooter = React.forwardRef<
+    82→  HTMLDivElement,
+    83→  React.HTMLAttributes<HTMLDivElement>
+    84→>(({ className, ...props }, ref) => (
+    85→  <div
+    86→    ref={ref}
+    87→    className={cn("flex items-center p-6 pt-0", className)}
+    88→    {...props}
+    89→  />
+    90→))
+    91→CardFooter.displayName = "CardFooter"
+    92→
+    93→export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }
+    94→
+    95→demo.tsx
+    96→import { Hero195 } from "@/components/ui/hero-195";
+    97→
+    98→const DemoOne = () => {
+    99→  return (
+   100→    <Hero195 />
+   101→  );
+   102→};
+   103→
+   104→export { DemoOne };
+   105→
+   106→```
+   107→
+   108→Copy-paste these files for dependencies:
+   109→```tsx
+   110→dillionverma/border-beam
+   111→import { cn } from "@/lib/utils"
+   112→
+   113→interface BorderBeamProps {
+   114→  className?: string
+   115→  size?: number
+   116→  duration?: number
+   117→  borderWidth?: number
+   118→  anchor?: number
+   119→  colorFrom?: string
+   120→  colorTo?: string
+   121→  delay?: number
+   122→}
+   123→
+   124→export const BorderBeam = ({
+   125→  className,
+   126→  size = 200,
+   127→  duration = 15,
+   128→  anchor = 90,
+   129→  borderWidth = 1.5,
+   130→  colorFrom = "#ffaa40",
+   131→  colorTo = "#9c40ff",
+   132→  delay = 0,
+   133→}: BorderBeamProps) => {
+   134→  return (
+   135→    <div
+   136→      style={
+   137→        {
+   138→          "--size": size,
+   139→          "--duration": duration,
+   140→          "--anchor": anchor,
+   141→          "--border-width": borderWidth,
+   142→          "--color-from": colorFrom,
+   143→          "--color-to": colorTo,
+   144→          "--delay": `-${delay}s`,
+   145→        } as React.CSSProperties
+   146→      }
+   147→      className={cn(
+   148→        "pointer-events-none absolute inset-0 rounded-[inherit] [border:calc(var(--border-width)*1px)_solid_transparent]",
+   149→
+   150→        // mask styles
+   151→        "![mask-clip:padding-box,border-box] ![mask-composite:intersect] [mask:linear-gradient(transparent,transparent),linear-gradient(white,white)]",
+   152→
+   153→        // pseudo styles
+   154→        "after:absolute after:aspect-square after:w-[calc(var(--size)*1px)] after:animate-border-beam after:[animation-delay:var(--delay)] after:[background:linear-gradient(to_left,var(--color-from),var(--color-to),transparent)] after:[offset-anchor:calc(var(--anchor)*1%)_50%] after:[offset-path:rect(0_auto_auto_0_round_calc(var(--size)*1px))]",
+   155→        className,
+   156→      )}
+   157→    />
+   158→  )
+   159→}
+   160→
+   161→```
+   162→```tsx
+   163→shadcn/button
+   164→import * as React from "react"
+   165→import { Slot } from "@radix-ui/react-slot"
+   166→import { cva, type VariantProps } from "class-variance-authority"
+   167→
+   168→import { cn } from "@/lib/utils"
+   169→
+   170→const buttonVariants = cva(
+   171→  "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+   172→  {
+   173→    variants: {
+   174→      variant: {
+   175→        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+   176→        destructive:
+   177→          "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+   178→        outline:
+   179→          "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+   180→        secondary:
+   181→          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+   182→        ghost: "hover:bg-accent hover:text-accent-foreground",
+   183→        link: "text-primary underline-offset-4 hover:underline",
+   184→      },
+   185→      size: {
+   186→        default: "h-10 px-4 py-2",
+   187→        sm: "h-9 rounded-md px-3",
+   188→        lg: "h-11 rounded-md px-8",
+   189→        icon: "h-10 w-10",
+   190→      },
+   191→    },
+   192→    defaultVariants: {
+   193→      variant: "default",
+   194→      size: "default",
+   195→    },
+   196→  },
+   197→)
+   198→
+   199→export interface ButtonProps
+   200→  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+   201→    VariantProps<typeof buttonVariants> {
+   202→  asChild?: boolean
+   203→}
+   204→
+   205→const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+   206→  ({ className, variant, size, asChild = false, ...props }, ref) => {
+   207→    const Comp = asChild ? Slot : "button"
+   208→    return (
+   209→      <Comp
+   210→        className={cn(buttonVariants({ variant, size, className }))}
+   211→        ref={ref}
+   212→        {...props}
+   213→      />
+   214→    )
+   215→  },
+   216→)
+   217→Button.displayName = "Button"
+   218→
+   219→export { Button, buttonVariants }
+   220→
+   221→```
+   222→```tsx
+   223→shadcn/tabs
+   224→"use client"
+   225→
+   226→import * as React from "react"
+   227→import * as TabsPrimitive from "@radix-ui/react-tabs"
+   228→
+   229→import { cn } from "@/lib/utils"
+   230→
+   231→const Tabs = TabsPrimitive.Root
+   232→
+   233→const TabsList = React.forwardRef<
+   234→  React.ElementRef<typeof TabsPrimitive.List>,
+   235→  React.ComponentPropsWithoutRef<typeof TabsPrimitive.List>
+   236→>(({ className, ...props }, ref) => (
+   237→  <TabsPrimitive.List
+   238→    ref={ref}
+   239→    className={cn(
+   240→      "inline-flex h-10 items-center justify-center rounded-md bg-muted p-1 text-muted-foreground",
+   241→      className,
+   242→    )}
+   243→    {...props}
+   244→  />
+   245→))
+   246→TabsList.displayName = TabsPrimitive.List.displayName
+   247→
+   248→const TabsTrigger = React.forwardRef<
+   249→  React.ElementRef<typeof TabsPrimitive.Trigger>,
+   250→  React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger>
+   251→>(({ className, ...props }, ref) => (
+   252→  <TabsPrimitive.Trigger
+   253→    ref={ref}
+   254→    className={cn(
+   255→      "inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm",
+   256→      className,
+   257→    )}
+   258→    {...props}
+   259→  />
+   260→))
+   261→TabsTrigger.displayName = TabsPrimitive.Trigger.displayName
+   262→
+   263→const TabsContent = React.forwardRef<
+   264→  React.ElementRef<typeof TabsPrimitive.Content>,
+   265→  React.ComponentPropsWithoutRef<typeof TabsPrimitive.Content>
+   266→>(({ className, ...props }, ref) => (
+   267→  <TabsPrimitive.Content
+   268→    ref={ref}
+   269→    className={cn(
+   270→      "mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+   271→      className,
+   272→    )}
+   273→    {...props}
+   274→  />
+   275→))
+   276→TabsContent.displayName = TabsPrimitive.Content.displayName
+   277→
+   278→export { Tabs, TabsList, TabsTrigger, TabsContent }
+   279→
+   280→```
+   281→```tsx
+   282→shadcn/card
+   283→import * as React from "react"
+   284→
+   285→import { cn } from "@/lib/utils"
+   286→
+   287→const Card = React.forwardRef<
+   288→  HTMLDivElement,
+   289→  React.HTMLAttributes<HTMLDivElement>
+   290→>(({ className, ...props }, ref) => (
+   291→  <div
+   292→    ref={ref}
+   293→    className={cn(
+   294→      "rounded-lg border bg-card text-card-foreground shadow-sm",
+   295→      className,
+   296→    )}
+   297→    {...props}
+   298→  />
+   299→))
+   300→Card.displayName = "Card"
+   301→
+   302→const CardHeader = React.forwardRef<
+   303→  HTMLDivElement,
+   304→  React.HTMLAttributes<HTMLDivElement>
+   305→>(({ className, ...props }, ref) => (
+   306→  <div
+   307→    ref={ref}
+   308→    className={cn("flex flex-col space-y-1.5 p-6", className)}
+   309→    {...props}
+   310→  />
+   311→))
+   312→CardHeader.displayName = "CardHeader"
+   313→
+   314→const CardTitle = React.forwardRef<
+   315→  HTMLParagraphElement,
+   316→  React.HTMLAttributes<HTMLHeadingElement>
+   317→>(({ className, ...props }, ref) => (
+   318→  <h3
+   319→    ref={ref}
+   320→    className={cn(
+   321→      "text-2xl font-semibold leading-none tracking-tight",
+   322→      className,
+   323→    )}
+   324→    {...props}
+   325→  />
+   326→))
+   327→CardTitle.displayName = "CardTitle"
+   328→
+   329→const CardDescription = React.forwardRef<
+   330→  HTMLParagraphElement,
+   331→  React.HTMLAttributes<HTMLParagraphElement>
+   332→>(({ className, ...props }, ref) => (
+   333→  <p
+   334→    ref={ref}
+   335→    className={cn("text-sm text-muted-foreground", className)}
+   336→    {...props}
+   337→  />
+   338→))
+   339→CardDescription.displayName = "CardDescription"
+   340→
+   341→const CardContent = React.forwardRef<
+   342→  HTMLDivElement,
+   343→  React.HTMLAttributes<HTMLDivElement>
+   344→>(({ className, ...props }, ref) => (
+   345→  <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
+   346→))
+   347→CardContent.displayName = "CardContent"
+   348→
+   349→const CardFooter = React.forwardRef<
+   350→  HTMLDivElement,
+   351→  React.HTMLAttributes<HTMLDivElement>
+   352→>(({ className, ...props }, ref) => (
+   353→  <div
+   354→    ref={ref}
+   355→    className={cn("flex items-center p-6 pt-0", className)}
+   356→    {...props}
+   357→  />
+   358→))
+   359→CardFooter.displayName = "CardFooter"
+   360→
+   361→export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }
+   362→
+   363→```
+   364→```tsx
+   365→shadcn/input
+   366→import * as React from "react"
+   367→
+   368→import { cn } from "@/lib/utils"
+   369→
+   370→export interface InputProps
+   371→  extends React.InputHTMLAttributes<HTMLInputElement> {}
+   372→
+   373→const Input = React.forwardRef<HTMLInputElement, InputProps>(
+   374→  ({ className, type, ...props }, ref) => {
+   375→    return (
+   376→      <input
+   377→        type={type}
+   378→        className={cn(
+   379→          "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+   380→          className
+   381→        )}
+   382→        ref={ref}
+   383→        {...props}
+   384→      />
+   385→    )
+   386→  }
+   387→)
+   388→Input.displayName = "Input"
+   389→
+   390→export { Input }
+   391→
+   392→```
+   393→```tsx
+   394→shadcn/label
+   395→"use client"
+   396→
+   397→import * as React from "react"
+   398→import * as LabelPrimitive from "@radix-ui/react-label"
+   399→import { cva, type VariantProps } from "class-variance-authority"
+   400→
+   401→import { cn } from "@/lib/utils"
+   402→
+   403→const labelVariants = cva(
+   404→  "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
+   405→)
+   406→
+   407→const Label = React.forwardRef<
+   408→  React.ElementRef<typeof LabelPrimitive.Root>,
+   409→  React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root> &
+   410→    VariantProps<typeof labelVariants>
+   411→>(({ className, ...props }, ref) => (
+   412→  <LabelPrimitive.Root
+   413→    ref={ref}
+   414→    className={cn(labelVariants(), className)}
+   415→    {...props}
+   416→  />
+   417→))
+   418→Label.displayName = LabelPrimitive.Root.displayName
+   419→
+   420→export { Label }
+   421→
+   422→```
+   423→```tsx
+   424→aceternity/tracing-beam
+   425→"use client";
+   426→import React, { useEffect, useRef, useState } from "react";
+   427→import {
+   428→  motion,
+   429→  useTransform,
+   430→  useScroll,
+   431→  useVelocity,
+   432→  useSpring,
+   433→} from "framer-motion";
+   434→import { cn } from "@/lib/utils";
+   435→
+   436→export const TracingBeam = ({
+   437→  children,
+   438→  className,
+   439→}: {
+   440→  children: React.ReactNode;
+   441→  className?: string;
+   442→}) => {
+   443→  const ref = useRef<HTMLDivElement>(null);
+   444→  const { scrollYProgress } = useScroll({
+   445→    target: ref,
+   446→    offset: ["start start", "end start"],
+   447→  });
+   448→
+   449→  const contentRef = useRef<HTMLDivElement>(null);
+   450→  const [svgHeight, setSvgHeight] = useState(0);
+   451→
+   452→  useEffect(() => {
+   453→    if (contentRef.current) {
+   454→      setSvgHeight(contentRef.current.offsetHeight);
+   455→    }
+   456→  }, []);
+   457→
+   458→  const y1 = useSpring(
+   459→    useTransform(scrollYProgress, [0, 0.8], [50, svgHeight]),
+   460→    {
+   461→      stiffness: 500,
+   462→      damping: 90,
+   463→    }
+   464→  );
+   465→  const y2 = useSpring(
+   466→    useTransform(scrollYProgress, [0, 1], [50, svgHeight - 200]),
+   467→    {
+   468→      stiffness: 500,
+   469→      damping: 90,
+   470→    }
+   471→  );
+   472→
+   473→  return (
+   474→    <motion.div
+   475→      ref={ref}
+   476→      className={cn("relative w-full max-w-4xl mx-auto h-full", className)}
+   477→    >
+   478→      <div className="absolute -left-4 md:-left-20 top-3">
+   479→        <motion.div
+   480→          transition={{
+   481→            duration: 0.2,
+   482→            delay: 0.5,
+   483→          }}
+   484→          animate={{
+   485→            boxShadow:
+   486→              scrollYProgress.get() > 0
+   487→                ? "none"
+   488→                : "rgba(0, 0, 0, 0.24) 0px 3px 8px",
+   489→          }}
+   490→          className="ml-[27px] h-4 w-4 rounded-full border border-netural-200 shadow-sm flex items-center justify-center"
+   491→        >
+   492→          <motion.div
+   493→            transition={{
+   494→              duration: 0.2,
+   495→              delay: 0.5,
+   496→            }}
+   497→            animate={{
+   498→              backgroundColor: scrollYProgress.get() > 0 ? "white" : "rgb(34 197 94)", // emerald-500
+   499→              borderColor: scrollYProgress.get() > 0 ? "white" : "rgb(22 163 74)", // emerald-600
+   500→            }}
+   501→            className="h-2 w-2 rounded-full border border-neutral-300 bg-white"
+   502→          />
+   503→        </motion.div>
+   504→        <svg
+   505→          viewBox={`0 0 20 ${svgHeight}`}
+   506→          width="20"
+   507→          height={svgHeight}
+   508→          className="ml-4 block"
+   509→          aria-hidden="true"
+   510→        >
+   511→          <motion.path
+   512→            d={`M 1 0V -36 l 18 24 V ${svgHeight * 0.8} l -18 24V ${svgHeight}`}
+   513→            fill="none"
+   514→            stroke="#9091A0"
+   515→            strokeOpacity="0.16"
+   516→            transition={{
+   517→              duration: 10,
+   518→            }}
+   519→          ></motion.path>
+   520→          <motion.path
+   521→            d={`M 1 0V -36 l 18 24 V ${svgHeight * 0.8} l -18 24V ${svgHeight}`}
+   522→            fill="none"
+   523→            stroke="url(#gradient)"
+   524→            strokeWidth="1.25"
+   525→            className="motion-reduce:hidden"
+   526→            transition={{
+   527→              duration: 10,
+   528→            }}
+   529→          ></motion.path>
+   530→          <defs>
+   531→            <motion.linearGradient
+   532→              id="gradient"
+   533→              gradientUnits="userSpaceOnUse"
+   534→              x1="0"
+   535→              x2="0"
+   536→              y1={y1}
+   537→              y2={y2}
+   538→            >
+   539→              <stop stopColor="#18CCFC" stopOpacity="0"></stop>
+   540→              <stop stopColor="#18CCFC"></stop>
+   541→              <stop offset="0.325" stopColor="#6344F5"></stop>
+   542→              <stop offset="1" stopColor="#AE48FF" stopOpacity="0"></stop>
+   543→            </motion.linearGradient>
+   544→          </defs>
+   545→        </svg>
+   546→      </div>
+   547→      <div ref={contentRef}>{children}</div>
+   548→    </motion.div>
+   549→  );
+   550→};
+   551→```
+   552→
+   553→Install NPM dependencies:
+   554→```bash
+   555→@radix-ui/react-slot, class-variance-authority, @radix-ui/react-tabs, @radix-ui/react-label, framer-motion
+   556→```
+   557→
+   558→Extend existing Tailwind 4 index.css with this code (or if project uses Tailwind 3, extend tailwind.config.js or globals.css):
+   559→```css
+   560→@import "tailwindcss";
+   561→@import "tw-animate-css";
+   562→
+   563→@theme inline {
+   564→  --color-destructive-foreground: var(--destructive-foreground);
+   565→  --color-muted-2: var(--muted-2);
+   566→  --color-muted-2-foreground: var(--muted-2-foreground);
+   567→  --color-transparent: transparent;
+   568→  --radius-xs: calc(var(--radius) - 4px);
+   569→  --breakpoint-sm: 640px;
+   570→  --breakpoint-md: 768px;
+   571→  --breakpoint-lg: 1024px;
+   572→  --breakpoint-xl: 1280px;
+   573→  --breakpoint-2xl: 1400px;
+   574→  --animate-accordion-down: accordion-down 0.2s ease-out;
+   575→  --animate-accordion-up: accordion-up 0.2s ease-out;
+   576→  --animate-fade-in-out: fade-in-out 4s ease-in-out;
+   577→  --animate-fade-in: fade-in 0.7s ease-out forwards;
+   578→  --animate-progress: progress 8s linear;
+   579→  --animate-infinite-slider: infiniteSlider 20s linear infinite;
+   580→  --animate-infinite-slider-reverse: infiniteSliderReverse 20s linear infinite;
+   581→  --animate-shadow-ping: shadow-ping 1.5s ease-in-out infinite;
+   582→  --animate-flip-btn: flip-btn 6s infinite steps(2, end);
+   583→  --animate-rotate-btn: rotate-btn 3s linear infinite both;
+   584→  --animate-light-to-right-top: light-to-right 4s linear infinite;
+   585→  --animate-light-to-right-bottom: light-to-right 4s linear infinite;
+   586→  --animate-marquee: marquee 25s linear infinite;
+   587→  --animate-slide-to-right: slide-to-right 3s linear infinite;
+   588→  --animate-slide-to-top: slide-to-top 3s linear infinite;
+   589→  --animate-shimmer-slide: shimmer-slide var(--speed) ease-in-out infinite
+   590→    alternate;
+   591→  --animate-spin-around: spin-around calc(var(--speed) * 2) infinite linear;
+   592→  --animate-shine: shine var(--duration) infinite linear;
+   593→  --font-sans: var(--font-sans);
+   594→  --font-serif: var(--font-serif);
+   595→  --font-mono: var(--font-mono);
+   596→  --font-cursive: var(--font-cursive);
+   597→  --font-playfair: "Playfair Display", serif;
+   598→  --font-caveat: "Caveat", cursive;
+   599→}
+   600→
+   601→:root {
+   602→  --background: hsl(0 0% 100%);
+   603→  --foreground: hsl(0 0% 3.9%);
+   604→  --card: hsl(0 0% 100%);
+   605→  --card-foreground: hsl(0 0% 3.9%);
+   606→  --popover: hsl(0 0% 100%);
+   607→  --popover-foreground: hsl(0 0% 3.9%);
+   608→  --primary: hsl(0 0% 9%);
+   609→  --primary-foreground: hsl(0 0% 98%);
+   610→  --secondary: hsl(0 0% 96%);
+   611→  --secondary-foreground: hsl(0 0% 9%);
+   612→  --muted: hsl(0 0% 96%);
+   613→  --muted-foreground: hsl(0 0% 45.1%);
+   614→  --accent: hsl(0 0% 96%);
+   615→  --accent-foreground: hsl(0 0% 9%);
+   616→  --destructive: hsl(0 84.2% 60.2%);
+   617→  --destructive-foreground: hsl(0 0% 98%);
+   618→  --border: hsl(0, 0%, 90%);
+   619→  --input: hsl(0 0% 89.8%);
+   620→  --ring: hsl(0 0% 3.9%);
+   621→  --radius: 8px;
+   622→  --chart-1: hsl(12 76% 61%);
+   623→  --chart-2: hsl(173 58% 39%);
+   624→  --chart-3: hsl(197 37% 24%);
+   625→  --chart-4: hsl(43 74% 66%);
+   626→  --chart-5: hsl(27 87% 67%);
+   627→  --sidebar: hsl(0 0% 98%);
+   628→  --sidebar-foreground: hsl(240 5.3% 26.1%);
+   629→  --sidebar-primary: hsl(240 5.9% 10%);
+   630→  --sidebar-primary-foreground: hsl(0 0% 98%);
+   631→  --sidebar-accent: hsl(240 4.8% 95.9%);
+   632→  --sidebar-accent-foreground: hsl(240 5.9% 10%);
+   633→  --sidebar-border: hsl(220 13% 91%);
+   634→  --sidebar-ring: hsl(217.2 91.2% 59.8%);
+   635→  --muted-2: hsl(0 0% 90%);
+   636→  --muted-2-foreground: hsl(240 3.8% 46.1%);
+   637→  --gradient-1: hsl(227 81% 67%);
+   638→  --gradient-2: hsl(125 51% 53%);
+   639→  --gradient-3: hsl(318 58% 66%);
+   640→  --font-sans: "Inter", sans-serif;
+   641→  --font-serif: "Roboto Serif", serif;
+   642→  --font-mono: "Roboto Mono", monospace;
+   643→  --font-cursive: "Caveat", cursive;
+   644→}
+   645→
+   646→.dark {
+   647→  --background: hsl(240 10% 3.9%);
+   648→  --foreground: hsl(0 0% 98%);
+   649→  --card: hsl(240 10% 3.9%);
+   650→  --card-foreground: hsl(0 0% 98%);
+   651→  --popover: hsl(240 10% 3.9%);
+   652→  --popover-foreground: hsl(0 0% 98%);
+   653→  --primary: hsl(0 0% 98%);
+   654→  --primary-foreground: hsl(240 5.9% 10%);
+   655→  --secondary: hsl(240 3.7% 15.9%);
+   656→  --secondary-foreground: hsl(0 0% 98%);
+   657→  --muted: hsl(240 3.7% 15.9%);
+   658→  --muted-foreground: hsl(240 5% 64.9%);
+   659→  --accent: hsl(240 3.7% 15.9%);
+   660→  --accent-foreground: hsl(0 0% 98%);
+   661→  --destructive: hsl(0 62.8% 30.6%);
+   662→  --destructive-foreground: hsl(0 0% 98%);
+   663→  --border: hsl(240 3.7% 15.9%);
+   664→  --input: hsl(240 3.7% 15.9%);
+   665→  --ring: hsl(240 4.9% 83.9%);
+   666→  --chart-1: hsl(220 70% 50%);
+   667→  --chart-2: hsl(160 60% 45%);
+   668→  --chart-3: hsl(30 80% 55%);
+   669→  --chart-4: hsl(280 65% 60%);
+   670→  --chart-5: hsl(340 75% 55%);
+   671→  --sidebar: hsl(240 5.9% 10%);
+   672→  --sidebar-foreground: hsl(240 4.8% 95.9%);
+   673→  --sidebar-primary: hsl(224.3 76.3% 48%);
+   674→  --sidebar-primary-foreground: hsl(0 0% 100%);
+   675→  --sidebar-accent: hsl(240 3.7% 15.9%);
+   676→  --sidebar-accent-foreground: hsl(240 4.8% 95.9%);
+   677→  --sidebar-border: hsl(240 3.7% 15.9%);
+   678→  --sidebar-ring: hsl(217.2 91.2% 59.8%);
+   679→  --muted-2: hsl(0, 0%, 18%);
+   680→  --muted-2-foreground: hsl(240, 2%, 75%);
+   681→  --gradient-1: hsl(240 77% 25%);
+   682→  --gradient-2: hsl(125 51% 53%);
+   683→  --gradient-3: hsl(318 58% 66%);
+   684→}
+   685→
+   686→@keyframes accordion-down {
+   687→  from {
+   688→    height: 0;
+   689→  }
+   690→  to {
+   691→    height: var(--radix-accordion-content-height);
+   692→  }
+   693→}
+   694→
+   695→@keyframes accordion-up {
+   696→  from {
+   697→    height: var(--radix-accordion-content-height);
+   698→  }
+   699→  to {
+   700→    height: 0;
+   701→  }
+   702→}
+   703→
+   704→@keyframes fade-in-out {
+   705→  0% {
+   706→    opacity: 0;
+   707→  }
+   708→  20% {
+   709→    opacity: 1;
+   710→  }
+   711→  80% {
+   712→    opacity: 1;
+   713→  }
+   714→  100% {
+   715→    opacity: 0;
+   716→  }
+   717→}
+   718→
+   719→@keyframes progress {
+   720→  from {
+   721→    width: "0%";
+   722→  }
+   723→  to {
+   724→    width: "100%";
+   725→  }
+   726→}
+   727→
+   728→@keyframes infiniteSlider {
+   729→  0% {
+   730→    transform: "translateX(0)";
+   731→  }
+   732→  100% {
+   733→    transform: "translateX(calc(-250px * 5))";
+   734→  }
+   735→}
+   736→
+   737→@keyframes infiniteSliderReverse {
+   738→  0% {
+   739→    transform: "translateX(calc(-250px * 5))";
+   740→  }
+   741→  100% {
+   742→    transform: "translateX(0)";
+   743→  }
+   744→}
+   745→
+   746→@keyframes fade-in-scale {
+   747→  0% {
+   748→    opacity: 0;
+   749→    transform: scale(0.95);
+   750→  }
+   751→  100% {
+   752→    opacity: 1;
+   753→    transform: scale(1);
+   754→  }
+   755→}
+   756→
+   757→@keyframes transform1 {
+   758→  0%,
+   759→    25%,
+   760→    100% {
+   761→    width: 100%;
+   762→    padding-bottom: 120%;
+   763→  }
+   764→  33.33%,
+   765→    58.33% {
+   766→    width: 0%;
+   767→    padding-bottom: 0%;
+   768→  }
+   769→  66.66%,
+   770→    91.66% {
+   771→    width: 90%;
+   772→    padding-bottom: 100%;
+   773→  }
+   774→}
+   775→
+   776→@keyframes transform2 {
+   777→  0%,
+   778→    25%,
+   779→    100% {
+   780→    width: 65%;
+   781→    padding-bottom: 65%;
+   782→  }
+   783→  33.33%,
+   784→    58.33% {
+   785→    width: 95%;
+   786→    padding-bottom: 114%;
+   787→  }
+   788→  66.66%,
+   789→    91.66% {
+   790→    width: 52%;
+   791→    padding-bottom: 52%;
+   792→  }
+   793→}
+   794→
+   795→@keyframes transform3 {
+   796→  0%,
+   797→    25%,
+   798→    100% {
+   799→    width: 78%;
+   800→    padding-bottom: 100%;
+   801→  }
+   802→  33.33%,
+   803→    58.33% {
+   804→    width: 78%;
+   805→    padding-bottom: 94%;
+   806→  }
+   807→  66.66%,
+   808→    91.66% {
+   809→    width: 95%;
+   810→    padding-bottom: 76%;
+   811→  }
+   812→}
+   813→
+   814→@keyframes transform4 {
+   815→  0%,
+   816→    25%,
+   817→    66.66%,
+   818→    91.66%,
+   819→    100% {
+   820→    width: 0%;
+   821→    padding-bottom: 0%;
+   822→  }
+   823→  33.33%,
+   824→    58.33% {
+   825→    width: 65%;
+   826→    padding-bottom: 46%;
+   827→  }
+   828→}
+   829→
+   830→@keyframes image1 {
+   831→  0%,
+   832→    25%,
+   833→    100% {
+   834→    opacity: 1;
+   835→  }
+   836→  33.33%,
+   837→    58.33%,
+   838→    66.66%,
+   839→    91.66% {
+   840→    opacity: 0;
+   841→  }
+   842→}
+   843→
+   844→@keyframes image2 {
+   845→  0%,
+   846→    25%,
+   847→    33.33%,
+   848→    58.33%,
+   849→    100% {
+   850→    opacity: 0;
+   851→  }
+   852→  66.66%,
+   853→    91.66% {
+   854→    opacity: 1;
+   855→  }
+   856→}
+   857→
+   858→@keyframes image3 {
+   859→  0%,
+   860→    25%,
+   861→    66.66%,
+   862→    91.66%,
+   863→    100% {
+   864→    opacity: 0;
+   865→  }
+   866→  33.33%,
+   867→    58.33% {
+   868→    opacity: 1;
+   869→  }
+   870→}
+   871→
+   872→@keyframes gradient-spin {
+   873→  0% {
+   874→    transform: translateX(-50%) translateY(-50%) rotate(0deg);
+   875→  }
+   876→  100% {
+   877→    transform: translateX(-50%) translateY(-50%) rotate(360deg);
+   878→  }
+   879→}
+   880→
+   881→@keyframes shadow-ping {
+   882→  0% {
+   883→    boxshadow: 0 0 0 0px theme("colors.neutral.100");
+   884→  }
+   885→  50% {
+   886→    boxshadow: 0 0 0 12px theme("colors.neutral.300");
+   887→  }
+   888→  100% {
+   889→    boxshadow: 0 0 0 12px transparent;
+   890→  }
+   891→}
+   892→
+   893→@keyframes show-text {
+   894→  0%,
+   895→    14.28% {
+   896→    opacity: 0;
+   897→  }
+   898→  17%,
+   899→    26% {
+   900→    opacity: 1;
+   901→  }
+   902→  28.58%,
+   903→    100% {
+   904→    opacity: 0;
+   905→  }
+   906→}
+   907→
+   908→@keyframes flip-btn {
+   909→  to {
+   910→    transform: rotate(360deg);
+   911→  }
+   912→}
+   913→
+   914→@keyframes rotate-btn {
+   915→  to {
+   916→    transform: rotate(90deg);
+   917→  }
+   918→}
+   919→
+   920→@keyframes slide-to-right {
+   921→  0% {
+   922→    opacity: 0;
+   923→    left: 0;
+   924→  }
+   925→  50% {
+   926→    opacity: 1;
+   927→  }
+   928→  100% {
+   929→    opacity: 0;
+   930→    left: 80%;
+   931→  }
+   932→}
+   933→
+   934→@keyframes slide-to-top {
+   935→  0% {
+   936→    opacity: 0;
+   937→    bottom: 0;
+   938→  }
+   939→  50% {
+   940→    opacity: 1;
+   941→  }
+   942→  100% {
+   943→    opacity: 0;
+   944→    bottom: 80%;
+   945→  }
+   946→}
+   947→
+   948→@keyframes light-to-right {
+   949→  0% {
+   950→    transform: translate(0%);
+   951→    opacity: 0;
+   952→  }
+   953→  50% {
+   954→    opacity: 1;
+   955→  }
+   956→  100% {
+   957→    transform: translate(100%);
+   958→    opacity: 0;
+   959→  }
+   960→}
+   961→
+   962→@keyframes marquee {
+   963→  0% {
+   964→    transform: translateX(0%);
+   965→  }
+   966→  100% {
+   967→    transform: translateX(-100%);
+   968→  }
+   969→}
+   970→
+   971→@keyframes fade-in {
+   972→  0% {
+   973→    opacity: 0;
+   974→    transform: translateY(20px);
+   975→  }
+   976→  100% {
+   977→    opacity: 1;
+   978→    transform: translateY(0);
+   979→  }
+   980→}
+   981→
+   982→@keyframes shimmer-slide {
+   983→  to {
+   984→    transform: translate(calc(100cqw - 100%), 0);
+   985→  }
+   986→}
+   987→
+   988→@keyframes spin-around {
+   989→  0% {
+   990→    transform: translateZ(0) rotate(0);
+   991→  }
+   992→  15%,
+   993→    35% {
+   994→    transform: translateZ(0) rotate(90deg);
+   995→  }
+   996→  65%,
+   997→    85% {
+   998→    transform: translateZ(0) rotate(270deg);
+   999→  }
+  1000→  100% {
+  1001→    transform: translateZ(0) rotate(360deg);
+  1002→  }
+  1003→}
+  1004→
+  1005→@keyframes shine {
+  1006→  0% {
+  1007→    background-position: 0% 0%;
+  1008→  }
+  1009→  50% {
+  1010→    background-position: 100% 100%;
+  1011→  }
+  1012→  to {
+  1013→    background-position: 0% 0%;
+  1014→  }
+  1015→}
+  1016→```
+  1017→
+  1018→Implementation Guidelines
+  1019→ 1. Analyze the component structure and identify all required dependencies
+  1020→ 2. Review the component's argumens and state
+  1021→ 3. Identify any required context providers or hooks and install them
+  1022→ 4. Questions to Ask
+  1023→ - What data/props will be passed to this component?
+  1024→ - Are there any specific state management requirements?
+  1025→ - Are there any required assets (images, icons, etc.)?
+  1026→ - What is the expected responsive behavior?
+  1027→ - What is the best place to use this component in the app?
+  1028→
+  1029→Steps to integrate
+  1030→ 0. Copy paste all the code above in the correct directories
+  1031→ 1. Install external dependencies
+  1032→ 2. Fill image assets with Unsplash stock images you know exist
+  1033→ 3. Use lucide-react icons for svgs or logos if component requires them

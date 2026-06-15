@@ -1,0 +1,941 @@
+     1→     1→You are given a task to integrate an existing React component in the codebase
+     2→     2→
+     3→     3→The codebase should support:
+     4→     4→- shadcn project structure  
+     5→     5→- Tailwind CSS
+     6→     6→- Typescript
+     7→     7→
+     8→     8→If it doesn't, provide instructions on how to setup project via shadcn CLI, install Tailwind or Typescript.
+     9→     9→
+    10→    10→Determine the default path for components and styles. 
+    11→    11→If default path for components is not /components/ui, provide instructions on why it's important to create this folder
+    12→    12→Copy-paste this component to /components/ui folder:
+    13→    13→```tsx
+    14→    14→timeline.tsx
+    15→    15→"use client";
+    16→    16→
+    17→    17→import * as React from "react";
+    18→    18→import { cva, type VariantProps } from "class-variance-authority";
+    19→    19→import { cn } from "@/lib/utils";
+    20→    20→import { ScrollArea } from "@/components/ui/scroll-area";
+    21→    21→import {
+    22→    22→  Check,
+    23→    23→  Clock,
+    24→    24→  AlertCircle,
+    25→    25→  X,
+    26→    26→  Calendar,
+    27→    27→  User,
+    28→    28→  MapPin,
+    29→    29→  MessageSquare,
+    30→    30→  Award,
+    31→    31→  Briefcase,
+    32→    32→  GraduationCap,
+    33→    33→  Heart,
+    34→    34→} from "lucide-react";
+    35→    35→
+    36→    36→const timelineVariants = cva("relative flex flex-col", {
+    37→    37→  variants: {
+    38→    38→    variant: {
+    39→    39→      default: "gap-4",
+    40→    40→      compact: "gap-2",
+    41→    41→      spacious: "gap-8",
+    42→    42→    },
+    43→    43→    orientation: {
+    44→    44→      vertical: "flex-col",
+    45→    45→      horizontal: "flex-row",
+    46→    46→    },
+    47→    47→  },
+    48→    48→  defaultVariants: {
+    49→    49→    variant: "default",
+    50→    50→    orientation: "vertical",
+    51→    51→  },
+    52→    52→});
+    53→    53→
+    54→    54→const timelineItemVariants = cva("relative flex gap-3 pb-2", {
+    55→    55→  variants: {
+    56→    56→    orientation: {
+    57→    57→      vertical: "flex-row",
+    58→    58→      horizontal: "flex-col min-w-64 shrink-0",
+    59→    59→    },
+    60→    60→  },
+    61→    61→  defaultVariants: {
+    62→    62→    orientation: "vertical",
+    63→    63→  },
+    64→    64→});
+    65→    65→
+    66→    66→const timelineConnectorVariants = cva("bg-border", {
+    67→    67→  variants: {
+    68→    68→    orientation: {
+    69→    69→      vertical: "absolute left-3 top-9 h-full w-px",
+    70→    70→      horizontal: "absolute top-3 left-8 w-full h-px",
+    71→    71→    },
+    72→    72→    status: {
+    73→    73→      default: "bg-border",
+    74→    74→      completed: "bg-primary",
+    75→    75→      active: "bg-primary",
+    76→    76→      pending: "bg-muted-foreground/30",
+    77→    77→      error: "bg-destructive",
+    78→    78→    },
+    79→    79→  },
+    80→    80→  defaultVariants: {
+    81→    81→    orientation: "vertical",
+    82→    82→    status: "default",
+    83→    83→  },
+    84→    84→});
+    85→    85→
+    86→    86→const timelineIconVariants = cva(
+    87→    87→  "flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 bg-background text-xs font-medium",
+    88→    88→  {
+    89→    89→    variants: {
+    90→    90→      status: {
+    91→    91→        default: "border-border text-muted-foreground",
+    92→    92→        completed: "border-primary bg-primary text-primary-foreground",
+    93→    93→        active: "border-primary bg-background text-primary animate-pulse",
+    94→    94→        pending: "border-muted-foreground/30 text-muted-foreground",
+    95→    95→        error: "border-destructive bg-destructive text-destructive-foreground",
+    96→    96→      },
+    97→    97→    },
+    98→    98→    defaultVariants: {
+    99→    99→      status: "default",
+   100→   100→    },
+   101→   101→  },
+   102→   102→);
+   103→   103→
+   104→   104→export interface TimelineItem {
+   105→   105→  id: string;
+   106→   106→  title: string;
+   107→   107→  description?: string;
+   108→   108→  timestamp?: string | Date;
+   109→   109→  status?: "default" | "completed" | "active" | "pending" | "error";
+   110→   110→  icon?: React.ReactNode;
+   111→   111→  content?: React.ReactNode;
+   112→   112→  metadata?: Record<string, any>;
+   113→   113→}
+   114→   114→
+   115→   115→export interface TimelineProps extends VariantProps<typeof timelineVariants> {
+   116→   116→  items: TimelineItem[];
+   117→   117→  className?: string;
+   118→   118→  showConnectors?: boolean;
+   119→   119→  showTimestamps?: boolean;
+   120→   120→  timestampPosition?: "top" | "bottom" | "inline";
+   121→   121→}
+   122→   122→
+   123→   123→function getStatusIcon(status: TimelineItem["status"]) {
+   124→   124→  switch (status) {
+   125→   125→    case "completed":
+   126→   126→      return <Check className="h-3 w-3" />;
+   127→   127→    case "active":
+   128→   128→      return <Clock className="h-3 w-3" />;
+   129→   129→    case "pending":
+   130→   130→      return <Clock className="h-3 w-3" />;
+   131→   131→    case "error":
+   132→   132→      return <X className="h-3 w-3" />;
+   133→   133→    default:
+   134→   134→      return <div className="h-2 w-2 rounded-full bg-current" />;
+   135→   135→  }
+   136→   136→}
+   137→   137→
+   138→   138→function formatTimestamp(timestamp: string | Date): string {
+   139→   139→  if (!timestamp) return "";
+   140→   140→  const date = typeof timestamp === "string" ? new Date(timestamp) : timestamp;
+   141→   141→  return date.toLocaleDateString("en-US", {
+   142→   142→    month: "short",
+   143→   143→    day: "numeric",
+   144→   144→    year: "numeric",
+   145→   145→    hour: "2-digit",
+   146→   146→    minute: "2-digit",
+   147→   147→  });
+   148→   148→}
+   149→   149→
+   150→   150→export function Timeline({
+   151→   151→  items,
+   152→   152→  className,
+   153→   153→  variant,
+   154→   154→  orientation = "vertical",
+   155→   155→  showConnectors = true,
+   156→   156→  showTimestamps = true,
+   157→   157→  timestampPosition = "top",
+   158→   158→  ...props
+   159→   159→}: TimelineProps) {
+   160→   160→  const timelineContent = (
+   161→   161→    <div
+   162→   162→      className={cn(
+   163→   163→        timelineVariants({ variant, orientation }),
+   164→   164→        orientation === "horizontal" ? "pb-4" : "",
+   165→   165→      )}
+   166→   166→    >
+   167→   167→      {items.map((item, index) => (
+   168→   168→        <div
+   169→   169→          key={item.id}
+   170→   170→          className={cn(timelineItemVariants({ orientation }))}
+   171→   171→        >
+   172→   172→          {/* Connector Line */}
+   173→   173→          {showConnectors && index < items.length - 1 && (
+   174→   174→            <div
+   175→   175→              className={cn(
+   176→   176→                timelineConnectorVariants({
+   177→   177→                  orientation,
+   178→   178→                  status: item.status,
+   179→   179→                }),
+   180→   180→              )}
+   181→   181→            />
+   182→   182→          )}
+   183→   183→
+   184→   184→          {/* Icon */}
+   185→   185→          <div className="relative z-10 flex shrink-0">
+   186→   186→            <div className={cn(timelineIconVariants({ status: item.status }))}>
+   187→   187→              {item.icon || getStatusIcon(item.status)}
+   188→   188→            </div>
+   189→   189→          </div>
+   190→   190→
+   191→   191→          {/* Content */}
+   192→   192→          <div className="flex min-w-0 flex-1 flex-col gap-2">
+   193→   193→            {/* Timestamp - Top */}
+   194→   194→            {showTimestamps &&
+   195→   195→              timestampPosition === "top" &&
+   196→   196→              item.timestamp && (
+   197→   197→                <time className="text-xs text-muted-foreground">
+   198→   198→                  {formatTimestamp(item.timestamp)}
+   199→   199→                </time>
+   200→   200→              )}
+   201→   201→
+   202→   202→            {/* Title and Inline Timestamp */}
+   203→   203→            <div className="flex items-start justify-between gap-2">
+   204→   204→              <h3 className="font-medium leading-tight">{item.title}</h3>
+   205→   205→              {showTimestamps &&
+   206→   206→                timestampPosition === "inline" &&
+   207→   207→                item.timestamp && (
+   208→   208→                  <time className="shrink-0 text-xs text-muted-foreground">
+   209→   209→                    {formatTimestamp(item.timestamp)}
+   210→   210→                  </time>
+   211→   211→                )}
+   212→   212→            </div>
+   213→   213→
+   214→   214→            {/* Description */}
+   215→   215→            {item.description && (
+   216→   216→              <p className="text-sm text-muted-foreground leading-relaxed">
+   217→   217→                {item.description}
+   218→   218→              </p>
+   219→   219→            )}
+   220→   220→
+   221→   221→            {/* Custom Content */}
+   222→   222→            {item.content && <div className="mt-3">{item.content}</div>}
+   223→   223→
+   224→   224→            {/* Timestamp - Bottom */}
+   225→   225→            {showTimestamps &&
+   226→   226→              timestampPosition === "bottom" &&
+   227→   227→              item.timestamp && (
+   228→   228→                <time className="text-xs text-muted-foreground">
+   229→   229→                  {formatTimestamp(item.timestamp)}
+   230→   230→                </time>
+   231→   231→              )}
+   232→   232→          </div>
+   233→   233→        </div>
+   234→   234→      ))}
+   235→   235→    </div>
+   236→   236→  );
+   237→   237→
+   238→   238→  if (orientation === "horizontal") {
+   239→   239→    return (
+   240→   240→      <ScrollArea
+   241→   241→        orientation="horizontal"
+   242→   242→        className={cn("w-full", className)}
+   243→   243→        {...props}
+   244→   244→      >
+   245→   245→        {timelineContent}
+   246→   246→      </ScrollArea>
+   247→   247→    );
+   248→   248→  }
+   249→   249→
+   250→   250→  return (
+   251→   251→    <div className={className} {...props}>
+   252→   252→      {timelineContent}
+   253→   253→    </div>
+   254→   254→  );
+   255→   255→}
+   256→   256→
+   257→   257→// Example Components for Documentation
+   258→   258→export function BasicTimelineExample() {
+   259→   259→  const items: TimelineItem[] = [
+   260→   260→    {
+   261→   261→      id: "1",
+   262→   262→      title: "Project Started",
+   263→   263→      description: "Initial project setup and planning phase",
+   264→   264→      timestamp: new Date("2024-01-15T09:00:00"),
+   265→   265→      status: "completed",
+   266→   266→    },
+   267→   267→    {
+   268→   268→      id: "2",
+   269→   269→      title: "Development Phase",
+   270→   270→      description: "Core features implementation in progress",
+   271→   271→      timestamp: new Date("2024-02-01T10:30:00"),
+   272→   272→      status: "active",
+   273→   273→    },
+   274→   274→    {
+   275→   275→      id: "3",
+   276→   276→      title: "Testing & QA",
+   277→   277→      description: "Quality assurance and testing phase",
+   278→   278→      timestamp: new Date("2024-02-15T14:00:00"),
+   279→   279→      status: "pending",
+   280→   280→    },
+   281→   281→    {
+   282→   282→      id: "4",
+   283→   283→      title: "Launch",
+   284→   284→      description: "Production deployment and launch",
+   285→   285→      timestamp: new Date("2024-03-01T16:00:00"),
+   286→   286→      status: "pending",
+   287→   287→    },
+   288→   288→  ];
+   289→   289→
+   290→   290→  return <Timeline items={items} />;
+   291→   291→}
+   292→   292→
+   293→   293→export function TimelineVariantsExample() {
+   294→   294→  const items: TimelineItem[] = [
+   295→   295→    {
+   296→   296→      id: "1",
+   297→   297→      title: "Task Completed",
+   298→   298→      description: "Successfully finished the assigned task",
+   299→   299→      status: "completed",
+   300→   300→    },
+   301→   301→    {
+   302→   302→      id: "2",
+   303→   303→      title: "In Progress",
+   304→   304→      description: "Currently working on this item",
+   305→   305→      status: "active",
+   306→   306→    },
+   307→   307→    {
+   308→   308→      id: "3",
+   309→   309→      title: "Upcoming",
+   310→   310→      description: "Scheduled for later",
+   311→   311→      status: "pending",
+   312→   312→    },
+   313→   313→  ];
+   314→   314→
+   315→   315→  return (
+   316→   316→    <div className="space-y-8">
+   317→   317→      <div>
+   318→   318→        <h3 className="mb-4 text-sm font-medium">Default</h3>
+   319→   319→        <Timeline items={items} variant="default" />
+   320→   320→      </div>
+   321→   321→      <div>
+   322→   322→        <h3 className="mb-4 text-sm font-medium">Compact</h3>
+   323→   323→        <Timeline items={items} variant="compact" />
+   324→   324→      </div>
+   325→   325→      <div>
+   326→   326→        <h3 className="mb-4 text-sm font-medium">Spacious</h3>
+   327→   327→        <Timeline items={items} variant="spacious" />
+   328→   328→      </div>
+   329→   329→    </div>
+   330→   330→  );
+   331→   331→}
+   332→   332→
+   333→   333→export function HorizontalTimelineExample() {
+   334→   334→  const items: TimelineItem[] = [
+   335→   335→    {
+   336→   336→      id: "1",
+   337→   337→      title: "Planning",
+   338→   338→      description: "Project planning and research",
+   339→   339→      status: "completed",
+   340→   340→    },
+   341→   341→    {
+   342→   342→      id: "2",
+   343→   343→      title: "Design",
+   344→   344→      description: "UI/UX design phase",
+   345→   345→      status: "completed",
+   346→   346→    },
+   347→   347→    {
+   348→   348→      id: "3",
+   349→   349→      title: "Development",
+   350→   350→      description: "Core development work",
+   351→   351→      status: "active",
+   352→   352→    },
+   353→   353→    {
+   354→   354→      id: "4",
+   355→   355→      title: "Testing",
+   356→   356→      description: "Quality assurance",
+   357→   357→      status: "pending",
+   358→   358→    },
+   359→   359→    {
+   360→   360→      id: "5",
+   361→   361→      title: "Launch",
+   362→   362→      description: "Production release",
+   363→   363→      status: "pending",
+   364→   364→    },
+   365→   365→  ];
+   366→   366→
+   367→   367→  return <Timeline items={items} orientation="horizontal" />;
+   368→   368→}
+   369→   369→
+   370→   370→export function TimelineWithCustomIconsExample() {
+   371→   371→  const items: TimelineItem[] = [
+   372→   372→    {
+   373→   373→      id: "1",
+   374→   374→      title: "Account Created",
+   375→   375→      description: "Welcome to our platform!",
+   376→   376→      timestamp: new Date("2024-01-01T08:00:00"),
+   377→   377→      status: "completed",
+   378→   378→      icon: <User className="h-3 w-3" />,
+   379→   379→    },
+   380→   380→    {
+   381→   381→      id: "2",
+   382→   382→      title: "Profile Updated",
+   383→   383→      description: "Personal information has been updated",
+   384→   384→      timestamp: new Date("2024-01-02T14:30:00"),
+   385→   385→      status: "completed",
+   386→   386→      icon: <User className="h-3 w-3" />,
+   387→   387→    },
+   388→   388→    {
+   389→   389→      id: "3",
+   390→   390→      title: "First Order Placed",
+   391→   391→      description: "Order #12345 has been placed successfully",
+   392→   392→      timestamp: new Date("2024-01-03T11:15:00"),
+   393→   393→      status: "completed",
+   394→   394→      icon: <Briefcase className="h-3 w-3" />,
+   395→   395→    },
+   396→   396→    {
+   397→   397→      id: "4",
+   398→   398→      title: "Delivery Scheduled",
+   399→   399→      description: "Your order is out for delivery",
+   400→   400→      timestamp: new Date("2024-01-04T09:45:00"),
+   401→   401→      status: "active",
+   402→   402→      icon: <MapPin className="h-3 w-3" />,
+   403→   403→    },
+   404→   404→  ];
+   405→   405→
+   406→   406→  return <Timeline items={items} />;
+   407→   407→}
+   408→   408→
+   409→   409→export function TimelineWithContentExample() {
+   410→   410→  const items: TimelineItem[] = [
+   411→   411→    {
+   412→   412→      id: "1",
+   413→   413→      title: "Code Review Completed",
+   414→   414→      description: "Pull request #123 has been reviewed",
+   415→   415→      timestamp: new Date("2024-01-01T10:00:00"),
+   416→   416→      status: "completed",
+   417→   417→      content: (
+   418→   418→        <div className="rounded-md bg-muted p-3 text-sm">
+   419→   419→          <p className="font-medium">Changes approved by John Doe</p>
+   420→   420→          <p className="text-muted-foreground">
+   421→   421→            3 files changed, +45 -12 lines
+   422→   422→          </p>
+   423→   423→        </div>
+   424→   424→      ),
+   425→   425→    },
+   426→   426→    {
+   427→   427→      id: "2",
+   428→   428→      title: "Build Failed",
+   429→   429→      description: "CI/CD pipeline encountered errors",
+   430→   430→      timestamp: new Date("2024-01-01T11:30:00"),
+   431→   431→      status: "error",
+   432→   432→      content: (
+   433→   433→        <div className="rounded-md bg-destructive/10 p-3 text-sm">
+   434→   434→          <p className="font-medium text-destructive">Build #456 failed</p>
+   435→   435→          <p className="text-muted-foreground">Syntax error in main.tsx:45</p>
+   436→   436→        </div>
+   437→   437→      ),
+   438→   438→    },
+   439→   439→    {
+   440→   440→      id: "3",
+   441→   441→      title: "Issue Assigned",
+   442→   442→      description: "Bug report assigned to development team",
+   443→   443→      timestamp: new Date("2024-01-01T15:20:00"),
+   444→   444→      status: "active",
+   445→   445→      content: (
+   446→   446→        <div className="rounded-md bg-primary/10 p-3 text-sm">
+   447→   447→          <p className="font-medium">Issue #789: Login form validation</p>
+   448→   448→          <p className="text-muted-foreground">
+   449→   449→            Priority: High | Assigned to: Jane Smith
+   450→   450→          </p>
+   451→   451→        </div>
+   452→   452→      ),
+   453→   453→    },
+   454→   454→  ];
+   455→   455→
+   456→   456→  return <Timeline items={items} />;
+   457→   457→}
+   458→   458→
+   459→   459→export function ProjectTimelineExample() {
+   460→   460→  const items: TimelineItem[] = [
+   461→   461→    {
+   462→   462→      id: "1",
+   463→   463→      title: "Project Kickoff",
+   464→   464→      description: "Initial meeting with stakeholders and team members",
+   465→   465→      timestamp: new Date("2024-01-15T09:00:00"),
+   466→   466→      status: "completed",
+   467→   467→      icon: <Briefcase className="h-3 w-3" />,
+   468→   468→      content: (
+   469→   469→        <div className="space-y-2">
+   470→   470→          <div className="flex gap-2 text-sm">
+   471→   471→            <span className="font-medium">Attendees:</span>
+   472→   472→            <span className="text-muted-foreground">5 team members</span>
+   473→   473→          </div>
+   474→   474→          <div className="flex gap-2 text-sm">
+   475→   475→            <span className="font-medium">Duration:</span>
+   476→   476→            <span className="text-muted-foreground">2 hours</span>
+   477→   477→          </div>
+   478→   478→        </div>
+   479→   479→      ),
+   480→   480→    },
+   481→   481→    {
+   482→   482→      id: "2",
+   483→   483→      title: "Requirements Gathering",
+   484→   484→      description:
+   485→   485→        "Detailed analysis of project requirements and specifications",
+   486→   486→      timestamp: new Date("2024-01-20T14:00:00"),
+   487→   487→      status: "completed",
+   488→   488→      icon: <MessageSquare className="h-3 w-3" />,
+   489→   489→    },
+   490→   490→    {
+   491→   491→      id: "3",
+   492→   492→      title: "Design Phase",
+   493→   493→      description: "UI/UX design and wireframe creation",
+   494→   494→      timestamp: new Date("2024-02-01T10:00:00"),
+   495→   495→      status: "active",
+   496→   496→      icon: <Award className="h-3 w-3" />,
+   497→   497→      content: (
+   498→   498→        <div className="rounded-md border border-primary/20 bg-primary/5 p-3 text-sm">
+   499→   499→          <p className="font-medium">Current Progress: 60%</p>
+   500→   500→          <p className="text-muted-foreground">
+   501→   501→            Expected completion: Feb 10, 2024
+   502→   502→          </p>
+   503→   503→        </div>
+   504→   504→      ),
+   505→   505→    },
+   506→   506→    {
+   507→   507→      id: "4",
+   508→   508→      title: "Development Sprint 1",
+   509→   509→      description: "Core functionality implementation",
+   510→   510→      timestamp: new Date("2024-02-15T09:00:00"),
+   511→   511→      status: "pending",
+   512→   512→      icon: <GraduationCap className="h-3 w-3" />,
+   513→   513→    },
+   514→   514→    {
+   515→   515→      id: "5",
+   516→   516→      title: "Testing & QA",
+   517→   517→      description: "Quality assurance and bug fixes",
+   518→   518→      timestamp: new Date("2024-03-01T09:00:00"),
+   519→   519→      status: "pending",
+   520→   520→      icon: <AlertCircle className="h-3 w-3" />,
+   521→   521→    },
+   522→   522→  ];
+   523→   523→
+   524→   524→  return <Timeline items={items} variant="spacious" />;
+   525→   525→}
+   526→   526→
+   527→   527→export function OrderTrackingTimelineExample() {
+   528→   528→  const items: TimelineItem[] = [
+   529→   529→    {
+   530→   530→      id: "1",
+   531→   531→      title: "Order Placed",
+   532→   532→      description: "Your order has been successfully placed",
+   533→   533→      timestamp: new Date("2024-01-01T10:30:00"),
+   534→   534→      status: "completed",
+   535→   535→      icon: <Check className="h-3 w-3" />,
+   536→   536→    },
+   537→   537→    {
+   538→   538→      id: "2",
+   539→   539→      title: "Payment Confirmed",
+   540→   540→      description: "Payment has been processed successfully",
+   541→   541→      timestamp: new Date("2024-01-01T10:35:00"),
+   542→   542→      status: "completed",
+   543→   543→      icon: <Check className="h-3 w-3" />,
+   544→   544→    },
+   545→   545→    {
+   546→   546→      id: "3",
+   547→   547→      title: "Order Processing",
+   548→   548→      description: "Your order is being prepared for shipment",
+   549→   549→      timestamp: new Date("2024-01-01T14:20:00"),
+   550→   550→      status: "active",
+   551→   551→      icon: <Clock className="h-3 w-3" />,
+   552→   552→    },
+   553→   553→    {
+   554→   554→      id: "4",
+   555→   555→      title: "Shipped",
+   556→   556→      description: "Your order has been shipped",
+   557→   557→      status: "pending",
+   558→   558→      icon: <MapPin className="h-3 w-3" />,
+   559→   559→    },
+   560→   560→    {
+   561→   561→      id: "5",
+   562→   562→      title: "Delivered",
+   563→   563→      description: "Package delivered to your address",
+   564→   564→      status: "pending",
+   565→   565→      icon: <Heart className="h-3 w-3" />,
+   566→   566→    },
+   567→   567→  ];
+   568→   568→
+   569→   569→  return <Timeline items={items} timestampPosition="inline" />;
+   570→   570→}
+   571→   571→
+   572→   572→export function CompactTimelineExample() {
+   573→   573→  const items: TimelineItem[] = [
+   574→   574→    {
+   575→   575→      id: "1",
+   576→   576→      title: "Login",
+   577→   577→      timestamp: new Date("2024-01-01T08:30:00"),
+   578→   578→      status: "completed",
+   579→   579→    },
+   580→   580→    {
+   581→   581→      id: "2",
+   582→   582→      title: "File uploaded",
+   583→   583→      timestamp: new Date("2024-01-01T08:35:00"),
+   584→   584→      status: "completed",
+   585→   585→    },
+   586→   586→    {
+   587→   587→      id: "3",
+   588→   588→      title: "Processing started",
+   589→   589→      timestamp: new Date("2024-01-01T08:40:00"),
+   590→   590→      status: "active",
+   591→   591→    },
+   592→   592→    {
+   593→   593→      id: "4",
+   594→   594→      title: "Processing complete",
+   595→   595→      status: "pending",
+   596→   596→    },
+   597→   597→  ];
+   598→   598→
+   599→   599→  return (
+   600→   600→    <Timeline
+   601→   601→      items={items}
+   602→   602→      variant="compact"
+   603→   603→      timestampPosition="inline"
+   604→   604→      showTimestamps={true}
+   605→   605→    />
+   606→   606→  );
+   607→   607→}
+   608→   608→
+   609→   609→export function ExtendedHorizontalTimelineExample() {
+   610→   610→  const items: TimelineItem[] = [
+   611→   611→    {
+   612→   612→      id: "1",
+   613→   613→      title: "Research",
+   614→   614→      description: "Market research and analysis",
+   615→   615→      timestamp: new Date("2024-01-01T09:00:00"),
+   616→   616→      status: "completed",
+   617→   617→      icon: <MessageSquare className="h-3 w-3" />,
+   618→   618→    },
+   619→   619→    {
+   620→   620→      id: "2",
+   621→   621→      title: "Planning",
+   622→   622→      description: "Project planning and roadmap",
+   623→   623→      timestamp: new Date("2024-01-05T10:00:00"),
+   624→   624→      status: "completed",
+   625→   625→      icon: <Calendar className="h-3 w-3" />,
+   626→   626→    },
+   627→   627→    {
+   628→   628→      id: "3",
+   629→   629→      title: "Design",
+   630→   630→      description: "UI/UX design and wireframes",
+   631→   631→      timestamp: new Date("2024-01-10T11:00:00"),
+   632→   632→      status: "completed",
+   633→   633→      icon: <Award className="h-3 w-3" />,
+   634→   634→    },
+   635→   635→    {
+   636→   636→      id: "4",
+   637→   637→      title: "Prototype",
+   638→   638→      description: "Interactive prototype development",
+   639→   639→      timestamp: new Date("2024-01-15T14:00:00"),
+   640→   640→      status: "completed",
+   641→   641→      icon: <Briefcase className="h-3 w-3" />,
+   642→   642→    },
+   643→   643→    {
+   644→   644→      id: "5",
+   645→   645→      title: "Development",
+   646→   646→      description: "Core feature implementation",
+   647→   647→      timestamp: new Date("2024-01-20T09:00:00"),
+   648→   648→      status: "active",
+   649→   649→      icon: <GraduationCap className="h-3 w-3" />,
+   650→   650→    },
+   651→   651→    {
+   652→   652→      id: "6",
+   653→   653→      title: "Testing",
+   654→   654→      description: "Quality assurance and testing",
+   655→   655→      timestamp: new Date("2024-02-01T10:00:00"),
+   656→   656→      status: "pending",
+   657→   657→      icon: <AlertCircle className="h-3 w-3" />,
+   658→   658→    },
+   659→   659→    {
+   660→   660→      id: "7",
+   661→   661→      title: "Review",
+   662→   662→      description: "Stakeholder review and feedback",
+   663→   663→      timestamp: new Date("2024-02-05T15:00:00"),
+   664→   664→      status: "pending",
+   665→   665→      icon: <User className="h-3 w-3" />,
+   666→   666→    },
+   667→   667→    {
+   668→   668→      id: "8",
+   669→   669→      title: "Deploy",
+   670→   670→      description: "Production deployment",
+   671→   671→      timestamp: new Date("2024-02-10T16:00:00"),
+   672→   672→      status: "pending",
+   673→   673→      icon: <MapPin className="h-3 w-3" />,
+   674→   674→    },
+   675→   675→    {
+   676→   676→      id: "9",
+   677→   677→      title: "Launch",
+   678→   678→      description: "Product launch and marketing",
+   679→   679→      timestamp: new Date("2024-02-15T09:00:00"),
+   680→   680→      status: "pending",
+   681→   681→      icon: <Heart className="h-3 w-3" />,
+   682→   682→    },
+   683→   683→  ];
+   684→   684→
+   685→   685→  return <Timeline items={items} orientation="horizontal" variant="spacious" />;
+   686→   686→}
+   687→   687→
+   688→   688→export {
+   689→   689→  timelineVariants,
+   690→   690→  timelineItemVariants,
+   691→   691→  timelineConnectorVariants,
+   692→   692→  timelineIconVariants,
+   693→   693→};
+   694→   694→
+   695→   695→demo.tsx
+   696→   696→import { Timeline } from "@/components/ui/timeline";
+   697→   697→
+   698→   698→interface TimelineItem {
+   699→   699→  id: string;
+   700→   700→  title: string;
+   701→   701→  description: string;
+   702→   702→  timestamp: Date;
+   703→   703→  status: "completed" | "active" | "pending";
+   704→   704→}
+   705→   705→
+   706→   706→export default function DemoOne() {
+   707→   707→  const items: TimelineItem[] = [
+   708→   708→    {
+   709→   709→      id: "1",
+   710→   710→      title: "Project Started",
+   711→   711→      description: "Initial project setup and planning phase",
+   712→   712→      timestamp: new Date("2024-01-15T09:00:00"),
+   713→   713→      status: "completed",
+   714→   714→    },
+   715→   715→    {
+   716→   716→      id: "2",
+   717→   717→      title: "Development Phase",
+   718→   718→      description: "Core features implementation in progress",
+   719→   719→      timestamp: new Date("2024-02-01T10:30:00"),
+   720→   720→      status: "active",
+   721→   721→    },
+   722→   722→    {
+   723→   723→      id: "3",
+   724→   724→      title: "Testing & QA",
+   725→   725→      description: "Quality assurance and testing phase",
+   726→   726→      timestamp: new Date("2024-02-15T14:00:00"),
+   727→   727→      status: "pending",
+   728→   728→    },
+   729→   729→    {
+   730→   730→      id: "4",
+   731→   731→      title: "Launch",
+   732→   732→      description: "Production deployment and launch",
+   733→   733→      timestamp: new Date("2024-03-01T16:00:00"),
+   734→   734→      status: "pending",
+   735→   735→    },
+   736→   736→  ];
+   737→   737→
+   738→   738→  return <Timeline items={items} />;
+   739→   739→}
+   740→   740→```
+   741→   741→
+   742→   742→Copy-paste these files for dependencies:
+   743→   743→```tsx
+   744→   744→preetsuthar17/scroll-area
+   745→   745→"use client";
+   746→   746→
+   747→   747→import * as React from "react";
+   748→   748→import * as ScrollAreaPrimitive from "@radix-ui/react-scroll-area";
+   749→   749→import { cva, type VariantProps } from "class-variance-authority";
+   750→   750→import { cn } from "@/lib/utils";
+   751→   751→
+   752→   752→const scrollAreaVariants = cva("relative overflow-hidden", {
+   753→   753→  variants: {
+   754→   754→    orientation: {
+   755→   755→      vertical: "h-full",
+   756→   756→      horizontal: "w-full",
+   757→   757→      both: "h-full w-full",
+   758→   758→    },
+   759→   759→  },
+   760→   760→  defaultVariants: {
+   761→   761→    orientation: "vertical",
+   762→   762→  },
+   763→   763→});
+   764→   764→
+   765→   765→const scrollBarVariants = cva("flex touch-none select-none transition-colors", {
+   766→   766→  variants: {
+   767→   767→    orientation: {
+   768→   768→      vertical: "h-full w-2.5 border-l border-l-transparent p-[1px]",
+   769→   769→      horizontal: "h-2.5 w-full border-t border-t-transparent p-[1px]",
+   770→   770→    },
+   771→   771→  },
+   772→   772→  defaultVariants: {
+   773→   773→    orientation: "vertical",
+   774→   774→  },
+   775→   775→});
+   776→   776→
+   777→   777→export interface ScrollAreaProps
+   778→   778→  extends React.ComponentPropsWithoutRef<typeof ScrollAreaPrimitive.Root>,
+   779→   779→    VariantProps<typeof scrollAreaVariants> {
+   780→   780→  scrollHideDelay?: number;
+   781→   781→  type?: "auto" | "always" | "scroll" | "hover";
+   782→   782→}
+   783→   783→
+   784→   784→const ScrollArea = React.forwardRef<
+   785→   785→  React.ElementRef<typeof ScrollAreaPrimitive.Root>,
+   786→   786→  ScrollAreaProps
+   787→   787→>(
+   788→   788→  (
+   789→   789→    {
+   790→   790→      className,
+   791→   791→      children,
+   792→   792→      orientation,
+   793→   793→      scrollHideDelay = 600,
+   794→   794→      type = "hover",
+   795→   795→      ...props
+   796→   796→    },
+   797→   797→    ref
+   798→   798→  ) => (
+   799→   799→    <ScrollAreaPrimitive.Root
+   800→   800→      ref={ref}
+   801→   801→      className={cn(scrollAreaVariants({ orientation }), className)}
+   802→   802→      {...props}
+   803→   803→    >
+   804→   804→      <ScrollAreaPrimitive.Viewport className="h-full w-full rounded-[inherit]">
+   805→   805→        {children}
+   806→   806→      </ScrollAreaPrimitive.Viewport>
+   807→   807→      <ScrollBar
+   808→   808→        orientation="vertical"
+   809→   809→        type={type}
+   810→   810→        scrollHideDelay={scrollHideDelay}
+   811→   811→      />
+   812→   812→      {(orientation === "horizontal" || orientation === "both") && (
+   813→   813→        <ScrollBar
+   814→   814→          orientation="horizontal"
+   815→   815→          type={type}
+   816→   816→          scrollHideDelay={scrollHideDelay}
+   817→   817→        />
+   818→   818→      )}
+   819→   819→      <ScrollAreaPrimitive.Corner />
+   820→   820→    </ScrollAreaPrimitive.Root>
+   821→   821→  )
+   822→   822→);
+   823→   823→
+   824→   824→ScrollArea.displayName = ScrollAreaPrimitive.Root.displayName;
+   825→   825→
+   826→   826→interface ScrollBarProps
+   827→   827→  extends React.ComponentPropsWithoutRef<
+   828→   828→    typeof ScrollAreaPrimitive.ScrollAreaScrollbar
+   829→   829→  > {
+   830→   830→  scrollHideDelay?: number;
+   831→   831→  type?: "auto" | "always" | "scroll" | "hover";
+   832→   832→}
+   833→   833→
+   834→   834→const ScrollBar = React.forwardRef<
+   835→   835→  React.ElementRef<typeof ScrollAreaPrimitive.ScrollAreaScrollbar>,
+   836→   836→  ScrollBarProps
+   837→   837→>(
+   838→   838→  (
+   839→   839→    { className, orientation = "vertical", scrollHideDelay, type, ...props },
+   840→   840→    ref
+   841→   841→  ) => {
+   842→   842→    return (
+   843→   843→      <ScrollAreaPrimitive.ScrollAreaScrollbar
+   844→   844→        ref={ref}
+   845→   845→        orientation={orientation}
+   846→   846→        className={cn(
+   847→   847→          scrollBarVariants({ orientation }),
+   848→   848→          "hover:bg-accent",
+   849→   849→          className
+   850→   850→        )}
+   851→   851→        {...(scrollHideDelay && { scrollHideDelay })}
+   852→   852→        {...(type && { type })}
+   853→   853→        {...props}
+   854→   854→      >
+   855→   855→        <ScrollAreaPrimitive.ScrollAreaThumb className="relative flex-1 rounded-full bg-border hover:bg-foreground/30 transition-colors" />
+   856→   856→      </ScrollAreaPrimitive.ScrollAreaScrollbar>
+   857→   857→    );
+   858→   858→  }
+   859→   859→);
+   860→   860→
+   861→   861→ScrollBar.displayName = ScrollAreaPrimitive.ScrollAreaScrollbar.displayName;
+   862→   862→
+   863→   863→export { ScrollArea, ScrollBar, scrollAreaVariants };
+   864→   864→```
+   865→   865→
+   866→   866→Install NPM dependencies:
+   867→   867→```bash
+   868→   868→lucide-react, class-variance-authority, @radix-ui/react-scroll-area
+   869→   869→```
+   870→   870→
+   871→   871→Extend existing Tailwind 4 index.css with this code (or if project uses Tailwind 3, extend tailwind.config.js or globals.css):
+   872→   872→```css
+   873→   873→@import "tailwindcss";
+   874→   874→@import "tw-animate-css";
+   875→   875→
+   876→   876→:root {
+   877→   877→  --hu-font-geist: var(--font-geist);
+   878→   878→  --hu-font-jetbrains: var(--font-jetbrains-mono);
+   879→   879→  --radius: 0.8rem;
+   880→   880→  --card-radius: 1rem;
+   881→   881→  --hu-background: 0, 0%, 100%;
+   882→   882→  --hu-foreground: 0, 0%, 14%;
+   883→   883→  --hu-card: 0, 0%, 99%;
+   884→   884→  --hu-card-foreground: 0, 0%, 14%;
+   885→   885→  --hu-primary: 235, 100%, 60%;
+   886→   886→  --hu-primary-foreground: 0, 0%, 98%;
+   887→   887→  --hu-secondary: 0, 0%, 97%;
+   888→   888→  --hu-secondary-foreground: 0, 0%, 20%;
+   889→   889→  --hu-muted: 0, 0%, 97%;
+   890→   890→  --hu-muted-foreground: 0, 0%, 56%;
+   891→   891→  --hu-accent: 0, 0%, 96%;
+   892→   892→  --hu-accent-foreground: 0, 0%, 20%;
+   893→   893→  --hu-destructive: 9, 96%, 47%;
+   894→   894→  --hu-destructive-foreground: 0, 0%, 98%;
+   895→   895→  --hu-border: 0, 0%, 92%;
+   896→   896→  --hu-input: 0, 0%, 100%;
+   897→   897→  --hu-ring: 0, 0%, 71%;
+   898→   898→  --color-fd-background: hsl(var(--hu-background));
+   899→   899→  --color-fd-card: hsl(var(--hu-background));
+   900→   900→}
+   901→   901→
+   902→   902→.dark {
+   903→   903→  --hu-background: 0, 0%, 7%;
+   904→   904→  --hu-foreground: 0, 0%, 100%;
+   905→   905→  --hu-card: 0, 0%, 9%;
+   906→   906→  --hu-card-foreground: 0, 0%, 100%;
+   907→   907→  --hu-primary: 235, 100%, 60%;
+   908→   908→  --hu-primary-foreground: 0, 0%, 98%;
+   909→   909→  --hu-secondary: 0, 0%, 15%;
+   910→   910→  --hu-secondary-foreground: 0, 0%, 100%;
+   911→   911→  --hu-muted: 0, 0%, 15%;
+   912→   912→  --hu-muted-foreground: 0, 0%, 71%;
+   913→   913→  --hu-accent: 0, 0%, 15%;
+   914→   914→  --hu-accent-foreground: 0, 0%, 100%;
+   915→   915→  --hu-destructive: 0, 84%, 50%;
+   916→   916→  --hu-destructive-foreground: 0, 0%, 98%;
+   917→   917→  --hu-border: 0, 0%, 100%, 10%;
+   918→   918→  --hu-input: 0, 0%, 100%, 5%;
+   919→   919→  --hu-ring: 0, 0%, 56%;
+   920→   920→  --color-fd-background: hsl(var(--hu-background));
+   921→   921→  --color-fd-card: hsl(var(--hu-background));
+   922→   922→}
+   923→   923→
+   924→   924→```
+   925→   925→
+   926→   926→Implementation Guidelines
+   927→   927→ 1. Analyze the component structure and identify all required dependencies
+   928→   928→ 2. Review the component's argumens and state
+   929→   929→ 3. Identify any required context providers or hooks and install them
+   930→   930→ 4. Questions to Ask
+   931→   931→ - What data/props will be passed to this component?
+   932→   932→ - Are there any specific state management requirements?
+   933→   933→ - Are there any required assets (images, icons, etc.)?
+   934→   934→ - What is the expected responsive behavior?
+   935→   935→ - What is the best place to use this component in the app?
+   936→   936→
+   937→   937→Steps to integrate
+   938→   938→ 0. Copy paste all the code above in the correct directories
+   939→   939→ 1. Install external dependencies
+   940→   940→ 2. Fill image assets with Unsplash stock images you know exist
+   941→   941→ 3. Use lucide-react icons for svgs or logos if component requires them
