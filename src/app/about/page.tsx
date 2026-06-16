@@ -510,7 +510,7 @@ export default function AboutPage() {
                       asChild
                     >
                       <a
-                        href="https://github.com/sandeepgaddam"
+                        href="https://github.com/sandeepgaddam5432"
                         target="_blank"
                         rel="noopener noreferrer"
                       >
@@ -551,7 +551,7 @@ export default function AboutPage() {
                         asChild
                       >
                         <a
-                          href="https://github.com/sandeepgaddam/unqwebtemplate"
+                          href="https://github.com/sandeepgaddam5432/unqwebtemplate"
                           target="_blank"
                           rel="noopener noreferrer"
                         >
@@ -565,7 +565,7 @@ export default function AboutPage() {
                         asChild
                       >
                         <a
-                          href="https://github.com/sandeepgaddam/unqwebtemplate/fork"
+                          href="https://github.com/sandeepgaddam5432/unqwebtemplate/fork"
                           target="_blank"
                           rel="noopener noreferrer"
                         >
@@ -648,7 +648,7 @@ export default function AboutPage() {
                       asChild
                     >
                       <a
-                        href="https://github.com/sandeepgaddam?tab=repositories"
+                        href="https://github.com/sandeepgaddam5432?tab=repositories"
                         target="_blank"
                         rel="noopener noreferrer"
                       >
@@ -673,25 +673,25 @@ export default function AboutPage() {
                 <CardContent className="p-6">
                   <div className="flex flex-col md:flex-row items-center justify-center gap-6">
                     <a
-                      href="https://github.com/sandeepgaddam"
+                      href="https://github.com/sandeepgaddam5432"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="block hover:scale-105 transition-transform"
                     >
                       <img
-                        src="https://github-readme-stats.vercel.app/api?username=sandeepgaddam&show_icons=true&theme=dark&hide_border=true&bg_color=00000000&text_color=c9c9c9&icon_color=d97757&title_color=d97757"
+                        src="https://github-readme-stats.vercel.app/api?username=sandeepgaddam5432&show_icons=true&theme=dark&hide_border=true&bg_color=00000000&text_color=c9c9c9&icon_color=d97757&title_color=d97757"
                         alt="GitHub Stats"
                         className="w-full max-w-md"
                       />
                     </a>
                     <a
-                      href="https://github.com/sandeepgaddam"
+                      href="https://github.com/sandeepgaddam5432"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="block hover:scale-105 transition-transform"
                     >
                       <img
-                        src="https://github-readme-streak-stats.herokuapp.com/?user=sandeepgaddam&theme=dark&hide_border=true&background=00000000&stroke=00000000&ring=d97757&fire=d97757&currLabel=d97757"
+                        src="https://github-readme-streak-stats.herokuapp.com/?user=sandeepgaddam5432&theme=dark&hide_border=true&background=00000000&stroke=00000000&ring=d97757&fire=d97757&currLabel=d97757"
                         alt="GitHub Streak"
                         className="w-full max-w-md"
                       />
@@ -878,7 +878,7 @@ export default function AboutPage() {
                   asChild
                 >
                   <a
-                    href="https://github.com/sandeepgaddam/unqwebtemplate"
+                    href="https://github.com/sandeepgaddam5432/unqwebtemplate"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -893,7 +893,7 @@ export default function AboutPage() {
                   asChild
                 >
                   <a
-                    href="https://github.com/sandeepgaddam/unqwebtemplate/fork"
+                    href="https://github.com/sandeepgaddam5432/unqwebtemplate/fork"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
