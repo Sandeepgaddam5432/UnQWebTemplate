@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <em>Where Design Meets Innovation</em>
+  <em>Where Design Meets Innovation</em> 
 </p>
 
 ---
