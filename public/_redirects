@@ -1,0 +1,3 @@
+# Cloudflare Pages _redirects
+# SPA fallback - redirect 404s to index for client-side routing
+/ /index.html 200
