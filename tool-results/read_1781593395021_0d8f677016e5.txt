@@ -1,0 +1,709 @@
+     1→"use client";
+     2→
+     3→import React from "react";
+     4→import { motion } from "framer-motion";
+     5→import { SidebarNav } from "@/components/navigation/sidebar";
+     6→import {
+     7→  BentoGridWithFeatures,
+     8→  type BentoFeature,
+     9→} from "@/components/ui/bento-grid";
+    10→import FeatureSection from "@/components/ui/stack-feature-section";
+    11→import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+    12→import { Badge } from "@/components/ui/badge";
+    13→import { Button } from "@/components/ui/button";
+    14→import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+    15→import { Separator } from "@/components/ui/separator";
+    16→import {
+    17→  Sparkles,
+    18→  CreditCard,
+    19→  TrendingUp,
+    20→  Users,
+    21→  Eye,
+    22→  BarChart3,
+    23→  ArrowUpRight,
+    24→  Heart,
+    25→  MessageCircle,
+    26→  Clock,
+    27→  Zap,
+    28→  Layers,
+    29→  Globe,
+    30→  Shield,
+    31→  Palette,
+    32→  Rocket,
+    33→  Star,
+    34→  BookOpen,
+    35→  ImageIcon,
+    36→  MousePointerClick,
+    37→  MonitorSmartphone,
+    38→  BrainCircuit,
+    39→  MoonStar,
+    40→  Component,
+    41→} from "lucide-react";
+    42→
+    43→// ===== ANIMATION VARIANTS =====
+    44→const sectionVariants = {
+    45→  hidden: { opacity: 0, y: 40 },
+    46→  visible: {
+    47→    opacity: 1,
+    48→    y: 0,
+    49→    transition: { duration: 0.7, ease: [0.25, 0.4, 0.25, 1] },
+    50→  },
+    51→};
+    52→
+    53→const staggerContainer = {
+    54→  hidden: { opacity: 0 },
+    55→  visible: {
+    56→    opacity: 1,
+    57→    transition: { staggerChildren: 0.08, delayChildren: 0.1 },
+    58→  },
+    59→};
+    60→
+    61→const staggerItem = {
+    62→  hidden: { opacity: 0, y: 20 },
+    63→  visible: {
+    64→    opacity: 1,
+    65→    y: 0,
+    66→    transition: { duration: 0.5, ease: "easeOut" },
+    67→  },
+    68→};
+    69→
+    70→// ===== BENTO FEATURES =====
+    71→const bentoFeatures: BentoFeature[] = [
+    72→  {
+    73→    id: "glass-cards",
+    74→    title: "Glassmorphism",
+    75→    description: "Frosted glass effects with backdrop blur and translucency for a modern, layered aesthetic.",
+    76→    content: (
+    77→      <div className="mt-4 rounded-xl h-32 w-full relative overflow-hidden bg-gradient-to-br from-primary/20 to-violet-500/20">
+    78→        <div className="absolute inset-2 backdrop-blur-md bg-white/10 dark:bg-white/5 rounded-lg border border-white/20 flex items-center justify-center">
+    79→          <span className="text-white/80 text-sm font-medium">Glass Effect</span>
+    80→        </div>
+    81→      </div>
+    82→    ),
+    83→    className: "col-span-1 md:col-span-3 lg:col-span-2 border-b md:border-r dark:border-neutral-800",
+    84→  },
+    85→  {
+    86→    id: "gradient-cards",
+    87→    title: "Gradient Cards",
+    88→    description: "Vibrant gradient backgrounds that make each card pop with color and energy.",
+    89→    content: (
+    90→      <div className="mt-4 rounded-xl h-32 w-full bg-gradient-to-r from-primary via-rose-500 to-amber-500 flex items-center justify-center">
+    91→        <span className="text-white font-bold text-lg">Vibrant</span>
+    92→      </div>
+    93→    ),
+    94→    className: "col-span-1 md:col-span-3 lg:col-span-2 border-b lg:border-r dark:border-neutral-800",
+    95→  },
+    96→  {
+    97→    id: "hover-cards",
+    98→    title: "Hover Effects",
+    99→    description: "Cards that lift, scale, and glow on hover for engaging interactive feedback.",
+   100→    content: (
+   101→      <div className="mt-4 flex gap-3 justify-center">
+   102→        {[1, 2, 3].map((i) => (
+   103→          <motion.div
+   104→            key={i}
+   105→            whileHover={{ scale: 1.1, y: -8 }}
+   106→            className="h-24 w-20 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center cursor-pointer"
+   107→          >
+   108→            <MousePointerClick className="h-5 w-5 text-primary/60" />
+   109→          </motion.div>
+   110→        ))}
+   111→      </div>
+   112→    ),
+   113→    className: "col-span-1 md:col-span-6 md:border-b lg:col-span-2 border-b dark:border-neutral-800",
+   114→  },
+   115→  {
+   116→    id: "stats-cards",
+   117→    title: "Stats & Metrics",
+   118→    description: "Data-rich cards with icons, numbers, and trend indicators for dashboards and analytics.",
+   119→    content: (
+   120→      <div className="mt-4 grid grid-cols-2 gap-2">
+   121→        {[
+   122→          { label: "Users", value: "24.5K", icon: Users },
+   123→          { label: "Revenue", value: "$89K", icon: TrendingUp },
+   124→        ].map((stat) => {
+   125→          const Icon = stat.icon;
+   126→          return (
+   127→            <div key={stat.label} className="rounded-lg bg-muted/50 p-3 flex items-center gap-2">
+   128→              <Icon className="h-4 w-4 text-primary" />
+   129→              <div>
+   130→                <p className="text-xs text-muted-foreground">{stat.label}</p>
+   131→                <p className="text-sm font-bold">{stat.value}</p>
+   132→              </div>
+   133→            </div>
+   134→          );
+   135→        })}
+   136→      </div>
+   137→    ),
+   138→    className: "col-span-1 md:col-span-6 lg:col-span-6 border-b lg:border-r-0 dark:border-neutral-800",
+   139→  },
+   140→  {
+   141→    id: "post-cards",
+   142→    title: "Content Cards",
+   143→    description: "Blog post and article cards with image placeholders, metadata, and reading time.",
+   144→    content: (
+   145→      <div className="mt-4 rounded-xl h-32 w-full bg-muted/30 border flex items-center gap-4 p-4">
+   146→        <div className="w-20 h-20 rounded-lg bg-gradient-to-br from-primary/20 to-primary/5 flex-shrink-0 flex items-center justify-center">
+   147→          <BookOpen className="h-6 w-6 text-primary/50" />
+   148→        </div>
+   149→        <div className="flex-1 min-w-0">
+   150→          <p className="text-sm font-medium truncate">Getting Started Guide</p>
+   151→          <p className="text-xs text-muted-foreground mt-1">5 min read · Tutorial</p>
+   152→        </div>
+   153→      </div>
+   154→    ),
+   155→    className: "col-span-1 md:col-span-3 lg:col-span-2 md:border-r dark:border-neutral-800",
+   156→  },
+   157→  {
+   158→    id: "interactive",
+   159→    title: "Interactive",
+   160→    description: "Cards with buttons, actions, and interactive elements that respond to user input.",
+   161→    content: (
+   162→      <div className="mt-4 flex gap-2">
+   163→        <Button size="sm" className="bg-primary hover:bg-primary/90"><Zap className="h-3 w-3 mr-1" /> Action</Button>
+   164→        <Button size="sm" variant="outline">Secondary</Button>
+   165→      </div>
+   166→    ),
+   167→    className: "col-span-1 md:col-span-3 lg:col-span-2 lg:border-r dark:border-neutral-800",
+   168→  },
+   169→  {
+   170→    id: "minimal",
+   171→    title: "Minimal Cards",
+   172→    description: "Clean, understated cards for when less is more. Elegance through simplicity.",
+   173→    content: (
+   174→      <div className="mt-4 h-24 rounded-lg border-l-2 border-primary bg-muted/20 flex items-center px-4">
+   175→        <p className="text-sm text-muted-foreground italic">Simplicity is the ultimate sophistication.</p>
+   176→      </div>
+   177→    ),
+   178→    className: "col-span-1 md:col-span-6 lg:border-r-0 lg:col-span-2 dark:border-neutral-800",
+   179→  },
+   180→];
+   181→
+   182→// ===== STATS DATA =====
+   183→const statsData = [
+   184→  {
+   185→    label: "Total Revenue",
+   186→    value: "$45,231",
+   187→    change: "+20.1%",
+   188→    icon: TrendingUp,
+   189→    trend: "up" as const,
+   190→    color: "from-emerald-500/20 to-emerald-500/5",
+   191→    iconColor: "text-emerald-500",
+   192→  },
+   193→  {
+   194→    label: "Active Users",
+   195→    value: "2,350",
+   196→    change: "+180",
+   197→    icon: Users,
+   198→    trend: "up" as const,
+   199→    color: "from-primary/20 to-primary/5",
+   200→    iconColor: "text-primary",
+   201→  },
+   202→  {
+   203→    label: "Page Views",
+   204→    value: "12.5K",
+   205→    change: "+19%",
+   206→    icon: Eye,
+   207→    trend: "up" as const,
+   208→    color: "from-amber-500/20 to-amber-500/5",
+   209→    iconColor: "text-amber-500",
+   210→  },
+   211→  {
+   212→    label: "Conversion",
+   213→    value: "3.2%",
+   214→    change: "+0.4%",
+   215→    icon: BarChart3,
+   216→    trend: "up" as const,
+   217→    color: "from-violet-500/20 to-violet-500/5",
+   218→    iconColor: "text-violet-500",
+   219→  },
+   220→];
+   221→
+   222→// ===== POST DATA =====
+   223→const postData = [
+   224→  {
+   225→    title: "Building Cinematic UI with Framer Motion",
+   226→    excerpt: "Learn how to create stunning animations that bring your Next.js applications to life with spring physics and scroll-triggered effects.",
+   227→    category: "Animation",
+   228→    readTime: "8 min",
+   229→    author: "Sandeep Gaddam",
+   230→    authorImg: "https://randomuser.me/api/portraits/men/32.jpg",
+   231→    gradient: "from-primary/30 to-rose-500/20",
+   232→  },
+   233→  {
+   234→    title: "The Art of Glassmorphism in Dark Mode",
+   235→    excerpt: "Master the delicate balance of backdrop blur, translucency, and border effects to create gorgeous glass cards.",
+   236→    category: "Design",
+   237→    readTime: "5 min",
+   238→    author: "Priya Sharma",
+   239→    authorImg: "https://randomuser.me/api/portraits/women/44.jpg",
+   240→    gradient: "from-emerald-500/30 to-teal-500/20",
+   241→  },
+   242→  {
+   243→    title: "Terracotta: A Color System Deep Dive",
+   244→    excerpt: "How we crafted the warm terracotta palette for UnQWebTemplate and why it works across light and dark modes.",
+   245→    category: "Color",
+   246→    readTime: "6 min",
+   247→    author: "Marcus Chen",
+   248→    authorImg: "https://randomuser.me/api/portraits/men/46.jpg",
+   249→    gradient: "from-amber-500/30 to-orange-500/20",
+   250→  },
+   251→];
+   252→
+   253→export default function CardsShowcase() {
+   254→  return (
+   255→    <div className="flex min-h-screen bg-background">
+   256→      <SidebarNav />
+   257→      <main className="flex-1 overflow-y-auto">
+   258→        {/* Page Header */}
+   259→        <div className="border-b border-border/50 bg-background/80 backdrop-blur-xl sticky top-0 z-20">
+   260→          <div className="px-6 md:px-10 py-8">
+   261→            <motion.div
+   262→              initial={{ opacity: 0, y: 20 }}
+   263→              animate={{ opacity: 1, y: 0 }}
+   264→              transition={{ duration: 0.6 }}
+   265→            >
+   266→              <div className="flex items-center gap-3 mb-3">
+   267→                <Badge className="bg-primary/10 text-primary border-primary/20 hover:bg-primary/20">
+   268→                  <CreditCard className="h-3 w-3 mr-1" /> Card Collection
+   269→                </Badge>
+   270→              </div>
+   271→              <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-2">
+   272→                Card Showcase
+   273→              </h1>
+   274→              <p className="text-muted-foreground text-base md:text-lg max-w-2xl">
+   275→                From bento grids to glassmorphism, every card style you need —
+   276→                beautifully designed and endlessly customizable.
+   277→              </p>
+   278→            </motion.div>
+   279→          </div>
+   280→        </div>
+   281→
+   282→        <div className="px-6 md:px-10 py-8 space-y-12">
+   283→          {/* ===== BENTO GRID SECTION ===== */}
+   284→          <motion.section
+   285→            initial="hidden"
+   286→            whileInView="visible"
+   287→            viewport={{ once: true, margin: "-50px" }}
+   288→            variants={sectionVariants}
+   289→          >
+   290→            <div className="mb-6">
+   291→              <div className="flex items-center gap-3 mb-3">
+   292→                <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+   293→                  <Layers className="h-4 w-4 text-primary" />
+   294→                </div>
+   295→                <div>
+   296→                  <h2 className="text-2xl font-bold">Bento Grid</h2>
+   297→                  <p className="text-muted-foreground text-sm">Flexible grid layout with feature-rich cards</p>
+   298→                </div>
+   299→              </div>
+   300→            </div>
+   301→            <BentoGridWithFeatures features={bentoFeatures} />
+   302→          </motion.section>
+   303→
+   304→          {/* ===== ORBIT FEATURE SECTION ===== */}
+   305→          <motion.section
+   306→            initial="hidden"
+   307→            whileInView="visible"
+   308→            viewport={{ once: true, margin: "-50px" }}
+   309→            variants={sectionVariants}
+   310→          >
+   311→            <div className="mb-6">
+   312→              <div className="flex items-center gap-3 mb-3">
+   313→                <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+   314→                  <Globe className="h-4 w-4 text-primary" />
+   315→                </div>
+   316→                <div>
+   317→                  <h2 className="text-2xl font-bold">Orbit Animation</h2>
+   318→                  <p className="text-muted-foreground text-sm">Feature section with orbiting tech icons</p>
+   319→                </div>
+   320→              </div>
+   321→            </div>
+   322→            <FeatureSection />
+   323→          </motion.section>
+   324→
+   325→          {/* ===== GLASSMORPHISM CARDS SECTION ===== */}
+   326→          <motion.section
+   327→            initial="hidden"
+   328→            whileInView="visible"
+   329→            viewport={{ once: true, margin: "-50px" }}
+   330→            variants={sectionVariants}
+   331→          >
+   332→            <div className="mb-6">
+   333→              <div className="flex items-center gap-3 mb-3">
+   334→                <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+   335→                  <Sparkles className="h-4 w-4 text-primary" />
+   336→                </div>
+   337→                <div>
+   338→                  <h2 className="text-2xl font-bold">Glassmorphism Cards</h2>
+   339→                  <p className="text-muted-foreground text-sm">Frosted glass effects with backdrop blur and translucency</p>
+   340→                </div>
+   341→              </div>
+   342→            </div>
+   343→            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+   344→              {[
+   345→                {
+   346→                  title: "Frosted Glass",
+   347→                  description: "Backdrop-blur creates a soft frosted effect that lets underlying colors bleed through beautifully.",
+   348→                  icon: Sparkles,
+   349→                  gradient: "from-primary/30 to-violet-500/30",
+   350→                },
+   351→                {
+   352→                  title: "Layered Depth",
+   353→                  description: "Multiple glass layers stack to create visual depth and hierarchy, perfect for complex dashboards.",
+   354→                  icon: Layers,
+   355→                  gradient: "from-emerald-500/30 to-teal-500/30",
+   356→                },
+   357→                {
+   358→                  title: "Light Refraction",
+   359→                  description: "Border highlights and subtle gradients simulate light refraction through frosted surfaces.",
+   360→                  icon: Shield,
+   361→                  gradient: "from-amber-500/30 to-rose-500/30",
+   362→                },
+   363→              ].map((card, i) => {
+   364→                const Icon = card.icon;
+   365→                return (
+   366→                  <motion.div
+   367→                    key={i}
+   368→                    whileHover={{ y: -6, transition: { duration: 0.25 } }}
+   369→                    className="relative group"
+   370→                  >
+   371→                    {/* Gradient backdrop */}
+   372→                    <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${card.gradient} opacity-40 blur-xl group-hover:opacity-60 transition-opacity`} />
+   373→                    {/* Glass card */}
+   374→                    <div className="relative rounded-2xl border border-white/10 dark:border-white/10 backdrop-blur-xl bg-white/5 dark:bg-white/[0.03] p-6 h-full">
+   375→                      <div className="h-12 w-12 rounded-xl bg-white/10 backdrop-blur-sm flex items-center justify-center mb-4 border border-white/10">
+   376→                        <Icon className="h-6 w-6 text-white/80" />
+   377→                      </div>
+   378→                      <h3 className="text-lg font-semibold text-white mb-2">{card.title}</h3>
+   379→                      <p className="text-white/50 text-sm leading-relaxed">{card.description}</p>
+   380→                    </div>
+   381→                  </motion.div>
+   382→                );
+   383→              })}
+   384→            </div>
+   385→          </motion.section>
+   386→
+   387→          {/* ===== GRADIENT CARDS SECTION ===== */}
+   388→          <motion.section
+   389→            initial="hidden"
+   390→            whileInView="visible"
+   391→            viewport={{ once: true, margin: "-50px" }}
+   392→            variants={sectionVariants}
+   393→          >
+   394→            <Card className="overflow-hidden border-border/50">
+   395→              <CardHeader>
+   396→                <div className="flex items-center gap-2">
+   397→                  <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+   398→                    <Palette className="h-4 w-4 text-primary" />
+   399→                  </div>
+   400→                  <div>
+   401→                    <CardTitle>Gradient Cards</CardTitle>
+   402→                    <CardDescription>Cards with vibrant gradient backgrounds for maximum visual impact</CardDescription>
+   403→                  </div>
+   404→                </div>
+   405→              </CardHeader>
+   406→              <CardContent>
+   407→                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+   408→                  {[
+   409→                    { title: "Terracotta", gradient: "from-[#c96442] to-[#d97757]", icon: Rocket },
+   410→                    { title: "Emerald", gradient: "from-emerald-500 to-teal-600", icon: Globe },
+   411→                    { title: "Sunset", gradient: "from-orange-500 to-rose-600", icon: Star },
+   412→                    { title: "Ocean", gradient: "from-cyan-500 to-blue-600", icon: Shield },
+   413→                  ].map((card, i) => {
+   414→                    const Icon = card.icon;
+   415→                    return (
+   416→                      <motion.div
+   417→                        key={i}
+   418→                        whileHover={{ scale: 1.03, rotate: 1, transition: { duration: 0.2 } }}
+   419→                        className={`rounded-2xl bg-gradient-to-br ${card.gradient} p-6 text-white relative overflow-hidden cursor-pointer`}
+   420→                      >
+   421→                        <div className="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full -translate-y-12 translate-x-12" />
+   422→                        <Icon className="h-8 w-8 mb-4 opacity-80" />
+   423→                        <h3 className="text-lg font-bold">{card.title}</h3>
+   424→                        <p className="text-white/70 text-sm mt-1">Gradient card</p>
+   425→                      </motion.div>
+   426→                    );
+   427→                  })}
+   428→                </div>
+   429→              </CardContent>
+   430→            </Card>
+   431→          </motion.section>
+   432→
+   433→          {/* ===== HOVER EFFECT CARDS SECTION ===== */}
+   434→          <motion.section
+   435→            initial="hidden"
+   436→            whileInView="visible"
+   437→            viewport={{ once: true, margin: "-50px" }}
+   438→            variants={sectionVariants}
+   439→          >
+   440→            <Card className="overflow-hidden border-border/50">
+   441→              <CardHeader>
+   442→                <div className="flex items-center gap-2">
+   443→                  <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+   444→                    <MousePointerClick className="h-4 w-4 text-primary" />
+   445→                  </div>
+   446→                  <div>
+   447→                    <CardTitle>Hover Effect Cards</CardTitle>
+   448→                    <CardDescription>Interactive cards that respond to hover with lift, scale, and glow effects</CardDescription>
+   449→                  </div>
+   450→                </div>
+   451→              </CardHeader>
+   452→              <CardContent>
+   453→                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+   454→                  {[
+   455→                    {
+   456→                      title: "Lift Effect",
+   457→                      description: "Cards gently rise on hover with a soft shadow, creating a sense of elevation and depth.",
+   458→                      icon: ArrowUpRight,
+   459→                      effect: "lift" as const,
+   460→                    },
+   461→                    {
+   462→                      title: "Scale Effect",
+   463→                      description: "Cards smoothly scale up on hover, drawing attention to the focused element.",
+   464→                      icon: Zap,
+   465→                      effect: "scale" as const,
+   466→                    },
+   467→                    {
+   468→                      title: "Glow Effect",
+   469→                      description: "A subtle glow appears on hover, highlighting the card with a warm terracotta aura.",
+   470→                      icon: Sparkles,
+   471→                      effect: "glow" as const,
+   472→                    },
+   473→                  ].map((card, i) => {
+   474→                    const Icon = card.icon;
+   475→                    const hoverProps =
+   476→                      card.effect === "lift"
+   477→                        ? { y: -8, boxShadow: "0 20px 40px rgba(201,100,66,0.15)" }
+   478→                        : card.effect === "scale"
+   479→                        ? { scale: 1.05 }
+   480→                        : { boxShadow: "0 0 30px rgba(201,100,66,0.2)" };
+   481→                    return (
+   482→                      <motion.div
+   483→                        key={i}
+   484→                        whileHover={{
+   485→                          ...hoverProps,
+   486→                          transition: { duration: 0.25 },
+   487→                        }}
+   488→                        className="rounded-2xl border bg-card p-6 cursor-pointer transition-colors hover:border-primary/30"
+   489→                      >
+   490→                        <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
+   491→                          <Icon className="h-6 w-6 text-primary" />
+   492→                        </div>
+   493→                        <h3 className="font-semibold mb-2">{card.title}</h3>
+   494→                        <p className="text-sm text-muted-foreground leading-relaxed">{card.description}</p>
+   495→                      </motion.div>
+   496→                    );
+   497→                  })}
+   498→                </div>
+   499→              </CardContent>
+   500→            </Card>
+   501→          </motion.section>
+   502→
+   503→          {/* ===== POST CARDS SECTION ===== */}
+   504→          <motion.section
+   505→            initial="hidden"
+   506→            whileInView="visible"
+   507→            viewport={{ once: true, margin: "-50px" }}
+   508→            variants={sectionVariants}
+   509→          >
+   510→            <div className="mb-6">
+   511→              <div className="flex items-center gap-3 mb-3">
+   512→                <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+   513→                  <BookOpen className="h-4 w-4 text-primary" />
+   514→                </div>
+   515→                <div>
+   516→                  <h2 className="text-2xl font-bold">Post Cards</h2>
+   517→                  <p className="text-muted-foreground text-sm">Blog post and article cards with rich content layouts</p>
+   518→                </div>
+   519→              </div>
+   520→            </div>
+   521→            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+   522→              {postData.map((post, i) => (
+   523→                <motion.article
+   524→                  key={i}
+   525→                  whileHover={{ y: -6, transition: { duration: 0.25 } }}
+   526→                  className="rounded-2xl border bg-card overflow-hidden cursor-pointer group"
+   527→                >
+   528→                  {/* Image Placeholder */}
+   529→                  <div className={`h-48 bg-gradient-to-br ${post.gradient} relative overflow-hidden`}>
+   530→                    <div className="absolute inset-0 flex items-center justify-center">
+   531→                      <ImageIcon className="h-12 w-12 text-white/30" />
+   532→                    </div>
+   533→                    <div className="absolute top-4 left-4">
+   534→                      <Badge className="bg-black/30 text-white border-0 backdrop-blur-sm">
+   535→                        {post.category}
+   536→                      </Badge>
+   537→                    </div>
+   538→                  </div>
+   539→                  {/* Content */}
+   540→                  <div className="p-5">
+   541→                    <h3 className="font-semibold mb-2 group-hover:text-primary transition-colors line-clamp-2">
+   542→                      {post.title}
+   543→                    </h3>
+   544→                    <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
+   545→                      {post.excerpt}
+   546→                    </p>
+   547→                    <Separator className="mb-4" />
+   548→                    <div className="flex items-center justify-between">
+   549→                      <div className="flex items-center gap-2">
+   550→                        <Avatar className="h-7 w-7">
+   551→                          <AvatarImage src={post.authorImg} alt={post.author} />
+   552→                          <AvatarFallback className="text-[10px]">{post.author.charAt(0)}</AvatarFallback>
+   553→                        </Avatar>
+   554→                        <span className="text-xs text-muted-foreground">{post.author}</span>
+   555→                      </div>
+   556→                      <div className="flex items-center gap-3 text-xs text-muted-foreground">
+   557→                        <span className="flex items-center gap-1">
+   558→                          <Clock className="h-3 w-3" /> {post.readTime}
+   559→                        </span>
+   560→                        <span className="flex items-center gap-1">
+   561→                          <Heart className="h-3 w-3" /> {Math.floor(Math.random() * 200 + 50)}
+   562→                        </span>
+   563→                      </div>
+   564→                    </div>
+   565→                  </div>
+   566→                </motion.article>
+   567→              ))}
+   568→            </div>
+   569→          </motion.section>
+   570→
+   571→          {/* ===== STATS CARDS SECTION ===== */}
+   572→          <motion.section
+   573→            initial="hidden"
+   574→            whileInView="visible"
+   575→            viewport={{ once: true, margin: "-50px" }}
+   576→            variants={sectionVariants}
+   577→          >
+   578→            <Card className="overflow-hidden border-border/50">
+   579→              <CardHeader>
+   580→                <div className="flex items-center gap-2">
+   581→                  <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+   582→                    <BarChart3 className="h-4 w-4 text-primary" />
+   583→                  </div>
+   584→                  <div>
+   585→                    <CardTitle>Stats Cards</CardTitle>
+   586→                    <CardDescription>Data-rich metric cards with icons, values, and trend indicators</CardDescription>
+   587→                  </div>
+   588→                </div>
+   589→              </CardHeader>
+   590→              <CardContent>
+   591→                <motion.div
+   592→                  variants={staggerContainer}
+   593→                  initial="hidden"
+   594→                  whileInView="visible"
+   595→                  viewport={{ once: true }}
+   596→                  className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
+   597→                >
+   598→                  {statsData.map((stat, i) => {
+   599→                    const Icon = stat.icon;
+   600→                    return (
+   601→                      <motion.div
+   602→                        key={i}
+   603→                        variants={staggerItem}
+   604→                        whileHover={{ y: -4, transition: { duration: 0.2 } }}
+   605→                        className="rounded-xl border bg-card p-5"
+   606→                      >
+   607→                        <div className="flex items-center justify-between mb-3">
+   608→                          <div className={`h-10 w-10 rounded-lg bg-gradient-to-br ${stat.color} flex items-center justify-center`}>
+   609→                            <Icon className={`h-5 w-5 ${stat.iconColor}`} />
+   610→                          </div>
+   611→                          <Badge variant="outline" className="text-emerald-500 border-emerald-500/30 text-xs">
+   612→                            <ArrowUpRight className="h-3 w-3 mr-0.5" /> {stat.change}
+   613→                          </Badge>
+   614→                        </div>
+   615→                        <p className="text-2xl font-bold">{stat.value}</p>
+   616→                        <p className="text-sm text-muted-foreground mt-1">{stat.label}</p>
+   617→                      </motion.div>
+   618→                    );
+   619→                  })}
+   620→                </motion.div>
+   621→              </CardContent>
+   622→            </Card>
+   623→          </motion.section>
+   624→
+   625→          {/* ===== ADDITIONAL CARD STYLES ===== */}
+   626→          <motion.section
+   627→            initial="hidden"
+   628→            whileInView="visible"
+   629→            viewport={{ once: true, margin: "-50px" }}
+   630→            variants={sectionVariants}
+   631→          >
+   632→            <Card className="overflow-hidden border-border/50 bg-gradient-to-br from-primary/5 via-transparent to-primary/5">
+   633→              <CardHeader>
+   634→                <div className="flex items-center gap-2">
+   635→                  <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+   636→                    <Component className="h-4 w-4 text-primary" />
+   637→                  </div>
+   638→                  <div>
+   639→                    <CardTitle>More Card Styles</CardTitle>
+   640→                    <CardDescription>Icon cards, accent cards, and notification cards</CardDescription>
+   641→                  </div>
+   642→                </div>
+   643→              </CardHeader>
+   644→              <CardContent>
+   645→                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+   646→                  {/* Icon Card */}
+   647→                  <motion.div
+   648→                    whileHover={{ y: -4, transition: { duration: 0.2 } }}
+   649→                    className="rounded-xl border bg-card p-6 flex items-start gap-4"
+   650→                  >
+   651→                    <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+   652→                      <Zap className="h-6 w-6 text-primary" />
+   653→                    </div>
+   654→                    <div>
+   655→                      <h3 className="font-semibold mb-1">Icon Card</h3>
+   656→                      <p className="text-sm text-muted-foreground">
+   657→                        Lead with an icon to visually categorize content. Great for feature lists and tool cards.
+   658→                      </p>
+   659→                    </div>
+   660→                  </motion.div>
+   661→
+   662→                  {/* Accent Card */}
+   663→                  <motion.div
+   664→                    whileHover={{ y: -4, transition: { duration: 0.2 } }}
+   665→                    className="rounded-xl border-l-4 border-l-primary bg-card p-6"
+   666→                  >
+   667→                    <h3 className="font-semibold mb-1">Accent Border Card</h3>
+   668→                    <p className="text-sm text-muted-foreground">
+   669→                      A colored left border draws the eye and creates visual hierarchy without overwhelming the layout.
+   670→                    </p>
+   671→                  </motion.div>
+   672→
+   673→                  {/* Notification Card */}
+   674→                  <motion.div
+   675→                    whileHover={{ y: -4, transition: { duration: 0.2 } }}
+   676→                    className="rounded-xl border bg-card p-5 flex items-center gap-4"
+   677→                  >
+   678→                    <div className="h-3 w-3 rounded-full bg-primary animate-pulse" />
+   679→                    <div className="flex-1">
+   680→                      <p className="text-sm font-medium">New update available</p>
+   681→                      <p className="text-xs text-muted-foreground">Version 2.4.0 includes 12 new components</p>
+   682→                    </div>
+   683→                    <Button variant="ghost" size="sm">View</Button>
+   684→                  </motion.div>
+   685→
+   686→                  {/* Quote Card */}
+   687→                  <motion.div
+   688→                    whileHover={{ y: -4, transition: { duration: 0.2 } }}
+   689→                    className="rounded-xl border bg-card p-6 relative"
+   690→                  >
+   691→                    <span className="absolute top-3 left-4 text-4xl text-primary/20 font-serif">&ldquo;</span>
+   692→                    <p className="text-sm text-muted-foreground italic pl-6 pt-3">
+   693→                      Good design is obvious. Great design is transparent. These cards make great design effortless.
+   694→                    </p>
+   695→                    <p className="text-xs text-primary mt-3 pl-6">— Sandeep Gaddam</p>
+   696→                  </motion.div>
+   697→                </div>
+   698→              </CardContent>
+   699→            </Card>
+   700→          </motion.section>
+   701→
+   702→          {/* Bottom spacing */}
+   703→          <div className="h-8" />
+   704→        </div>
+   705→      </main>
+   706→    </div>
+   707→  );
+   708→}
+   709→

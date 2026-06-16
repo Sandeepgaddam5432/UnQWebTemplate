@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://21st.dev",
+    "name": "Discover community-made UI components | 21st",
+    "snippet": "Explore, copy, and remix thousands of high-quality React components published to the 21st.dev Community by designers and developers.",
+    "host_name": "21st.dev",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://21st.dev/home",
+    "name": "21st.dev — AI Agent Registry, UI Components & Developer Tools for",
+    "snippet": "Generate components, pick your favorite. Describe what you need, get multiple React components to choose from. Available as MCP server or web interface.",
+    "host_name": "21st.dev",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=H2Mze4K5j6Q",
+    "name": "The Only UI Library You'll Ever Need (21st.dev) - YouTube",
+    "snippet": "In this video, I share with you, the cleanest collection of UI libraries aggregated in one site. 21st.dev: https://dub.sh/21stdev Learn to ...",
+    "host_name": "www.youtube.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/21st-dev",
+    "name": "21st Labs - GitHub",
+    "snippet": "Open-source CLI for managing private React component registries — publish, install, search, and share components with your team. Works with any AI agent that ...",
+    "host_name": "github.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://madewithreactjs.com/21stdev",
+    "name": "21st.dev - Collection of React UI Components - Made With React.js",
+    "snippet": "21st.dev is an open-source community registry of React UI components where anyone can publish minimal Tailwind & Radix UI components and install any component ...",
+    "host_name": "madewithreactjs.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://open-vsx.org/extension/21st-dev/21st-extension",
+    "name": "21st.dev - Open VSX Registry",
+    "snippet": "Sends DOM elements & more metadata to your AI agent; Comes with examples for React, Vue, Svelte and more; Search and integrate UI components from 21st.dev ...",
+    "host_name": "open-vsx.org",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.producthunt.com/products/21st-dev-the-npm-for-design-engineers/alternatives",
+    "name": "21st Competitors & Alternatives (2026) | Product Hunt",
+    "snippet": "21st.dev is the largest React component registry for AI applications, used by 1.4M developers (200K MAU). We provide the building blocks to create AI agents ...",
+    "host_name": "www.producthunt.com",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://uibakery.io/blog/what-is-21st-dev",
+    "name": "What is 21st.dev: New Component Hub | UI Bakery Blog",
+    "snippet": "Let's explore 21st.dev as the simplest way to put it is: it's an open, community-driven registry for high-quality React UI components. What ...",
+    "host_name": "uibakery.io",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.ycombinator.com/companies/21st",
+    "name": "21st: Infrastructure and UI building blocks for the agentic internet",
+    "snippet": "21st.dev is the largest React component registry for AI applications, used by 2M developers (370K MAU). We provide the building blocks to create AI agents ...",
+    "host_name": "www.ycombinator.com",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://21st.dev/community/blog/component-libraries",
+    "name": "Introducing Component Libraries: Publish from Your Terminal, Used",
+    "snippet": "Components in a library can be public (show up in the 21st catalog after review), unlisted (installable by URL but hidden), or private (scoped ...",
+    "host_name": "21st.dev",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]

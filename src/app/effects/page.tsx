@@ -6,6 +6,10 @@ import { SidebarNav } from "@/components/navigation/sidebar";
 import { ParticleTextEffect } from "@/components/ui/particle-text-effect";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { BorderBeam } from "@/components/ui/border-beam";
+import { Marquee } from "@/components/ui/marquee";
+import { Meteors } from "@/components/ui/meteors";
+import { AnimatedBeam } from "@/components/ui/animated-beam";
 import {
   Sparkles,
   Zap,
@@ -15,6 +19,8 @@ import {
   Ghost,
   Sun,
   Circle,
+  MonitorSmartphone,
+  Server,
 } from "lucide-react";
 
 const sectionVariants = {
@@ -402,6 +408,60 @@ function GradientBorderCard() {
   );
 }
 
+// Animated Beam Demo Component
+function AnimatedBeamDemo() {
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const fromRef = React.useRef<HTMLDivElement>(null);
+  const toRef = React.useRef<HTMLDivElement>(null);
+
+  return (
+    <div
+      ref={containerRef}
+      className="relative rounded-2xl border border-white/10 bg-black/80 p-8 overflow-hidden min-h-[280px] flex items-center justify-center"
+    >
+      <div className="flex items-center justify-between w-full max-w-md gap-12">
+        <div
+          ref={fromRef}
+          className="relative z-10 flex flex-col items-center justify-center w-28 h-28 rounded-2xl border border-white/10 bg-white/5"
+        >
+          <MonitorSmartphone className="h-8 w-8 text-primary mb-2" />
+          <span className="text-xs text-white/60 font-medium">Frontend</span>
+        </div>
+        <div
+          ref={toRef}
+          className="relative z-10 flex flex-col items-center justify-center w-28 h-28 rounded-2xl border border-white/10 bg-white/5"
+        >
+          <Server className="h-8 w-8 text-purple-400 mb-2" />
+          <span className="text-xs text-white/60 font-medium">Backend</span>
+        </div>
+      </div>
+      <AnimatedBeam
+        containerRef={containerRef}
+        fromRef={fromRef}
+        toRef={toRef}
+        curvature={-40}
+        pathColor="rgba(201,100,66,0.3)"
+        pathWidth={3}
+        gradientStartColor="#c96442"
+        gradientStopColor="#d97757"
+        duration={3}
+      />
+      <AnimatedBeam
+        containerRef={containerRef}
+        fromRef={fromRef}
+        toRef={toRef}
+        curvature={40}
+        pathColor="rgba(156,135,245,0.2)"
+        pathWidth={2}
+        gradientStartColor="#9c87f5"
+        gradientStopColor="#c96442"
+        duration={4}
+        delay={0.5}
+      />
+    </div>
+  );
+}
+
 export default function EffectsPage() {
   return (
     <div className="flex min-h-screen">
@@ -577,6 +637,175 @@ export default function EffectsPage() {
               </p>
             </div>
             <FloatingElements />
+          </motion.section>
+
+          {/* Border Beam */}
+          <motion.section
+            variants={sectionVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+          >
+            <div className="mb-6">
+              <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+                <Zap className="h-5 w-5 text-primary" />
+                Border Beam
+              </h2>
+              <p className="text-white/40 text-sm mt-1">
+                Animated beam of light traveling along the border of a card
+              </p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="relative rounded-2xl border border-white/10 bg-black/80 p-8 overflow-hidden">
+                <BorderBeam
+                  size={80}
+                  duration={4}
+                  colorFrom="#c96442"
+                  colorTo="#d97757"
+                  borderWidth={2}
+                />
+                <div className="flex flex-col items-center justify-center text-center min-h-[160px]">
+                  <Zap className="h-8 w-8 text-primary mb-3" />
+                  <h4 className="text-lg font-bold text-white mb-1">Terracotta Beam</h4>
+                  <p className="text-white/40 text-xs">Animated border beam in primary colors</p>
+                </div>
+              </div>
+              <div className="relative rounded-2xl border border-white/10 bg-black/80 p-8 overflow-hidden">
+                <BorderBeam
+                  size={80}
+                  duration={4}
+                  delay={2}
+                  colorFrom="#9c40ff"
+                  colorTo="#ffaa40"
+                  borderWidth={2}
+                />
+                <BorderBeam
+                  size={60}
+                  duration={3}
+                  colorFrom="#c96442"
+                  colorTo="#d97757"
+                  borderWidth={1}
+                  reverse
+                />
+                <div className="flex flex-col items-center justify-center text-center min-h-[160px]">
+                  <Layers className="h-8 w-8 text-purple-400 mb-3" />
+                  <h4 className="text-lg font-bold text-white mb-1">Dual Beam</h4>
+                  <p className="text-white/40 text-xs">Two beams traveling in opposite directions</p>
+                </div>
+              </div>
+            </div>
+          </motion.section>
+
+          {/* Marquee */}
+          <motion.section
+            variants={sectionVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+          >
+            <div className="mb-6">
+              <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+                <Sparkles className="h-5 w-5 text-primary" />
+                Marquee
+              </h2>
+              <p className="text-white/40 text-sm mt-1">
+                Auto-scrolling marquee with tech stack names
+              </p>
+            </div>
+            <Card className="bg-black/80 border-white/10 overflow-hidden">
+              <CardContent className="p-6 space-y-4">
+                <Marquee pauseOnHover className="[--duration:30s] [--gap:1.5rem]">
+                  {[
+                    "Next.js", "React", "TypeScript", "Tailwind CSS", "Framer Motion",
+                    "Prisma", "tRPC", "Zustand", "Vercel", "shadcn/ui",
+                    "Radix UI", "Zod", "React Query", "Lucide"
+                  ].map((tech) => (
+                    <div
+                      key={tech}
+                      className="flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 text-sm text-white/70 hover:text-primary hover:border-primary/30 transition-colors cursor-default"
+                    >
+                      <Zap className="h-3 w-3 text-primary" />
+                      {tech}
+                    </div>
+                  ))}
+                </Marquee>
+                <Marquee reverse pauseOnHover className="[--duration:25s] [--gap:1.5rem]">
+                  {[
+                    "Node.js", "PostgreSQL", "Redis", "Docker", "Kubernetes",
+                    "GraphQL", "REST API", "AWS", "CI/CD", "Git",
+                    "WebSocket", "Stripe", "Auth.js", "Edge Runtime"
+                  ].map((tech) => (
+                    <div
+                      key={tech}
+                      className="flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 text-sm text-white/70 hover:text-primary hover:border-primary/30 transition-colors cursor-default"
+                    >
+                      <Sparkles className="h-3 w-3 text-purple-400" />
+                      {tech}
+                    </div>
+                  ))}
+                </Marquee>
+              </CardContent>
+            </Card>
+          </motion.section>
+
+          {/* Meteors */}
+          <motion.section
+            variants={sectionVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+          >
+            <div className="mb-6">
+              <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+                <Circle className="h-5 w-5 text-primary" />
+                Meteors
+              </h2>
+              <p className="text-white/40 text-sm mt-1">
+                Meteor shower effect on a dark card with subtle trails
+              </p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="relative rounded-2xl border border-white/10 bg-black p-8 overflow-hidden min-h-[220px]">
+                <Meteors number={15} />
+                <div className="relative z-10 flex flex-col items-center justify-center text-center min-h-[160px]">
+                  <h4 className="text-xl font-bold text-white mb-2">Meteor Shower</h4>
+                  <p className="text-white/40 text-sm max-w-xs">
+                    Animated meteors streaking across the card with varying speeds and delays
+                  </p>
+                </div>
+              </div>
+              <div className="relative rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/5 to-black p-8 overflow-hidden min-h-[220px]">
+                <Meteors number={25} minDelay={0.1} maxDelay={0.8} minDuration={1} maxDuration={5} />
+                <div className="relative z-10 flex flex-col items-center justify-center text-center min-h-[160px]">
+                  <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center mb-3">
+                    <Sparkles className="h-5 w-5 text-primary" />
+                  </div>
+                  <h4 className="text-xl font-bold text-white mb-2">Dense Meteor Field</h4>
+                  <p className="text-white/40 text-sm max-w-xs">
+                    Higher density meteors with faster animation and terracotta-tinted border
+                  </p>
+                </div>
+              </div>
+            </div>
+          </motion.section>
+
+          {/* Animated Beam */}
+          <motion.section
+            variants={sectionVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+          >
+            <div className="mb-6">
+              <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+                <Eye className="h-5 w-5 text-primary" />
+                Animated Beam
+              </h2>
+              <p className="text-white/40 text-sm mt-1">
+                SVG beam connecting two elements with animated gradient flow
+              </p>
+            </div>
+            <AnimatedBeamDemo />
           </motion.section>
 
           {/* Footer */}

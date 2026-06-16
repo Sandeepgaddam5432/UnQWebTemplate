@@ -13,6 +13,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
+import { MagicCard } from "@/components/ui/magic-card";
+import { Meteors } from "@/components/ui/meteors";
 import {
   Sparkles,
   CreditCard,
@@ -38,6 +40,8 @@ import {
   BrainCircuit,
   MoonStar,
   Component,
+  Wand2,
+  Flame,
 } from "lucide-react";
 
 // ===== ANIMATION VARIANTS =====
@@ -697,6 +701,149 @@ export default function CardsShowcase() {
                 </div>
               </CardContent>
             </Card>
+          </motion.section>
+
+          {/* Magic Cards */}
+          <motion.section
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+            variants={sectionVariants}
+          >
+            <div className="mb-6">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <Wand2 className="h-4 w-4 text-primary" />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-bold">Magic Cards</h2>
+                  <p className="text-muted-foreground text-sm">Animated gradient cards with mouse tracking</p>
+                </div>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <MagicCard
+                className="cursor-pointer rounded-2xl"
+                gradientFrom="#c96442"
+                gradientTo="#d97757"
+                gradientSize={300}
+              >
+                <div className="p-6 flex flex-col justify-between min-h-[220px]">
+                  <div>
+                    <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
+                      <Zap className="h-5 w-5 text-primary" />
+                    </div>
+                    <h3 className="text-lg font-bold mb-2">Terracotta Glow</h3>
+                    <p className="text-sm text-muted-foreground">Mouse-tracking gradient in the signature terracotta color palette.</p>
+                  </div>
+                  <Badge variant="outline" className="w-fit text-xs border-primary/30 text-primary">
+                    Primary
+                  </Badge>
+                </div>
+              </MagicCard>
+              <MagicCard
+                className="cursor-pointer rounded-2xl"
+                gradientFrom="#10b981"
+                gradientTo="#059669"
+                gradientSize={300}
+              >
+                <div className="p-6 flex flex-col justify-between min-h-[220px]">
+                  <div>
+                    <div className="h-10 w-10 rounded-xl bg-emerald-500/10 flex items-center justify-center mb-4">
+                      <Globe className="h-5 w-5 text-emerald-500" />
+                    </div>
+                    <h3 className="text-lg font-bold mb-2">Emerald Wave</h3>
+                    <p className="text-sm text-muted-foreground">Fresh emerald gradient that follows your cursor movement.</p>
+                  </div>
+                  <Badge variant="outline" className="w-fit text-xs border-emerald-500/30 text-emerald-500">
+                    Emerald
+                  </Badge>
+                </div>
+              </MagicCard>
+              <MagicCard
+                className="cursor-pointer rounded-2xl"
+                gradientFrom="#ec4899"
+                gradientTo="#d946ef"
+                gradientSize={300}
+              >
+                <div className="p-6 flex flex-col justify-between min-h-[220px]">
+                  <div>
+                    <div className="h-10 w-10 rounded-xl bg-rose-500/10 flex items-center justify-center mb-4">
+                      <Star className="h-5 w-5 text-rose-500" />
+                    </div>
+                    <h3 className="text-lg font-bold mb-2">Rose Aurora</h3>
+                    <p className="text-sm text-muted-foreground">Vibrant rose-to-fuchsia gradient with smooth tracking.</p>
+                  </div>
+                  <Badge variant="outline" className="w-fit text-xs border-rose-500/30 text-rose-500">
+                    Rose
+                  </Badge>
+                </div>
+              </MagicCard>
+            </div>
+          </motion.section>
+
+          {/* Cards with Meteors */}
+          <motion.section
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+            variants={sectionVariants}
+          >
+            <div className="mb-6">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <Flame className="h-4 w-4 text-primary" />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-bold">Cards with Meteors</h2>
+                  <p className="text-muted-foreground text-sm">Card components with meteor shower overlay effects</p>
+                </div>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="relative rounded-2xl border border-white/10 bg-black p-8 overflow-hidden min-h-[260px]">
+                <Meteors number={12} />
+                <div className="relative z-10">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                      <Rocket className="h-5 w-5 text-primary" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-bold text-white">Launch Ready</h3>
+                      <p className="text-xs text-white/40">Deploy in seconds</p>
+                    </div>
+                  </div>
+                  <p className="text-sm text-white/60 mb-4 max-w-sm">
+                    Production-grade deployment with edge runtime, auto-scaling, and zero-config CI/CD pipelines.
+                  </p>
+                  <div className="flex gap-2">
+                    <Badge className="bg-primary/10 text-primary border-primary/20 text-xs">Vercel</Badge>
+                    <Badge className="bg-white/10 text-white/60 border-white/10 text-xs">Edge</Badge>
+                  </div>
+                </div>
+              </div>
+              <div className="relative rounded-2xl border border-white/10 bg-black p-8 overflow-hidden min-h-[260px]">
+                <Meteors number={20} minDelay={0.1} maxDelay={0.5} minDuration={2} maxDuration={6} />
+                <div className="relative z-10">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="h-10 w-10 rounded-xl bg-purple-500/10 flex items-center justify-center">
+                      <BrainCircuit className="h-5 w-5 text-purple-400" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-bold text-white">AI Powered</h3>
+                      <p className="text-xs text-white/40">Intelligent automation</p>
+                    </div>
+                  </div>
+                  <p className="text-sm text-white/60 mb-4 max-w-sm">
+                    Built-in AI capabilities with streaming responses, function calling, and multi-modal support.
+                  </p>
+                  <div className="flex gap-2">
+                    <Badge className="bg-purple-500/10 text-purple-400 border-purple-500/20 text-xs">GPT-4</Badge>
+                    <Badge className="bg-white/10 text-white/60 border-white/10 text-xs">Streaming</Badge>
+                  </div>
+                </div>
+              </div>
+            </div>
           </motion.section>
 
           {/* Bottom spacing */}

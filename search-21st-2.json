@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://21st.dev/community/components/edwinvakayil/faq-pro/default",
+    "name": "FAQ Pro | Community Components - 21st Dev",
+    "snippet": "Install components with shadcn using commands like npx shadcn@latest add @iconiq/b-button, or use a direct registry URL from iconiqui.com/r/b- ...",
+    "host_name": "21st.dev",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://21st.dev/community/blog/component-libraries",
+    "name": "Introducing Component Libraries: Publish from Your Terminal, Used",
+    "snippet": "The shadcn registry model fixed this for the public ecosystem: components live as code, installable on demand. Libraries on 21st brings the ...",
+    "host_name": "21st.dev",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://21st.dev/community/blog/agent-elements",
+    "name": "Introducing Agent Elements: 25 shadcn/ui Components Built for",
+    "snippet": "Install any component with one command. Files land in your project — you own them. terminalBrowse components →. # install the full chat npx shadcn@latest add ...",
+    "host_name": "21st.dev",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://21st.dev/community/components/OrcDev/8bit-faq2/default",
+    "name": "8bit FAQ 2 — Card Grid | Community Components - 21st Dev",
+    "snippet": "Works with any project that uses shadcn/ui. How do I install? Run the shadcn CLI: pnpm dlx shadcn@latest add @8bitcn/button. That's it. Can ...",
+    "host_name": "21st.dev",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://21st.dev/community/shadcn",
+    "name": "shadcn's UI components - 21st Dev",
+    "snippet": "Browse shadcn's open-source UI components on 21st.dev.",
+    "host_name": "21st.dev",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://cdn.21st.dev/lyanchouss/faq-pro/default/bundle.1780693119279.html",
+    "name": "Vite + React + TS - 21st Dev",
+    "snippet": "Install components with shadcn using commands like npx shadcn@latest add @iconiq/b-button, or use a direct registry URL from iconiqui.com/r/b-button.json.",
+    "host_name": "cdn.21st.dev",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://21st.dev/community/components/haydenbleasel/snippet",
+    "name": "Snippet | Community Components - 21st Dev",
+    "snippet": "A React component by Hayden Bleasel. High-quality React component from the community.",
+    "host_name": "21st.dev",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://21st.dev",
+    "name": "Discover community-made UI components | 21st",
+    "snippet": "Explore, copy, and remix thousands of high-quality React components published to the 21st.dev Community by designers and developers.",
+    "host_name": "21st.dev",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://21st.dev/community/components/larsen66/flexnative-tooltip",
+    "name": "Flexnative Tooltip | Community Components - 21st | 21st",
+    "snippet": "A Tooltip from the Flexnative UI registry with 10 variants: basic hover, four-side positioning, keyboard shortcut hint, icon-button trigger, custom open delay, ...",
+    "host_name": "21st.dev",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://21st.dev/community/components/openstatusHQ/datetime-picker",
+    "name": "Datetime Picker | Community Components - 21st Dev",
+    "snippet": "A component built with React and Shadcn UI. - No additional library - Listens to keydown events - Supports arrow navigation - Formats date ...",
+    "host_name": "21st.dev",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]

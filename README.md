@@ -1,49 +1,96 @@
 # UnQWebTemplate
 
 <p align="center">
-  <strong>A Premium, Cinematic Next.js Web Template</strong>
+  <strong>A Premium, Cinematic Next.js Web Template &mdash; The Complete UI/UX Universe</strong>
 </p>
 
 <p align="center">
   Built with ❤️ by <strong>Sandeep Gaddam</strong>
 </p>
 
+<p align="center">
+  <em>Where Design Meets Innovation</em>
+</p>
+
 ---
 
 ## Overview
 
-UnQWebTemplate is a production-ready, visually stunning Next.js web template featuring 15+ showcase pages, 30+ UI components, glassmorphism effects, cinematic animations, and AI-powered tools. Designed for developers who demand excellence in both aesthetics and functionality.
+UnQWebTemplate is a production-ready, visually stunning Next.js web template that combines the power of 21st.dev ecosystem, Magic UI components, shadcn/ui, and custom-built cinematic animations into a single premium template. Featuring 19+ showcase pages, 65+ UI components, and integration with the 21st.dev component registry, this is not just a template &mdash; it's a complete UI/UX universe.
 
 ## Pages
 
 | # | Page | Route | Description |
 |---|------|-------|-------------|
-| 1 | Landing | `/` | Cinematic hero, bento grid, testimonials, particle effects |
-| 2 | Dashboard | `/dashboard` | Stats, charts, data tables, glass calendar & clock |
-| 3 | AI Tools | `/tools` | AI image/video generation, API playground |
-| 4 | Components | `/components` | Buttons, badges, cards, avatars, accordions, dialogs, tabs |
-| 5 | Animations | `/animations` | Hero, morphing cards, stagger, parallax, spring physics |
-| 6 | Cards | `/cards` | Bento grid, glassmorphism, gradient, hover effects |
-| 7 | Navigation | `/navigation` | Expandable tabs, macOS dock, breadcrumbs, floating nav |
-| 8 | Forms | `/forms` | Contact, login, registration, settings, multi-step forms |
-| 9 | Data Display | `/data-display` | Data tables, timelines, charts, orbital timelines |
-| 10 | Feedback | `/feedback` | Alerts, toasts, toggles, progress bars, hover cards |
-| 11 | Loaders | `/loaders` | Cube loader, spinners, skeletons, page transitions |
-| 12 | Effects | `/effects` | Particles, aurora, glow, glassmorphism, floating elements |
-| 13 | Search | `/search` | Command palette, global search, filtered search |
-| 14 | Calendar & Clock | `/calendar-clock` | Glass calendar, glass clock, world clock, date picker |
-| 15 | About | `/about` | Creator info, tech stack, open source section |
+| 1 | **Landing** | `/` | Cinematic hero, bento grid, orbit features, testimonials, glass swiper, particle effects |
+| 2 | **Dashboard** | `/dashboard` | Stats, charts, data tables, glass calendar & clock, terminal, marquee |
+| 3 | **AI Tools** | `/tools` | AI image/video generation, API playground, expandable tabs |
+| 4 | **Component Explorer** | `/explorer` | Searchable gallery of 65+ components with live preview & copy-code |
+| 5 | **SaaS Landing** | `/saas` | Hero, stats, features, pricing tiers, testimonials, CTA |
+| 6 | **Marketing** | `/marketing` | Announcement bar, globe hero, logo cloud, comparison, FAQ |
+| 7 | **Blocks Gallery** | `/blocks` | 21 reusable page sections: heroes, features, CTAs, pricing, footers |
+| 8 | **Components** | `/components` | shadcn/ui: buttons, badges, cards, avatars, accordions, dialogs, tabs |
+| 9 | **Animations** | `/animations` | Hero, morphing cards, stagger, parallax, spring, word rotate, hyper text |
+| 10 | **Cards** | `/cards` | Magic cards, bento grid, glassmorphism, gradient, meteors, hover effects |
+| 11 | **Navigation** | `/navigation` | Expandable tabs, macOS dock, breadcrumbs, floating nav, sidebars |
+| 12 | **Forms** | `/forms` | Contact, login, registration, settings, multi-step with progress |
+| 13 | **Data Display** | `/data-display` | Data tables, timelines, charts, orbital timeline, collection view |
+| 14 | **Feedback** | `/feedback` | Alerts, toasts, toggles, progress bars, skeletons, hover cards |
+| 15 | **Loaders** | `/loaders` | Cube loader, spinners, skeletons, progress, page transitions |
+| 16 | **Effects** | `/effects` | Particles, aurora, border beam, marquee, meteors, animated beam |
+| 17 | **Search** | `/search` | Command palette, global search, filtered search, recent searches |
+| 18 | **Calendar & Clock** | `/calendar-clock` | Glass calendar, glass clock, world clock, date picker |
+| 19 | **About** | `/about` | Creator info, tech stack, 15-page showcase, open source |
+
+## Component Sources
+
+### 21st.dev Ecosystem (Magic UI)
+
+Components installed from the 21st.dev registry via Magic UI:
+
+| Component | Description |
+|-----------|-------------|
+| MagicCard | Animated gradient card with mouse tracking |
+| BorderBeam | Animated beam border effect |
+| AnimatedBeam | SVG beam connections between elements |
+| Marquee | Auto-scrolling content marquee |
+| Meteors | Meteor shower animation overlay |
+| OrbitingCircles | Orbiting circle animation |
+| Particles | Interactive particle background |
+| Ripple | Click ripple effect |
+| AnimatedGridPattern | Animated grid background |
+| DotPattern | Dot pattern background |
+| FlickeringGrid | Flickering grid effect |
+| GridPattern | Grid pattern background |
+| Globe | 3D interactive globe |
+| NumberTicker | Animated number counter |
+| WordRotate | Rotating words animation |
+| BlurFade | Blur-to-fade entrance animation |
+| HyperText | Scramble/decode text animation |
+| ScrollBasedVelocity | Velocity-based scroll text |
+| Terminal | Terminal/command-line component |
+| AnimatedList | Staggered list entrance animation |
+| CoolMode | Fun particle click effect |
+
+### shadcn/ui
+
+Full set of shadcn/ui components: Accordion, Alert, AlertDialog, AspectRatio, Avatar, Badge, Breadcrumb, Button, Calendar, Card, Carousel, Checkbox, Collapsible, Command, ContextMenu, Dialog, Drawer, DropdownMenu, Form, HoverCard, Input, InputOTP, Label, Menubar, NavigationMenu, Pagination, Popover, Progress, RadioGroup, Resizable, ScrollArea, Select, Separator, Sheet, Sidebar, Skeleton, Slider, Switch, Table, Tabs, Textarea, Toast, Toggle, ToggleGroup, Tooltip
+
+### Custom Components
+
+GlassCalendar, GlassClock, ParticleTextEffect, MacOSDock, RadialOrbitalTimeline, ShamayimToggleSwitch, CubeLoader, ActionSearchBar, APIPlayground, AIMultiModalGeneration, ExpandableTabs, BentoGrid, HeroGeometric, TestimonialStack, AnimatedTestimonials, FooterSection, StackFeatureSection, AlertBanner, DataTable, Timeline
 
 ## Tech Stack
 
 - **Framework**: [Next.js 16](https://nextjs.org/) with App Router
 - **Language**: [TypeScript 5](https://www.typescriptlang.org/)
-- **Styling**: [Tailwind CSS 4](https://tailwindcss.com/) + [shadcn/ui](https://ui.shadcn.com/)
+- **Styling**: [Tailwind CSS 4](https://tailwindcss.com/)
+- **UI Library**: [shadcn/ui](https://ui.shadcn.com/) + [Magic UI](https://magicui.design/) (21st.dev)
 - **Animations**: [Framer Motion](https://www.framer.com/motion/)
 - **Icons**: [Lucide React](https://lucide.dev/)
 - **Charts**: [Recharts](https://recharts.org/)
 - **3D**: [Three.js](https://threejs.org/)
-- **Theme**: [next-themes](https://github.com/pacocoursey/next-themes) (Dark/Light mode)
+- **Theme**: [next-themes](https://github.com/pacocoursey/next-themes)
 - **Database**: [Prisma](https://www.prisma.io/) with SQLite
 - **State**: [Zustand](https://zustand-demo.pmnd.rs/) + [TanStack Query](https://tanstack.com/query)
 
@@ -58,10 +105,10 @@ UnQWebTemplate is a production-ready, visually stunning Next.js web template fea
 ### Design Principles
 
 - **Cinematic First**: Every page feels like a premium visual experience
+- **21st.dev Powered**: Integrating the best of the 21st.dev component ecosystem
 - **Accessibility**: 4.5:1 contrast ratios, semantic HTML, ARIA support
 - **Responsive**: Mobile-first design with touch-friendly 44px targets
 - **Performance**: Optimized animations, lazy loading, efficient rendering
-- **Consistency**: 4pt/8dp spacing rhythm, unified component patterns
 
 ## Getting Started
 
@@ -73,93 +120,63 @@ UnQWebTemplate is a production-ready, visually stunning Next.js web template fea
 ### Installation
 
 ```bash
-# Clone the repository
 git clone <repository-url>
 cd unq-web-template
-
-# Install dependencies
 bun install
-
-# Start development server
 bun run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-### Build for Production
+### Installing More 21st.dev Components
 
 ```bash
-bun run build
-bun run start
+# Install any component from the 21st.dev ecosystem
+npx shadcn@latest add "https://magicui.design/r/COMPONENT_NAME"
+
+# Example: Install the sparkles component
+npx shadcn@latest add "https://magicui.design/r/sparkles"
 ```
+
+Browse available components at [21st.dev](https://21st.dev) or [magicui.design](https://magicui.design).
 
 ## Project Structure
 
 ```
 unq-web-template/
 ├── src/
-│   ├── app/                    # Next.js App Router pages
-│   │   ├── page.tsx            # Landing page
-│   │   ├── layout.tsx          # Root layout
-│   │   ├── globals.css         # Global styles & theme
-│   │   ├── dashboard/          # Dashboard page
-│   │   ├── tools/              # AI Tools page
-│   │   ├── components/         # Components showcase
-│   │   ├── animations/         # Animations showcase
-│   │   ├── cards/              # Cards showcase
-│   │   ├── navigation/         # Navigation showcase
-│   │   ├── forms/              # Forms showcase
-│   │   ├── data-display/       # Data display showcase
-│   │   ├── feedback/           # Feedback showcase
-│   │   ├── loaders/            # Loaders showcase
-│   │   ├── effects/            # Effects showcase
-│   │   ├── search/             # Search showcase
-│   │   ├── calendar-clock/     # Calendar & Clock showcase
-│   │   └── about/              # About page
+│   ├── app/                    # 19+ Next.js App Router pages
 │   ├── components/
-│   │   ├── ui/                 # shadcn/ui + custom components
+│   │   ├── ui/                 # 65+ UI components
+│   │   │   ├── magic-card.tsx  # 21st.dev/Magic UI components
+│   │   │   ├── border-beam.tsx
+│   │   │   ├── marquee.tsx
+│   │   │   ├── ... (65+ more)
+│   │   │   └── button.tsx      # shadcn/ui components
 │   │   └── navigation/         # Sidebar navigation
 │   ├── hooks/                  # Custom React hooks
 │   └── lib/                    # Utilities
 ├── prisma/                     # Database schema
 ├── public/                     # Static assets
-└── package.json
+└── README.md
 ```
 
-## Key Components
+## Key Features
 
-### Custom Components
-
-- **GlassCalendar** - Frosted glass calendar with weekly/monthly views
-- **GlassClock** - Braun-inspired analog clock with glass effect
-- **ParticleTextEffect** - Canvas-based particle text animation
-- **MacOSDock** - Fish-eye magnification dock navigation
-- **RadialOrbitalTimeline** - Interactive orbital timeline visualization
-- **ShamayimToggleSwitch** - Premium toggle with 16 pattern presets
-- **CubeLoader** - 3D rotating cube loading animation
-- **ActionSearchBar** - Animated search with action results
-- **APIPlayground** - Interactive API testing tool
-- **AIMultiModalGeneration** - AI image/video/avatar generation UI
-- **ExpandableTabs** - Animated tabs with icon expansion
-- **BentoGrid** - Flexible bento-style grid layout
-- **HeroGeometric** - Cinematic geometric hero section
-- **TestimonialStack** - Draggable glass testimonial cards
-
-## Features
-
-- 15+ beautifully crafted showcase pages
-- 30+ production-ready UI components
+- 19 beautifully crafted showcase pages
+- 65+ production-ready UI components
+- 21st.dev ecosystem integration with Magic UI
+- Searchable component explorer with live preview
 - Dark/Light mode with smooth transitions
 - Cinematic animations powered by Framer Motion
 - Glassmorphism and aurora UI effects
-- Responsive design for all screen sizes
+- SaaS landing page sections
+- Marketing page templates
+- Reusable blocks and sections gallery
 - AI-powered tools (image generation, API playground)
 - Interactive data visualizations
 - Comprehensive form components
-- Advanced navigation patterns
-- Search and command palette
-- Calendar and clock widgets
-- Customizable theme with CSS variables
+- Copy-code functionality in component explorer
 
 ## License
 
@@ -172,5 +189,5 @@ MIT License
 </p>
 
 <p align="center">
-  <strong>UnQWebTemplate</strong> — Where Design Meets Innovation
+  <strong>UnQWebTemplate</strong> &mdash; The Complete UI/UX Universe
 </p>

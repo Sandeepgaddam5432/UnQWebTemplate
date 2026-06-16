@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://www.youtube.com/watch?v=TMaGcVAO9Ww",
+    "name": "This Shadcn Update Will Blow Your Mind! | Introducing CLI 3.0",
+    "snippet": "Comments · Top 10 Frontend Tools & Websites You Must Use in 2025 | Ultimate Developer Toolkit | Manu Arora · Reacting to Your Projects | Project ...",
+    "host_name": "www.youtube.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://21st.dev/community/components/s/shadcn-ui",
+    "name": "Shadcn/ui Components - 21st Dev",
+    "snippet": "Explore 31 components from the shadcn/ui library, offering modern React and Tailwind CSS solutions for building stylish interfaces.",
+    "host_name": "21st.dev",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://shadcnstudio.com/blocks/bento-grid/bento-grid",
+    "name": "Shadcn Bento Grid",
+    "snippet": "Shadcn Bento Grid Blocks are modern UI components designed to display content in visually engaging grid layouts. Built using Shadcn UI, Tailwind CSS, and React, ...",
+    "host_name": "shadcnstudio.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://adminlte.io/blog/shadcn-ui-block-libraries",
+    "name": "12 Best shadcn/ui Block Libraries 2026 - AdminLTE.IO",
+    "snippet": "The 150+ components cover terminal animations, marquees, particle effects, kinetic text, animated lists, bento grids, ripples, and bordered ...",
+    "host_name": "adminlte.io",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.reddit.com/r/Frontend/comments/1sftnsc/resources_around_shadcnui_that_helped_me_build",
+    "name": "Resources around shadcn/ui that helped me build dashboards faster",
+    "snippet": "Magic UI – great collection of animated UI components compatible with shadcn setups. 21st.dev – modern UI components and patterns that ...",
+    "host_name": "www.reddit.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://21st.dev/community/components/s/bento-grid",
+    "name": "Bento grid Components - 21st Dev",
+    "snippet": "Organize content in style with 11 bento grid components for React, leveraging Tailwind CSS for flexible and dynamic layouts.",
+    "host_name": "21st.dev",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.shadcnblocks.com/blocks/hero",
+    "name": "Shadcn Hero Blocks - Shadcnblocks.com",
+    "snippet": "Browse 247+ Shadcn UI Hero blocks, sections & components built with React, Tailwind CSS and shadcn/ui. Copy & paste the code or install via the shadcn CLI.",
+    "host_name": "www.shadcnblocks.com",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/birobirobiro/awesome-shadcn-ui",
+    "name": "birobirobiro/awesome-shadcn-ui - GitHub",
+    "snippet": "A fully animated, open-source React component distribution. Browse a list of animated primitives, components and icons you can install and use in your projects.",
+    "host_name": "github.com",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=U6YZfpiFhkQ",
+    "name": "I Found Even BETTER React Component Libraries Built on Top of",
+    "snippet": "I found even more powerful and beautiful components built on top of TailwindCSS and ShadcnUI, ranging from simple yet very powerful ...",
+    "host_name": "www.youtube.com",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://shadcnspace.com/blocks/marketing/bento-grid-section",
+    "name": "1+ Shadcn Bento Grid",
+    "snippet": "Explore 1+ shadcn UI bento grid blocks for flexible, grid-based layouts. Display content in varied card sizes, preview layouts, and copy ready-to-use ...",
+    "host_name": "shadcnspace.com",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]

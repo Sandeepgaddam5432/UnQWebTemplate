@@ -2,6 +2,9 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, useInView } from "framer-motion";
+import { NumberTicker } from "@/components/ui/number-ticker";
+import { Terminal, TypingAnimation, AnimatedSpan } from "@/components/ui/terminal";
+import { Marquee } from "@/components/ui/marquee";
 import {
   Users,
   DollarSign,
@@ -13,6 +16,8 @@ import {
   Activity,
   Clock,
   BarChart3,
+  TerminalSquare,
+  Hash,
 } from "lucide-react";
 import {
   LineChart,
@@ -643,6 +648,148 @@ export default function DashboardPage() {
                   variant="spacious"
                   showConnector
                 />
+              </CardContent>
+            </Card>
+          </AnimatedSection>
+          {/* Number Ticker Stats */}
+          <AnimatedSection delay={0.3}>
+            <div className="flex items-center gap-2 mb-4">
+              <Hash className="h-5 w-5 text-primary" />
+              <h2 className="text-lg font-semibold text-foreground">Animated Stats</h2>
+              <Badge variant="outline" className="text-xs">
+                Number Ticker
+              </Badge>
+            </div>
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+              {[
+                { title: "Page Views", value: 284593, prefix: "", suffix: "", change: "+18.7%", isPositive: true, color: "text-primary", bgColor: "bg-primary/10" },
+                { title: "Bounce Rate", value: 24, prefix: "", suffix: "%", change: "-3.2%", isPositive: true, color: "text-emerald-500", bgColor: "bg-emerald-500/10" },
+                { title: "Avg Session", value: 4, prefix: "", suffix: "m 32s", change: "+0.8%", isPositive: true, color: "text-amber-500", bgColor: "bg-amber-500/10" },
+                { title: "Conversions", value: 1284, prefix: "", suffix: "", change: "+31.4%", isPositive: true, color: "text-purple-500", bgColor: "bg-purple-500/10" },
+              ].map((stat, index) => (
+                <motion.div
+                  key={stat.title}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: index * 0.1 }}
+                >
+                  <Card className="relative overflow-hidden group hover:shadow-lg transition-shadow duration-300 border-border/50">
+                    <CardContent className="p-5">
+                      <div className="flex items-start justify-between">
+                        <div className={`p-2.5 rounded-xl ${stat.bgColor}`}>
+                          <Hash className={`h-5 w-5 ${stat.color}`} />
+                        </div>
+                        <div
+                          className={`flex items-center gap-1 text-xs font-medium ${
+                            stat.isPositive ? "text-green-500" : "text-red-500"
+                          }`}
+                        >
+                          {stat.isPositive ? (
+                            <ArrowUpRight className="h-3 w-3" />
+                          ) : (
+                            <ArrowDownRight className="h-3 w-3" />
+                          )}
+                          {stat.change}
+                        </div>
+                      </div>
+                      <div className="mt-4">
+                        <p className="text-2xl font-bold tracking-tight text-foreground">
+                          <NumberTicker
+                            value={stat.value}
+                            className="text-2xl font-bold tracking-tight"
+                            delay={index * 0.15}
+                          />
+                          <span className="text-lg text-muted-foreground">{stat.suffix}</span>
+                        </p>
+                        <p className="text-sm text-muted-foreground mt-0.5">
+                          {stat.title}
+                        </p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
+          </AnimatedSection>
+
+          {/* Terminal */}
+          <AnimatedSection delay={0.35}>
+            <div className="flex items-center gap-2 mb-4">
+              <TerminalSquare className="h-5 w-5 text-primary" />
+              <h2 className="text-lg font-semibold text-foreground">Terminal</h2>
+              <Badge variant="outline" className="text-xs">
+                Interactive
+              </Badge>
+            </div>
+            <Card className="border-border/50 overflow-hidden">
+              <CardContent className="p-6 flex justify-center">
+                <Terminal className="max-w-full" startOnView>
+                  <TypingAnimation>&gt; npx create-unq-app@latest my-project</TypingAnimation>
+                  <AnimatedSpan delay={0.5}>
+                    <span className="text-emerald-500">✓</span> Creating project in ./my-project
+                  </AnimatedSpan>
+                  <AnimatedSpan delay={0.3}>
+                    <span className="text-emerald-500">✓</span> Installing dependencies: next, react, typescript
+                  </AnimatedSpan>
+                  <AnimatedSpan delay={0.3}>
+                    <span className="text-emerald-500">✓</span> Setting up Tailwind CSS & shadcn/ui
+                  </AnimatedSpan>
+                  <AnimatedSpan delay={0.3}>
+                    <span className="text-emerald-500">✓</span> Configuring Framer Motion animations
+                  </AnimatedSpan>
+                  <AnimatedSpan delay={0.3}>
+                    <span className="text-emerald-500">✓</span> Adding Magic UI components
+                  </AnimatedSpan>
+                  <TypingAnimation delay={500}>&gt; cd my-project && bun dev</TypingAnimation>
+                  <AnimatedSpan delay={0.5}>
+                    <span className="text-primary">⚡</span> Ready on http://localhost:3000
+                  </AnimatedSpan>
+                  <AnimatedSpan delay={0.3}>
+                    <span className="text-muted-foreground">  21st.dev components loaded ✓</span>
+                  </AnimatedSpan>
+                </Terminal>
+              </CardContent>
+            </Card>
+          </AnimatedSection>
+
+          {/* Marquee Activity Feed */}
+          <AnimatedSection delay={0.4}>
+            <div className="flex items-center gap-2 mb-4">
+              <Activity className="h-5 w-5 text-primary" />
+              <h2 className="text-lg font-semibold text-foreground">Live Activity</h2>
+              <Badge variant="default" className="text-xs">
+                Streaming
+              </Badge>
+            </div>
+            <Card className="border-border/50 overflow-hidden">
+              <CardContent className="p-4">
+                <Marquee pauseOnHover className="[--duration:40s] [--gap:1rem]">
+                  {[
+                    { user: "Alex R.", action: "deployed to production", time: "2m ago", color: "bg-emerald-500" },
+                    { user: "Priya S.", action: "merged PR #1847", time: "5m ago", color: "bg-primary" },
+                    { user: "Marcus C.", action: "updated design system", time: "8m ago", color: "bg-purple-500" },
+                    { user: "Zara O.", action: "closed 12 issues", time: "12m ago", color: "bg-amber-500" },
+                    { user: "Noah K.", action: "pushed 3 commits", time: "15m ago", color: "bg-cyan-500" },
+                    { user: "Sofia R.", action: "reviewed PR #1843", time: "18m ago", color: "bg-rose-500" },
+                    { user: "Leo P.", action: "released v2.4.0", time: "22m ago", color: "bg-blue-500" },
+                    { user: "Isla N.", action: "updated Figma tokens", time: "25m ago", color: "bg-teal-500" },
+                  ].map((item, i) => (
+                    <div
+                      key={i}
+                      className="flex items-center gap-3 px-4 py-3 rounded-xl border border-border/50 bg-muted/30 min-w-[280px]"
+                    >
+                      <div className={`h-2 w-2 rounded-full ${item.color} shrink-0`} />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm text-foreground truncate">
+                          <span className="font-medium">{item.user}</span>{" "}
+                          <span className="text-muted-foreground">{item.action}</span>
+                        </p>
+                      </div>
+                      <span className="text-xs text-muted-foreground shrink-0">{item.time}</span>
+                    </div>
+                  ))}
+                </Marquee>
               </CardContent>
             </Card>
           </AnimatedSection>

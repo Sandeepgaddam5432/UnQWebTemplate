@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://claudemarketplaces.com/mcp/21st-dev/magic-mcp",
+    "name": "Magic | MCP Servers - Claude Code Marketplaces",
+    "snippet": "Choose Installation Method. Method 1: CLI Installation (Recommended). One command to install and configure MCP for your IDE: npx @21st-dev/cli@latest install ...",
+    "host_name": "claudemarketplaces.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=DfWHX7kszQI&vl=en",
+    "name": "Claude Code MCP: How to Add MCP Servers (Complete Guide)",
+    "snippet": "... guide covers both remote and STDIO server setup, environment variable configuration, Windows-specific installation without WSL, and ...",
+    "host_name": "www.youtube.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/madhukarkumar/anthropic-mcp-servers",
+    "name": "madhukarkumar/anthropic-mcp-servers: Model Context Protocol",
+    "snippet": "This repository is a collection of reference implementations for the Model Context Protocol (MCP), as well as references to community built servers and ...",
+    "host_name": "github.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://heeki.medium.com/building-an-mcp-server-as-an-api-developer-cfc162d06a83",
+    "name": "Building an MCP server as an API developer | by Heeki Park - Medium",
+    "snippet": "I walk through the process by starting with core business logic, then building a local MCP server, and then deploying it as a remote MCP server using Amazon ...",
+    "host_name": "heeki.medium.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.reddit.com/r/ClaudeAI/comments/1jf4hnt/setting_up_mcp_servers_in_claude_code_a_tech",
+    "name": "Setting Up MCP Servers in Claude Code: A Tech Ritual for  - Reddit",
+    "snippet": "After much trial and error I finally got functioning MCP servers in Claude Code albeit with slightly less will to live.",
+    "host_name": "www.reddit.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=AydDDYn09QA",
+    "name": "MCP Tutorial: Connect AI to your HomeLab (and more) - YouTube",
+    "snippet": "... AI and how to fix it 05:31 What is MCP and how does it work 07:35 Where to find MCP Servers? 09:35 How to configure MCP Servers? 11:07 MCP ...",
+    "host_name": "www.youtube.com",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://agentpedia.codes/mcp/21st-dev-magic",
+    "name": "21st.dev Magic MCP Server - Craft UI Components Faster",
+    "snippet": "Open your MCP client and navigate to the server configuration or settings area. 3. Select the option to add a new MCP server or custom tool integration. 4.",
+    "host_name": "agentpedia.codes",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.anthropic.com/news/model-context-protocol",
+    "name": "Introducing the Model Context Protocol - Anthropic",
+    "snippet": "Developers can start building and testing MCP connectors today. All Claude.ai plans support connecting MCP servers to the Claude Desktop app.",
+    "host_name": "www.anthropic.com",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://mcpservers.org/servers/mark3labs/mcphost",
+    "name": "MCPHost MCP Server",
+    "snippet": "A CLI host application that enables Large Language Models (LLMs) to interact with external tools through the Model Context Protocol (MCP).",
+    "host_name": "mcpservers.org",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://dev.to/codecowboydotio/creating-an-mcp-server-with-anthropic-3m87",
+    "name": "Creating an MCP server with Anthropic - DEV Community",
+    "snippet": "In order for your MCP server to be registered, you'll need to configure the desktop client. Claude has a file called claude_desktop_config.json.",
+    "host_name": "dev.to",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]

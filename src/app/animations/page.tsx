@@ -15,6 +15,10 @@ import {
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { WordRotate } from "@/components/ui/word-rotate";
+import { NumberTicker } from "@/components/ui/number-ticker";
+import { BlurFade } from "@/components/ui/blur-fade";
+import { HyperText } from "@/components/ui/hyper-text";
 import {
   Sparkles,
   MousePointerClick,
@@ -29,6 +33,9 @@ import {
   Heart,
   ArrowRight,
   ChevronRight,
+  Hash,
+  Type,
+  AlignCenter,
 } from "lucide-react";
 
 // ===== DATA =====
@@ -539,6 +546,184 @@ export default function AnimationsShowcase() {
             <div className="max-w-lg mx-auto px-6" style={{ minHeight: "350px" }}>
               <TestimonialStack testimonials={glassTestimonials} />
             </div>
+          </motion.section>
+
+          {/* Word Rotate */}
+          <motion.section
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+            variants={sectionVariants}
+          >
+            <div className="mb-6">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <Type className="h-4 w-4 text-primary" />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-bold">Word Rotate</h2>
+                  <p className="text-muted-foreground text-sm">Cycling through words with smooth animated transitions</p>
+                </div>
+              </div>
+            </div>
+            <Card className="overflow-hidden border-border/50">
+              <CardContent className="p-8 flex flex-col items-center justify-center text-center min-h-[280px]">
+                <p className="text-muted-foreground text-sm mb-4">We build</p>
+                <div className="flex items-center gap-3 text-4xl md:text-5xl font-bold">
+                  <span className="text-foreground">Amazing</span>
+                  <WordRotate
+                    words={["Websites", "Apps", "Experiences", "Platforms", "Products"]}
+                    className="text-primary text-4xl md:text-5xl font-bold"
+                    duration={2000}
+                  />
+                </div>
+                <p className="text-muted-foreground text-sm mt-4">that users love</p>
+              </CardContent>
+            </Card>
+          </motion.section>
+
+          {/* Number Ticker */}
+          <motion.section
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+            variants={sectionVariants}
+          >
+            <div className="mb-6">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <Hash className="h-4 w-4 text-primary" />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-bold">Number Ticker</h2>
+                  <p className="text-muted-foreground text-sm">Animated number counters that spring into view</p>
+                </div>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {[
+                { label: "Components", value: 60, suffix: "+", color: "text-primary" },
+                { label: "Downloads", value: 12, suffix: "K+", color: "text-emerald-500" },
+                { label: "Stars", value: 8400, suffix: "", color: "text-amber-500" },
+                { label: "Contributors", value: 156, suffix: "", color: "text-purple-500" },
+              ].map((stat, i) => (
+                <Card key={stat.label} className="border-border/50 text-center">
+                  <CardContent className="p-6 flex flex-col items-center">
+                    <NumberTicker
+                      value={stat.value}
+                      className={`text-3xl md:text-4xl font-bold tabular-nums ${stat.color}`}
+                      delay={i * 0.3}
+                    />
+                    <p className="text-sm text-muted-foreground mt-2">{stat.label}</p>
+                    {stat.suffix && (
+                      <Badge variant="outline" className="mt-2 text-xs">{stat.suffix}</Badge>
+                    )}
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </motion.section>
+
+          {/* Blur Fade */}
+          <motion.section
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+            variants={sectionVariants}
+          >
+            <div className="mb-6">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <AlignCenter className="h-4 w-4 text-primary" />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-bold">Blur Fade</h2>
+                  <p className="text-muted-foreground text-sm">Elements fade in with a blur-to-clear animation on scroll</p>
+                </div>
+              </div>
+            </div>
+            <Card className="overflow-hidden border-border/50">
+              <CardContent className="p-8 space-y-6">
+                <BlurFade delay={0} inView>
+                  <h3 className="text-2xl font-bold text-foreground">Bring Your Content to Life</h3>
+                </BlurFade>
+                <BlurFade delay={0.15} inView direction="left">
+                  <p className="text-muted-foreground max-w-lg">
+                    BlurFade animates elements from blurred to clear, creating a cinematic reveal effect
+                    that draws attention to your most important content.
+                  </p>
+                </BlurFade>
+                <BlurFade delay={0.3} inView direction="right">
+                  <div className="flex gap-3">
+                    <Badge className="bg-primary/10 text-primary border-primary/20">
+                      <Sparkles className="h-3 w-3 mr-1" /> Blur Reveal
+                    </Badge>
+                    <Badge variant="outline" className="border-primary/20 text-primary">Directional</Badge>
+                    <Badge variant="outline" className="border-primary/20 text-primary">Staggered</Badge>
+                  </div>
+                </BlurFade>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+                  {["Direction: Up", "Direction: Left", "Direction: Right"].map((label, i) => (
+                    <BlurFade
+                      key={label}
+                      delay={0.4 + i * 0.15}
+                      inView
+                      direction={i === 0 ? "up" : i === 1 ? "left" : "right"}
+                    >
+                      <div className="rounded-xl border border-border/50 bg-muted/30 p-4 text-center">
+                        <p className="text-sm font-medium text-foreground">{label}</p>
+                        <p className="text-xs text-muted-foreground mt-1">Animated with blur fade</p>
+                      </div>
+                    </BlurFade>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </motion.section>
+
+          {/* HyperText */}
+          <motion.section
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+            variants={sectionVariants}
+          >
+            <div className="mb-6">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <Zap className="h-4 w-4 text-primary" />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-bold">HyperText</h2>
+                  <p className="text-muted-foreground text-sm">Text scramble animation with character-by-character reveal</p>
+                </div>
+              </div>
+            </div>
+            <Card className="overflow-hidden border-border/50">
+              <CardContent className="p-8 flex flex-col items-center justify-center text-center min-h-[320px] space-y-6">
+                <HyperText
+                  className="text-3xl md:text-4xl font-bold text-foreground"
+                  duration={1000}
+                  startOnView
+                  animateOnHover
+                >
+                  UnQWebTemplate
+                </HyperText>
+                <HyperText
+                  className="text-xl md:text-2xl font-semibold text-primary"
+                  duration={800}
+                  startOnView
+                  animateOnHover
+                  as="h2"
+                >
+                  Magic UI Components
+                </HyperText>
+                <p className="text-sm text-muted-foreground max-w-md">
+                  Hover over the text above to trigger the scramble animation again.
+                  Characters randomize before resolving to the final letter.
+                </p>
+              </CardContent>
+            </Card>
           </motion.section>
 
           {/* Bottom spacing */}

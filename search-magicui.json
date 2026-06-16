@@ -1,0 +1,47 @@
+[
+  {
+    "url": "https://magicui.design/docs/installation",
+    "name": "Installation | React Components & Templates - Magic UI",
+    "snippet": "How to install dependencies and structure your app. Note: We have the exact same installation process as shadcn/ui.",
+    "host_name": "magicui.design",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.npmjs.com/package/magicui-cli?activeTab=dependencies",
+    "name": "magicui-cli - NPM",
+    "snippet": "Add magic ui components to your apps. Shadcn-ui based config. Latest version: 0.1.6, last published: 2 years ago. Start using magicui-cli in ...",
+    "host_name": "www.npmjs.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=AkN6xJcnVYs",
+    "name": "Magic UI Review: The Best of Radix, Shadcn & Framer Motion",
+    "snippet": "... UI libraries and front-end development! 00:00 Welcome and Introduction 00:26 Exploring MagicUI 01:36 MagicUI Installation Guide 04:46 MagicUI ...",
+    "host_name": "www.youtube.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/shadcn-ui/ui/issues/2027",
+    "name": "npx shadcn-ui@latest add ALL < installs all components > #2027",
+    "snippet": "You can install all components in a go by using npx shadcn-ui@latest add without specifying any component name. For removing deps, knip.dev is a popular option.",
+    "host_name": "github.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.reddit.com/r/nextjs/comments/1du79u1/how_to_make_ui_components_publicly_available_via",
+    "name": "How to Make UI Components Publicly Available via CLI Like shadcn",
+    "snippet": "I want to test and make some of my components publicly available via CLI, similar to shadcn so that people have full control over the code.",
+    "host_name": "www.reddit.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  }
+]

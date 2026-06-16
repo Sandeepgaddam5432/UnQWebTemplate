@@ -28,6 +28,10 @@ import {
   Heart,
   Menu,
   X,
+  Layers,
+  Rocket,
+  Megaphone,
+  LayoutGrid,
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
@@ -38,7 +42,16 @@ const navSections = [
     items: [
       { href: "/", label: "Landing", icon: Home },
       { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+      { href: "/explorer", label: "Explorer", icon: Layers },
       { href: "/tools", label: "AI Tools", icon: Wand2 },
+    ],
+  },
+  {
+    label: "Pages",
+    items: [
+      { href: "/saas", label: "SaaS Landing", icon: Rocket },
+      { href: "/marketing", label: "Marketing", icon: Megaphone },
+      { href: "/blocks", label: "Blocks Gallery", icon: LayoutGrid },
     ],
   },
   {
