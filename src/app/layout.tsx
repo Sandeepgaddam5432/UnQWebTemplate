@@ -15,11 +15,23 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Nexus AI - Advanced Dashboard & AI Tools",
-  description: "A mind-blowing modern web application with AI tools, interactive dashboard, and stunning animations.",
-  keywords: ["AI", "Dashboard", "Next.js", "TypeScript", "Tailwind CSS", "shadcn/ui"],
+  title: "UnQWebTemplate - Premium Next.js UI Template",
+  description:
+    "UnQWebTemplate - A cinematic, modern Next.js web template with 15+ showcase pages, AI tools, glassmorphism UI, and stunning animations. Built with love by Sandeep Gaddam.",
+  keywords: [
+    "Next.js",
+    "TypeScript",
+    "Tailwind CSS",
+    "shadcn/ui",
+    "Web Template",
+    "UI Components",
+    "Framer Motion",
+    "Glassmorphism",
+    "UnQWebTemplate",
+  ],
+  authors: [{ name: "Sandeep Gaddam" }],
   icons: {
-    icon: "https://z-cdn.chatglm.cn/z-ai/static/logo.svg",
+    icon: "/logo.svg",
   },
 };
 
