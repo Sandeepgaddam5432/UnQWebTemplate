@@ -1,0 +1,711 @@
+     1→     1→"use client";
+     2→     2→
+     3→     3→import React from "react";
+     4→     4→import { motion } from "framer-motion";
+     5→     5→import Link from "next/link";
+     6→     6→import { SidebarNav } from "@/components/navigation/sidebar";
+     7→     7→import { Card, CardContent } from "@/components/ui/card";
+     8→     8→import { Badge } from "@/components/ui/badge";
+     9→     9→import { Button } from "@/components/ui/button";
+    10→    10→import { Separator } from "@/components/ui/separator";
+    11→    11→import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+    12→    12→import {
+    13→    13→  Heart,
+    14→    14→  Github,
+    15→    15→  Twitter,
+    16→    16→  Linkedin,
+    17→    17→  Mail,
+    18→    18→  ExternalLink,
+    19→    19→  Sparkles,
+    20→    20→  LayoutDashboard,
+    21→    21→  Component,
+    22→    22→  Wand2,
+    23→    23→  CreditCard,
+    24→    24→  Navigation,
+    25→    25→  FileText,
+    26→    26→  Table2,
+    27→    27→  MessageSquare,
+    28→    28→  Loader2,
+    29→    29→  Atom,
+    30→    30→  Search,
+    31→    31→  CalendarClock,
+    32→    32→  Home,
+    33→    33→  Star,
+    34→    34→  GitFork,
+    35→    35→  Code2,
+    36→    36→  Zap,
+    37→    37→  Globe,
+    38→    38→  Shield,
+    39→    39→  Layers,
+    40→    40→  Palette,
+    41→    41→  BookOpen,
+    42→    42→} from "lucide-react";
+    43→    43→
+    44→    44→const sectionVariants = {
+    45→    45→  hidden: { opacity: 0, y: 50 },
+    46→    46→  visible: {
+    47→    47→    opacity: 1,
+    48→    48→    y: 0,
+    49→    49→    transition: { duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] },
+    50→    50→  },
+    51→    51→};
+    52→    52→
+    53→    53→const fadeInUp = {
+    54→    54→  hidden: { opacity: 0, y: 30 },
+    55→    55→  visible: (i: number) => ({
+    56→    56→    opacity: 1,
+    57→    57→    y: 0,
+    58→    58→    transition: { delay: i * 0.08, duration: 0.6, ease: "easeOut" },
+    59→    59→  }),
+    60→    60→};
+    61→    61→
+    62→    62→// Tech stack data
+    63→    63→const techStack = [
+    64→    64→  {
+    65→    65→    name: "Next.js 16",
+    66→    66→    description: "React framework with App Router, SSR, and API routes",
+    67→    67→    icon: Globe,
+    68→    68→    color: "text-white",
+    69→    69→    bg: "bg-black",
+    70→    70→  },
+    71→    71→  {
+    72→    72→    name: "TypeScript",
+    73→    73→    description: "Strict type safety throughout the entire codebase",
+    74→    74→    icon: Code2,
+    75→    75→    color: "text-blue-400",
+    76→    76→    bg: "bg-blue-500/10",
+    77→    77→  },
+    78→    78→  {
+    79→    79→    name: "Tailwind CSS 4",
+    80→    80→    description: "Utility-first CSS with custom design tokens",
+    81→    81→    icon: Palette,
+    82→    82→    color: "text-cyan-400",
+    83→    83→    bg: "bg-cyan-500/10",
+    84→    84→  },
+    85→    85→  {
+    86→    86→    name: "shadcn/ui",
+    87→    87→    description: "50+ accessible, composable UI components",
+    88→    88→    icon: Layers,
+    89→    89→    color: "text-primary",
+    90→    90→    bg: "bg-primary/10",
+    91→    91→  },
+    92→    92→  {
+    93→    93→    name: "Framer Motion",
+    94→    94→    description: "Production-ready animations and gestures",
+    95→    95→    icon: Sparkles,
+    96→    96→    color: "text-purple-400",
+    97→    97→    bg: "bg-purple-500/10",
+    98→    98→  },
+    99→    99→  {
+   100→   100→    name: "Prisma ORM",
+   101→   101→    description: "Type-safe database client with SQLite",
+   102→   102→    icon: Shield,
+   103→   103→    color: "text-emerald-400",
+   104→   104→    bg: "bg-emerald-500/10",
+   105→   105→  },
+   106→   106→  {
+   107→   107→    name: "Zustand",
+   108→   108→    description: "Lightweight state management for client",
+   109→   109→    icon: Zap,
+   110→   110→    color: "text-amber-400",
+   111→   111→    bg: "bg-amber-500/10",
+   112→   112→  },
+   113→   113→  {
+   114→   114→    name: "TanStack Query",
+   115→   115→    description: "Server state management with caching",
+   116→   116→    icon: Table2,
+   117→   117→    color: "text-rose-400",
+   118→   118→    bg: "bg-rose-500/10",
+   119→   119→  },
+   120→   120→];
+   121→   121→
+   122→   122→// Pages data
+   123→   123→const pages = [
+   124→   124→  {
+   125→   125→    name: "Landing",
+   126→   126→    href: "/",
+   127→   127→    icon: Home,
+   128→   128→    description: "Stunning landing page with hero, features, and CTA sections",
+   129→   129→  },
+   130→   130→  {
+   131→   131→    name: "Dashboard",
+   132→   132→    href: "/dashboard",
+   133→   133→    icon: LayoutDashboard,
+   134→   134→    description: "Analytics dashboard with charts, stats, and real-time data",
+   135→   135→  },
+   136→   136→  {
+   137→   137→    name: "AI Tools",
+   138→   138→    href: "/tools",
+   139→   139→    icon: Wand2,
+   140→   140→    description: "AI-powered tools playground with interactive demos",
+   141→   141→  },
+   142→   142→  {
+   143→   143→    name: "Components",
+   144→   144→    href: "/components",
+   145→   145→    icon: Component,
+   146→   146→    description: "Complete shadcn/ui component library showcase",
+   147→   147→  },
+   148→   148→  {
+   149→   149→    name: "Animations",
+   150→   150→    href: "/animations",
+   151→   151→    icon: Sparkles,
+   152→   152→    description: "Framer Motion animations, testimonials, and scroll effects",
+   153→   153→  },
+   154→   154→  {
+   155→   155→    name: "Cards",
+   156→   156→    href: "/cards",
+   157→   157→    icon: CreditCard,
+   158→   158→    description: "Beautiful card variants with hover effects and layouts",
+   159→   159→  },
+   160→   160→  {
+   161→   161→    name: "Navigation",
+   162→   162→    href: "/navigation",
+   163→   163→    icon: Navigation,
+   164→   164→    description: "Nav menus, breadcrumbs, and sidebar components",
+   165→   165→  },
+   166→   166→  {
+   167→   167→    name: "Forms",
+   168→   168→    href: "/forms",
+   169→   169→    icon: FileText,
+   170→   170→    description: "Form components with validation and accessibility",
+   171→   171→  },
+   172→   172→  {
+   173→   173→    name: "Data Display",
+   174→   174→    href: "/data-display",
+   175→   175→    icon: Table2,
+   176→   176→    description: "Tables, charts, and data visualization components",
+   177→   177→  },
+   178→   178→  {
+   179→   179→    name: "Feedback",
+   180→   180→    href: "/feedback",
+   181→   181→    icon: MessageSquare,
+   182→   182→    description: "Alerts, toasts, and user feedback components",
+   183→   183→  },
+   184→   184→  {
+   185→   185→    name: "Loaders",
+   186→   186→    href: "/loaders",
+   187→   187→    icon: Loader2,
+   188→   188→    description: "Loading spinners, skeletons, and progress indicators",
+   189→   189→  },
+   190→   190→  {
+   191→   191→    name: "Effects",
+   192→   192→    href: "/effects",
+   193→   193→    icon: Atom,
+   194→   194→    description: "Visual effects: particles, aurora, glow, glassmorphism",
+   195→   195→  },
+   196→   196→  {
+   197→   197→    name: "Search",
+   198→   198→    href: "/search",
+   199→   199→    icon: Search,
+   200→   200→    description: "Command palette, global search, and filter components",
+   201→   201→  },
+   202→   202→  {
+   203→   203→    name: "Calendar & Clock",
+   204→   204→    href: "/calendar-clock",
+   205→   205→    icon: CalendarClock,
+   206→   206→    description: "Glass calendar, clock, world time, and event scheduler",
+   207→   207→  },
+   208→   208→  {
+   209→   209→    name: "About",
+   210→   210→    href: "/about",
+   211→   211→    icon: BookOpen,
+   212→   212→    description: "This page — the story behind UnQWebTemplate",
+   213→   213→  },
+   214→   214→];
+   215→   215→
+   216→   216→export default function AboutPage() {
+   217→   217→  return (
+   218→   218→    <div className="flex min-h-screen">
+   219→   219→      <SidebarNav />
+   220→   220→      <main className="flex-1 overflow-y-auto">
+   221→   221→        {/* ===== CINEMATIC HERO ===== */}
+   222→   222→        <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden bg-black">
+   223→   223→          {/* Animated background */}
+   224→   224→          <motion.div
+   225→   225→            className="absolute inset-0"
+   226→   226→            animate={{
+   227→   227→              background: [
+   228→   228→                "radial-gradient(ellipse at 30% 20%, rgba(201,100,66,0.15) 0%, transparent 50%), radial-gradient(ellipse at 70% 80%, rgba(156,135,245,0.1) 0%, transparent 50%)",
+   229→   229→                "radial-gradient(ellipse at 60% 30%, rgba(201,100,66,0.2) 0%, transparent 50%), radial-gradient(ellipse at 30% 70%, rgba(156,135,245,0.15) 0%, transparent 50%)",
+   230→   230→                "radial-gradient(ellipse at 30% 20%, rgba(201,100,66,0.15) 0%, transparent 50%), radial-gradient(ellipse at 70% 80%, rgba(156,135,245,0.1) 0%, transparent 50%)",
+   231→   231→              ],
+   232→   232→            }}
+   233→   233→            transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+   234→   234→          />
+   235→   235→          {/* Dot grid */}
+   236→   236→          <div className="absolute inset-0 opacity-[0.03]">
+   237→   237→            <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+   238→   238→              <defs>
+   239→   239→                <pattern id="heroDots" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse">
+   240→   240→                  <circle cx="2" cy="2" r="1" fill="white" />
+   241→   241→                </pattern>
+   242→   242→              </defs>
+   243→   243→              <rect width="100%" height="100%" fill="url(#heroDots)" />
+   244→   244→            </svg>
+   245→   245→          </div>
+   246→   246→
+   247→   247→          <div className="relative z-10 max-w-4xl mx-auto text-center px-6">
+   248→   248→            <motion.div
+   249→   249→              initial={{ opacity: 0, scale: 0.9 }}
+   250→   250→              animate={{ opacity: 1, scale: 1 }}
+   251→   251→              transition={{ duration: 1, ease: "easeOut" }}
+   252→   252→            >
+   253→   253→              <motion.div
+   254→   254→                initial={{ opacity: 0, y: 20 }}
+   255→   255→                animate={{ opacity: 1, y: 0 }}
+   256→   256→                transition={{ delay: 0.2, duration: 0.8 }}
+   257→   257→              >
+   258→   258→                <Badge
+   259→   259→                  variant="outline"
+   260→   260→                  className="mb-6 border-primary/30 text-primary bg-primary/10 text-sm px-4 py-1"
+   261→   261→                >
+   262→   262→                  <Heart className="h-3.5 w-3.5 mr-1.5 fill-primary" />
+   263→   263→                  Made with Passion
+   264→   264→                </Badge>
+   265→   265→              </motion.div>
+   266→   266→
+   267→   267→              <motion.h1
+   268→   268→                initial={{ opacity: 0, y: 30 }}
+   269→   269→                animate={{ opacity: 1, y: 0 }}
+   270→   270→                transition={{ delay: 0.4, duration: 0.8 }}
+   271→   271→                className="text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-6 leading-[1.1]"
+   272→   272→              >
+   273→   273→                About{" "}
+   274→   274→                <span className="bg-gradient-to-r from-primary via-primary/80 to-amber-500 bg-clip-text text-transparent">
+   275→   275→                  UnQWeb
+   276→   276→                </span>
+   277→   277→                <span className="text-white">Template</span>
+   278→   278→              </motion.h1>
+   279→   279→
+   280→   280→              <motion.p
+   281→   281→                initial={{ opacity: 0, y: 20 }}
+   282→   282→                animate={{ opacity: 1, y: 0 }}
+   283→   283→                transition={{ delay: 0.6, duration: 0.8 }}
+   284→   284→                className="text-lg md:text-xl text-white/50 max-w-2xl mx-auto leading-relaxed"
+   285→   285→              >
+   286→   286→                A premium Next.js web template crafted with obsessive attention to
+   287→   287→                detail. 15 pages. 50+ components. One vision — to make the web
+   288→   288→                beautiful.
+   289→   289→              </motion.p>
+   290→   290→
+   291→   291→              <motion.div
+   292→   292→                initial={{ opacity: 0, y: 20 }}
+   293→   293→                animate={{ opacity: 1, y: 0 }}
+   294→   294→                transition={{ delay: 0.8, duration: 0.8 }}
+   295→   295→                className="flex flex-wrap items-center justify-center gap-3 mt-8"
+   296→   296→              >
+   297→   297→                <Badge variant="outline" className="border-white/10 text-white/60 bg-white/5">
+   298→   298→                  Next.js 16
+   299→   299→                </Badge>
+   300→   300→                <Badge variant="outline" className="border-white/10 text-white/60 bg-white/5">
+   301→   301→                  TypeScript
+   302→   302→                </Badge>
+   303→   303→                <Badge variant="outline" className="border-white/10 text-white/60 bg-white/5">
+   304→   304→                  Tailwind CSS 4
+   305→   305→                </Badge>
+   306→   306→                <Badge variant="outline" className="border-white/10 text-white/60 bg-white/5">
+   307→   307→                  Framer Motion
+   308→   308→                </Badge>
+   309→   309→              </motion.div>
+   310→   310→            </motion.div>
+   311→   311→          </div>
+   312→   312→
+   313→   313→          {/* Scroll indicator */}
+   314→   314→          <motion.div
+   315→   315→            className="absolute bottom-8 left-1/2 -translate-x-1/2"
+   316→   316→            animate={{ y: [0, 8, 0] }}
+   317→   317→            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+   318→   318→          >
+   319→   319→            <div className="w-5 h-8 rounded-full border border-white/20 flex items-start justify-center p-1.5">
+   320→   320→              <div className="w-1 h-2 rounded-full bg-primary" />
+   321→   321→            </div>
+   322→   322→          </motion.div>
+   323→   323→        </section>
+   324→   324→
+   325→   325→        {/* ===== CREATOR SECTION ===== */}
+   326→   326→        <motion.section
+   327→   327→          variants={sectionVariants}
+   328→   328→          initial="hidden"
+   329→   329→          whileInView="visible"
+   330→   330→          viewport={{ once: true, margin: "-100px" }}
+   331→   331→          className="py-24 px-6 md:px-12 bg-background"
+   332→   332→        >
+   333→   333→          <div className="max-w-5xl mx-auto">
+   334→   334→            <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 items-center">
+   335→   335→              {/* Avatar - Using real image */}
+   336→   336→              <motion.div
+   337→   337→                initial={{ opacity: 0, scale: 0.8 }}
+   338→   338→                whileInView={{ opacity: 1, scale: 1 }}
+   339→   339→                viewport={{ once: true }}
+   340→   340→                transition={{ duration: 0.6 }}
+   341→   341→                className="lg:col-span-2 flex justify-center"
+   342→   342→              >
+   343→   343→                <div className="relative">
+   344→   344→                  <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary to-amber-500 blur-2xl opacity-30 scale-110" />
+   345→   345→                  <Avatar className="w-48 h-48 border-4 border-primary/30 shadow-2xl relative">
+   346→   346→                    <AvatarImage
+   347→   347→                      src="/sandeep.png"
+   348→   348→                      alt="Sandeep Gaddam"
+   349→   349→                    />
+   350→   350→                    <AvatarFallback className="text-4xl font-bold bg-primary/10 text-primary">
+   351→   351→                      SG
+   352→   352→                    </AvatarFallback>
+   353→   353→                  </Avatar>
+   354→   354→                  <motion.div
+   355→   355→                    className="absolute -bottom-2 -right-2 bg-primary text-primary-foreground rounded-full p-2 shadow-lg"
+   356→   356→                    animate={{ scale: [1, 1.1, 1] }}
+   357→   357→                    transition={{ duration: 2, repeat: Infinity }}
+   358→   358→                  >
+   359→   359→                    <Heart className="h-4 w-4 fill-current" />
+   360→   360→                  </motion.div>
+   361→   361→                </div>
+   362→   362→              </motion.div>
+   363→   363→
+   364→   364→              {/* Bio */}
+   365→   365→              <motion.div
+   366→   366→                initial={{ opacity: 0, x: 30 }}
+   367→   367→                whileInView={{ opacity: 1, x: 0 }}
+   368→   368→                viewport={{ once: true }}
+   369→   369→                transition={{ duration: 0.6, delay: 0.2 }}
+   370→   370→                className="lg:col-span-3 space-y-6"
+   371→   371→              >
+   372→   372→                <div>
+   373→   373→                  <p className="text-sm font-semibold text-primary uppercase tracking-widest mb-2">
+   374→   374→                    The Creator
+   375→   375→                  </p>
+   376→   376→                  <h2 className="text-3xl md:text-4xl font-bold">
+   377→   377→                    Sandeep Gaddam
+   378→   378→                  </h2>
+   379→   379→                </div>
+   380→   380→                <p className="text-muted-foreground text-lg leading-relaxed">
+   381→   381→                  I&apos;m a passionate full-stack developer and UI designer who
+   382→   382→                  believes that every pixel matters. UnQWebTemplate is my love
+   383→   383→                  letter to the web — a collection of everything I&apos;ve learned
+   384→   384→                  about building beautiful, performant, and accessible web
+   385→   385→                  applications.
+   386→   386→                </p>
+   387→   387→                <p className="text-muted-foreground leading-relaxed">
+   388→   388→                  Every animation is hand-tuned. Every color is intentional. Every
+   389→   389→                  component is crafted to be both beautiful and functional. This
+   390→   390→                  isn&apos;t just a template — it&apos;s a philosophy that the web
+   391→   391→                  deserves to be gorgeous.
+   392→   392→                </p>
+   393→   393→                <div className="flex flex-wrap gap-3">
+   394→   394→                  <Button
+   395→   395→                    variant="outline"
+   396→   396→                    size="sm"
+   397→   397→                    className="gap-2 border-border/50"
+   398→   398→                    asChild
+   399→   399→                  >
+   400→   400→                    <a
+   401→   401→                      href="https://github.com/sandeepgaddam"
+   402→   402→                      target="_blank"
+   403→   403→                      rel="noopener noreferrer"
+   404→   404→                    >
+   405→   405→                      <Github className="h-4 w-4" />
+   406→   406→                      GitHub
+   407→   407→                    </a>
+   408→   408→                  </Button>
+   409→   409→                  <Button
+   410→   410→                    variant="outline"
+   411→   411→                    size="sm"
+   412→   412→                    className="gap-2 border-border/50"
+   413→   413→                    asChild
+   414→   414→                  >
+   415→   415→                    <a
+   416→   416→                      href="https://twitter.com/sandeepgaddam"
+   417→   417→                      target="_blank"
+   418→   418→                      rel="noopener noreferrer"
+   419→   419→                    >
+   420→   420→                      <Twitter className="h-4 w-4" />
+   421→   421→                      Twitter
+   422→   422→                    </a>
+   423→   423→                  </Button>
+   424→   424→                  <Button
+   425→   425→                    variant="outline"
+   426→   426→                    size="sm"
+   427→   427→                    className="gap-2 border-border/50"
+   428→   428→                    asChild
+   429→   429→                  >
+   430→   430→                    <a
+   431→   431→                      href="https://linkedin.com/in/sandeepgaddam"
+   432→   432→                      target="_blank"
+   433→   433→                      rel="noopener noreferrer"
+   434→   434→                    >
+   435→   435→                      <Linkedin className="h-4 w-4" />
+   436→   436→                      LinkedIn
+   437→   437→                    </a>
+   438→   438→                  </Button>
+   439→   439→                  <Button
+   440→   440→                    variant="outline"
+   441→   441→                    size="sm"
+   442→   442→                    className="gap-2 border-border/50"
+   443→   443→                    asChild
+   444→   444→                  >
+   445→   445→                    <a href="mailto:hello@sandeepgaddam.dev">
+   446→   446→                      <Mail className="h-4 w-4" />
+   447→   447→                      Email
+   448→   448→                    </a>
+   449→   449→                  </Button>
+   450→   450→                </div>
+   451→   451→              </motion.div>
+   452→   452→            </div>
+   453→   453→          </div>
+   454→   454→        </motion.section>
+   455→   455→
+   456→   456→        {/* ===== TECH STACK ===== */}
+   457→   457→        <motion.section
+   458→   458→          variants={sectionVariants}
+   459→   459→          initial="hidden"
+   460→   460→          whileInView="visible"
+   461→   461→          viewport={{ once: true, margin: "-100px" }}
+   462→   462→          className="py-24 px-6 md:px-12 bg-muted/30"
+   463→   463→        >
+   464→   464→          <div className="max-w-6xl mx-auto">
+   465→   465→            <div className="text-center mb-16">
+   466→   466→              <motion.div
+   467→   467→                initial={{ opacity: 0, y: 20 }}
+   468→   468→                whileInView={{ opacity: 1, y: 0 }}
+   469→   469→                viewport={{ once: true }}
+   470→   470→                transition={{ duration: 0.6 }}
+   471→   471→              >
+   472→   472→                <p className="text-sm font-semibold text-primary uppercase tracking-widest mb-2">
+   473→   473→                  Powered By
+   474→   474→                </p>
+   475→   475→                <h2 className="text-3xl md:text-4xl font-bold mb-4">
+   476→   476→                  Tech Stack
+   477→   477→                </h2>
+   478→   478→                <p className="text-muted-foreground max-w-lg mx-auto">
+   479→   479→                  Built with the most modern and battle-tested technologies in the
+   480→   480→                  React ecosystem.
+   481→   481→                </p>
+   482→   482→              </motion.div>
+   483→   483→            </div>
+   484→   484→
+   485→   485→            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+   486→   486→              {techStack.map((tech, i) => {
+   487→   487→                const Icon = tech.icon;
+   488→   488→                return (
+   489→   489→                  <motion.div
+   490→   490→                    key={tech.name}
+   491→   491→                    custom={i}
+   492→   492→                    variants={fadeInUp}
+   493→   493→                    initial="hidden"
+   494→   494→                    whileInView="visible"
+   495→   495→                    viewport={{ once: true }}
+   496→   496→                  >
+   497→   497→                    <Card className="border-border/30 hover:border-primary/30 transition-all duration-300 group h-full">
+   498→   498→                      <CardContent className="p-6">
+   499→   499→                        <div
+   500→   500→                          className={`w-10 h-10 rounded-xl ${tech.bg} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}
+   501→   501→                        >
+   502→   502→                          <Icon className={`h-5 w-5 ${tech.color}`} />
+   503→   503→                        </div>
+   504→   504→                        <h3 className="font-semibold mb-1 group-hover:text-primary transition-colors">
+   505→   505→                          {tech.name}
+   506→   506→                        </h3>
+   507→   507→                        <p className="text-xs text-muted-foreground leading-relaxed">
+   508→   508→                          {tech.description}
+   509→   509→                        </p>
+   510→   510→                      </CardContent>
+   511→   511→                    </Card>
+   512→   512→                  </motion.div>
+   513→   513→                );
+   514→   514→              })}
+   515→   515→            </div>
+   516→   516→          </div>
+   517→   517→        </motion.section>
+   518→   518→
+   519→   519→        {/* ===== FEATURES / PAGES ===== */}
+   520→   520→        <motion.section
+   521→   521→          variants={sectionVariants}
+   522→   522→          initial="hidden"
+   523→   523→          whileInView="visible"
+   524→   524→          viewport={{ once: true, margin: "-100px" }}
+   525→   525→          className="py-24 px-6 md:px-12 bg-background"
+   526→   526→        >
+   527→   527→          <div className="max-w-6xl mx-auto">
+   528→   528→            <div className="text-center mb-16">
+   529→   529→              <motion.div
+   530→   530→                initial={{ opacity: 0, y: 20 }}
+   531→   531→                whileInView={{ opacity: 1, y: 0 }}
+   532→   532→                viewport={{ once: true }}
+   533→   533→                transition={{ duration: 0.6 }}
+   534→   534→              >
+   535→   535→                <p className="text-sm font-semibold text-primary uppercase tracking-widest mb-2">
+   536→   536→                  Explore
+   537→   537→                </p>
+   538→   538→                <h2 className="text-3xl md:text-4xl font-bold mb-4">
+   539→   539→                  15 Pages. Zero Compromise.
+   540→   540→                </h2>
+   541→   541→                <p className="text-muted-foreground max-w-lg mx-auto">
+   542→   542→                  Every page is a showcase of what&apos;s possible when design and
+   543→   543→                  engineering work in harmony.
+   544→   544→                </p>
+   545→   545→              </motion.div>
+   546→   546→            </div>
+   547→   547→
+   548→   548→            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+   549→   549→              {pages.map((page, i) => {
+   550→   550→                const Icon = page.icon;
+   551→   551→                return (
+   552→   552→                  <motion.div
+   553→   553→                    key={page.name}
+   554→   554→                    custom={i}
+   555→   555→                    variants={fadeInUp}
+   556→   556→                    initial="hidden"
+   557→   557→                    whileInView="visible"
+   558→   558→                    viewport={{ once: true }}
+   559→   559→                  >
+   560→   560→                    <Link href={page.href} className="block group">
+   561→   561→                      <Card className="border-border/30 hover:border-primary/30 transition-all duration-300 h-full hover:shadow-lg hover:shadow-primary/5">
+   562→   562→                        <CardContent className="p-5">
+   563→   563→                          <div className="flex items-start gap-3">
+   564→   564→                            <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors">
+   565→   565→                              <Icon className="h-4 w-4 text-primary" />
+   566→   566→                            </div>
+   567→   567→                            <div className="flex-1 min-w-0">
+   568→   568→                              <h3 className="font-semibold text-sm group-hover:text-primary transition-colors flex items-center gap-1.5">
+   569→   569→                                {page.name}
+   570→   570→                                <ExternalLink className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+   571→   571→                              </h3>
+   572→   572→                              <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
+   573→   573→                                {page.description}
+   574→   574→                              </p>
+   575→   575→                            </div>
+   576→   576→                          </div>
+   577→   577→                        </CardContent>
+   578→   578→                      </Card>
+   579→   579→                    </Link>
+   580→   580→                  </motion.div>
+   581→   581→                );
+   582→   582→              })}
+   583→   583→            </div>
+   584→   584→          </div>
+   585→   585→        </motion.section>
+   586→   586→
+   587→   587→        {/* ===== OPEN SOURCE ===== */}
+   588→   588→        <motion.section
+   589→   589→          variants={sectionVariants}
+   590→   590→          initial="hidden"
+   591→   591→          whileInView="visible"
+   592→   592→          viewport={{ once: true, margin: "-100px" }}
+   593→   593→          className="relative py-24 px-6 md:px-12 bg-black overflow-hidden"
+   594→   594→        >
+   595→   595→          {/* Background glow */}
+   596→   596→          <div className="absolute inset-0">
+   597→   597→            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/10 rounded-full blur-[120px]" />
+   598→   598→          </div>
+   599→   599→
+   600→   600→          <div className="relative z-10 max-w-3xl mx-auto text-center">
+   601→   601→            <motion.div
+   602→   602→              initial={{ opacity: 0, y: 30 }}
+   603→   603→              whileInView={{ opacity: 1, y: 0 }}
+   604→   604→              viewport={{ once: true }}
+   605→   605→              transition={{ duration: 0.8 }}
+   606→   606→            >
+   607→   607→              <motion.div
+   608→   608→                className="inline-flex items-center gap-2 mb-6"
+   609→   609→                animate={{ y: [0, -5, 0] }}
+   610→   610→                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+   611→   611→              >
+   612→   612→                <Star className="h-8 w-8 text-primary fill-primary" />
+   613→   613→              </motion.div>
+   614→   614→              <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">
+   615→   615→                Open Source.{" "}
+   616→   616→                <span className="text-primary">Forever.</span>
+   617→   617→              </h2>
+   618→   618→              <p className="text-white/50 text-lg leading-relaxed mb-8">
+   619→   619→                UnQWebTemplate is and will always be open source. I believe in
+   620→   620→                building in public, sharing knowledge, and empowering developers
+   621→   621→                around the world. Your contributions, feedback, and stars are
+   622→   622→                what keep this project alive.
+   623→   623→              </p>
+   624→   624→              <div className="flex flex-wrap items-center justify-center gap-4">
+   625→   625→                <Button
+   626→   626→                  size="lg"
+   627→   627→                  className="bg-primary text-primary-foreground hover:bg-primary/90 gap-2"
+   628→   628→                  asChild
+   629→   629→                >
+   630→   630→                  <a
+   631→   631→                    href="https://github.com/sandeepgaddam/unqwebtemplate"
+   632→   632→                    target="_blank"
+   633→   633→                    rel="noopener noreferrer"
+   634→   634→                  >
+   635→   635→                    <Github className="h-5 w-5" />
+   636→   636→                    Star on GitHub
+   637→   637→                  </a>
+   638→   638→                </Button>
+   639→   639→                <Button
+   640→   640→                  size="lg"
+   641→   641→                  variant="outline"
+   642→   642→                  className="gap-2 border-white/20 text-white hover:bg-white/10"
+   643→   643→                  asChild
+   644→   644→                >
+   645→   645→                  <a
+   646→   646→                    href="https://github.com/sandeepgaddam/unqwebtemplate/fork"
+   647→   647→                    target="_blank"
+   648→   648→                    rel="noopener noreferrer"
+   649→   649→                  >
+   650→   650→                    <GitFork className="h-5 w-5" />
+   651→   651→                    Fork It
+   652→   652→                  </a>
+   653→   653→                </Button>
+   654→   654→              </div>
+   655→   655→
+   656→   656→              <div className="flex items-center justify-center gap-8 mt-12 text-white/40">
+   657→   657→                <div className="text-center">
+   658→   658→                  <p className="text-2xl font-bold text-white">15</p>
+   659→   659→                  <p className="text-xs">Pages</p>
+   660→   660→                </div>
+   661→   661→                <div className="w-px h-8 bg-white/10" />
+   662→   662→                <div className="text-center">
+   663→   663→                  <p className="text-2xl font-bold text-white">50+</p>
+   664→   664→                  <p className="text-xs">Components</p>
+   665→   665→                </div>
+   666→   666→                <div className="w-px h-8 bg-white/10" />
+   667→   667→                <div className="text-center">
+   668→   668→                  <p className="text-2xl font-bold text-white">∞</p>
+   669→   669→                  <p className="text-xs">Possibilities</p>
+   670→   670→                </div>
+   671→   671→              </div>
+   672→   672→            </motion.div>
+   673→   673→          </div>
+   674→   674→        </motion.section>
+   675→   675→
+   676→   676→        {/* ===== FOOTER ===== */}
+   677→   677→        <footer className="bg-background border-t border-border/30 py-12 px-6 md:px-12">
+   678→   678→          <div className="max-w-4xl mx-auto text-center">
+   679→   679→            <motion.div
+   680→   680→              initial={{ opacity: 0 }}
+   681→   681→              whileInView={{ opacity: 1 }}
+   682→   682→              viewport={{ once: true }}
+   683→   683→              className="space-y-4"
+   684→   684→            >
+   685→   685→              <div className="flex items-center justify-center gap-2">
+   686→   686→                <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 overflow-hidden">
+   687→   687→                  <img src="/logo.svg" alt="UnQ" className="w-full h-full object-cover" />
+   688→   688→                </div>
+   689→   689→                <h3 className="text-lg font-bold">
+   690→   690→                  UnQ<span className="text-primary">Web</span>Template
+   691→   691→                </h3>
+   692→   692→              </div>
+   693→   693→              <p className="text-muted-foreground text-sm">
+   694→   694→                A premium Next.js web template showcasing the art of the possible.
+   695→   695→              </p>
+   696→   696→              <Separator className="max-w-xs mx-auto" />
+   697→   697→              <p className="text-sm flex items-center justify-center gap-1.5">
+   698→   698→                Built with <Heart className="h-3.5 w-3.5 text-red-500 fill-red-500" /> by{" "}
+   699→   699→                <span className="font-semibold text-primary">Sandeep Gaddam</span>
+   700→   700→              </p>
+   701→   701→              <p className="text-xs text-muted-foreground/60">
+   702→   702→                © {new Date().getFullYear()} UnQWebTemplate. Open source under MIT License.
+   703→   703→              </p>
+   704→   704→            </motion.div>
+   705→   705→          </div>
+   706→   706→        </footer>
+   707→   707→      </main>
+   708→   708→    </div>
+   709→   709→  );
+   710→   710→}
+   711→   711→

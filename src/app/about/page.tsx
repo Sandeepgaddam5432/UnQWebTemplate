@@ -453,13 +453,263 @@ export default function AboutPage() {
           </div>
         </motion.section>
 
-        {/* ===== TECH STACK ===== */}
+        {/* ===== GITHUB SECTION ===== */}
         <motion.section
           variants={sectionVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
           className="py-24 px-6 md:px-12 bg-muted/30"
+        >
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center mb-16">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+              >
+                <p className="text-sm font-semibold text-primary uppercase tracking-widest mb-2">
+                  Open Source
+                </p>
+                <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                  Find Me on <span className="text-primary">GitHub</span>
+                </h2>
+                <p className="text-muted-foreground max-w-lg mx-auto">
+                  I build in public. Check out my projects, contribute, or just say hi.
+                </p>
+              </motion.div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* GitHub Profile Card */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+              >
+                <Card className="border-border/30 hover:border-primary/30 transition-all duration-300 group h-full">
+                  <CardContent className="p-6">
+                    <div className="flex items-center gap-4 mb-4">
+                      <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center shadow-lg">
+                        <Github className="h-7 w-7 text-white" />
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-lg group-hover:text-primary transition-colors">
+                          GitHub Profile
+                        </h3>
+                        <p className="text-sm text-muted-foreground">@sandeepgaddam</p>
+                      </div>
+                    </div>
+                    <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+                      Explore all my open source projects, contributions, and code experiments. Follow me to stay updated on new releases.
+                    </p>
+                    <Button
+                      className="w-full bg-gray-800 hover:bg-gray-700 text-white gap-2"
+                      asChild
+                    >
+                      <a
+                        href="https://github.com/sandeepgaddam"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <Github className="h-4 w-4" />
+                        Visit GitHub Profile
+                      </a>
+                    </Button>
+                  </CardContent>
+                </Card>
+              </motion.div>
+
+              {/* UnQWebTemplate Repo Card */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+              >
+                <Card className="border-border/30 hover:border-primary/30 transition-all duration-300 group h-full">
+                  <CardContent className="p-6">
+                    <div className="flex items-center gap-4 mb-4">
+                      <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary to-amber-500 flex items-center justify-center shadow-lg">
+                        <Code2 className="h-7 w-7 text-white" />
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-lg group-hover:text-primary transition-colors">
+                          UnQWebTemplate
+                        </h3>
+                        <p className="text-sm text-muted-foreground">Main Repository</p>
+                      </div>
+                    </div>
+                    <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+                      This very project! Star it, fork it, or use it as a starting point for your own premium web applications.
+                    </p>
+                    <div className="flex gap-3">
+                      <Button
+                        className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground gap-2"
+                        asChild
+                      >
+                        <a
+                          href="https://github.com/sandeepgaddam/unqwebtemplate"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <Star className="h-4 w-4" />
+                          Star
+                        </a>
+                      </Button>
+                      <Button
+                        variant="outline"
+                        className="flex-1 gap-2 border-border/50"
+                        asChild
+                      >
+                        <a
+                          href="https://github.com/sandeepgaddam/unqwebtemplate/fork"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <GitFork className="h-4 w-4" />
+                          Fork
+                        </a>
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+
+              {/* GitHub Gists Card */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+              >
+                <Card className="border-border/30 hover:border-primary/30 transition-all duration-300 group h-full">
+                  <CardContent className="p-6">
+                    <div className="flex items-center gap-4 mb-4">
+                      <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-600 to-emerald-800 flex items-center justify-center shadow-lg">
+                        <Code2 className="h-7 w-7 text-white" />
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-lg group-hover:text-primary transition-colors">
+                          GitHub Gists
+                        </h3>
+                        <p className="text-sm text-muted-foreground">Snippets & Utilities</p>
+                      </div>
+                    </div>
+                    <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+                      Quick code snippets, utility functions, and micro-solutions I share with the community.
+                    </p>
+                    <Button
+                      variant="outline"
+                      className="w-full gap-2 border-border/50"
+                      asChild
+                    >
+                      <a
+                        href="https://gist.github.com/sandeepgaddam"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <ExternalLink className="h-4 w-4" />
+                        Browse Gists
+                      </a>
+                    </Button>
+                  </CardContent>
+                </Card>
+              </motion.div>
+
+              {/* Contributions Card */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+              >
+                <Card className="border-border/30 hover:border-primary/30 transition-all duration-300 group h-full">
+                  <CardContent className="p-6">
+                    <div className="flex items-center gap-4 mb-4">
+                      <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-violet-600 to-violet-800 flex items-center justify-center shadow-lg">
+                        <GitFork className="h-7 w-7 text-white" />
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-lg group-hover:text-primary transition-colors">
+                          Contributions
+                        </h3>
+                        <p className="text-sm text-muted-foreground">Activity & PRs</p>
+                      </div>
+                    </div>
+                    <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+                      See my recent activity, pull requests, and open source contributions across the ecosystem.
+                    </p>
+                    <Button
+                      variant="outline"
+                      className="w-full gap-2 border-border/50"
+                      asChild
+                    >
+                      <a
+                        href="https://github.com/sandeepgaddam?tab=repositories"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <ExternalLink className="h-4 w-4" />
+                        View All Repos
+                      </a>
+                    </Button>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            </div>
+
+            {/* GitHub Stats Banner */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="mt-8"
+            >
+              <Card className="border-border/30 bg-gradient-to-r from-gray-900/80 via-background to-gray-900/80 overflow-hidden">
+                <CardContent className="p-6">
+                  <div className="flex flex-col md:flex-row items-center justify-center gap-6">
+                    <a
+                      href="https://github.com/sandeepgaddam"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block hover:scale-105 transition-transform"
+                    >
+                      <img
+                        src="https://github-readme-stats.vercel.app/api?username=sandeepgaddam&show_icons=true&theme=dark&hide_border=true&bg_color=00000000&text_color=c9c9c9&icon_color=d97757&title_color=d97757"
+                        alt="GitHub Stats"
+                        className="w-full max-w-md"
+                      />
+                    </a>
+                    <a
+                      href="https://github.com/sandeepgaddam"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block hover:scale-105 transition-transform"
+                    >
+                      <img
+                        src="https://github-readme-streak-stats.herokuapp.com/?user=sandeepgaddam&theme=dark&hide_border=true&background=00000000&stroke=00000000&ring=d97757&fire=d97757&currLabel=d97757"
+                        alt="GitHub Streak"
+                        className="w-full max-w-md"
+                      />
+                    </a>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          </div>
+        </motion.section>
+
+        {/* ===== TECH STACK ===== */}
+        <motion.section
+          variants={sectionVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          className="py-24 px-6 md:px-12 bg-background"
         >
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16">
