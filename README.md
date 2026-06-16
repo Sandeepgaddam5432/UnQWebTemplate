@@ -5,10 +5,6 @@
 </p>
 
 <p align="center">
-  Built with ❤️ by <strong>Sandeep Gaddam</strong>
-</p>
-
-<p align="center">
   <em>Where Design Meets Innovation</em>
 </p>
 
