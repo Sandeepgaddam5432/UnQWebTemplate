@@ -332,7 +332,7 @@ export default function AboutPage() {
         >
           <div className="max-w-5xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 items-center">
-              {/* Avatar */}
+              {/* Avatar - Using real image */}
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
                 whileInView={{ opacity: 1, scale: 1 }}
@@ -344,7 +344,7 @@ export default function AboutPage() {
                   <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary to-amber-500 blur-2xl opacity-30 scale-110" />
                   <Avatar className="w-48 h-48 border-4 border-primary/30 shadow-2xl relative">
                     <AvatarImage
-                      src="https://avatars.githubusercontent.com/u/57777034?v=4"
+                      src="/sandeep.png"
                       alt="Sandeep Gaddam"
                     />
                     <AvatarFallback className="text-4xl font-bold bg-primary/10 text-primary">
@@ -683,8 +683,8 @@ export default function AboutPage() {
               className="space-y-4"
             >
               <div className="flex items-center justify-center gap-2">
-                <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-primary/10 border border-primary/20">
-                  <span className="text-primary font-bold text-sm">U</span>
+                <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 overflow-hidden">
+                  <img src="/logo.svg" alt="UnQ" className="w-full h-full object-cover" />
                 </div>
                 <h3 className="text-lg font-bold">
                   UnQ<span className="text-primary">Web</span>Template

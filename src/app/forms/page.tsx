@@ -103,7 +103,7 @@ function ContactForm() {
                 className="flex flex-col items-center justify-center py-12 gap-4"
               >
                 <div className="w-16 h-16 rounded-full bg-green-500/10 flex items-center justify-center">
-                  <CheckCircle2 className="h-8 w-8 text-green-500" />
+                  <CheckCircle2 className="h-8 touch-target w-8 text-green-500" />
                 </div>
                 <h3 className="text-lg font-semibold">Message Sent!</h3>
                 <p className="text-sm text-muted-foreground text-center">We&apos;ll get back to you within 24 hours.</p>
@@ -815,7 +815,7 @@ function MultiStepForm() {
               {step === 3 && (
                 <div className="flex flex-col items-center py-6 gap-3">
                   <div className="w-14 h-14 rounded-full bg-green-500/10 flex items-center justify-center">
-                    <CheckCircle2 className="h-7 w-7 text-green-500" />
+                    <CheckCircle2 className="h-7 touch-target w-7 text-green-500" />
                   </div>
                   <h4 className="font-semibold">All Done!</h4>
                   <p className="text-sm text-muted-foreground text-center">Your information has been submitted.</p>
@@ -857,13 +857,13 @@ function MultiStepForm() {
 // ===== MAIN PAGE =====
 export default function FormsPage() {
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-dvh">
       <SidebarNav />
-      <main className="flex-1 overflow-y-auto">
+      <main className="flex-1 overflow-y-auto overflow-x-hidden pt-16 md:pt-0">
         {/* Hero */}
         <div className="relative overflow-hidden border-b border-border/50">
           <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent" />
-          <div className="relative px-6 md:px-10 py-12 md:py-16 max-w-7xl mx-auto">
+          <div className="relative section-padding py-12 md:py-16 max-w-7xl mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
@@ -883,7 +883,7 @@ export default function FormsPage() {
         </div>
 
         {/* Forms Grid */}
-        <div className="px-6 md:px-10 py-10 max-w-7xl mx-auto">
+        <div className="section-padding py-10 max-w-7xl mx-auto">
           <motion.div
             variants={staggerContainer}
             initial="hidden"
@@ -911,7 +911,7 @@ export default function FormsPage() {
         </div>
 
         {/* Footer attribution */}
-        <div className="px-6 md:px-10 py-8 border-t border-border/50 text-center">
+        <div className="section-padding py-8 border-t border-border/50 text-center">
           <motion.p
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}

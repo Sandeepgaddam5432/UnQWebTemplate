@@ -294,7 +294,7 @@ function SkeletonLoadingSection() {
           </div>
         </CardHeader>
         <CardContent key={key}>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {/* Full Page Skeleton */}
             <div className="space-y-2">
               <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
@@ -302,12 +302,12 @@ function SkeletonLoadingSection() {
               </div>
               <div className="rounded-xl border border-border/50 overflow-hidden">
                 <div className="p-4 border-b border-border/50 bg-muted/20 flex gap-3">
-                  <Skeleton className="h-8 w-8 rounded-lg" />
-                  <Skeleton className="h-8 flex-1" />
-                  <Skeleton className="h-8 w-20" />
+                  <Skeleton className="h-8 touch-target w-8 rounded-lg" />
+                  <Skeleton className="h-8 touch-target flex-1" />
+                  <Skeleton className="h-8 touch-target w-20" />
                 </div>
                 <div className="p-6 space-y-4">
-                  <Skeleton className="h-8 w-1/3" />
+                  <Skeleton className="h-8 touch-target w-1/3" />
                   <Skeleton className="h-4 w-full" />
                   <Skeleton className="h-4 w-5/6" />
                   <div className="grid grid-cols-3 gap-4 pt-4">
@@ -334,10 +334,10 @@ function SkeletonLoadingSection() {
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <Skeleton className="h-8 w-8 rounded-full" />
+                    <Skeleton className="h-8 touch-target w-8 rounded-full" />
                     <Skeleton className="h-3 w-24" />
                   </div>
-                  <Skeleton className="h-8 w-20 rounded-md" />
+                  <Skeleton className="h-8 touch-target w-20 rounded-md" />
                 </div>
               </div>
             </div>
@@ -693,7 +693,7 @@ function ContentLoadingSection() {
                           className="space-y-3"
                         >
                           <Skeleton className="h-4 w-20" />
-                          <Skeleton className="h-8 w-28" />
+                          <Skeleton className="h-8 touch-target w-28" />
                           <Skeleton className="h-3 w-16" />
                         </motion.div>
                       ) : (
@@ -727,7 +727,7 @@ function ContentLoadingSection() {
                   <motion.div key="list-loading" className="divide-y divide-border/50">
                     {Array.from({ length: 4 }).map((_, i) => (
                       <div key={i} className="flex items-center gap-3 p-3">
-                        <Skeleton className="h-8 w-8 rounded-full" />
+                        <Skeleton className="h-8 touch-target w-8 rounded-full" />
                         <div className="flex-1 space-y-1.5">
                           <Skeleton className="h-3 w-2/3" />
                           <Skeleton className="h-3 w-1/3" />
@@ -760,7 +760,7 @@ function ContentLoadingSection() {
                         <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold text-primary">
                           {item.name.split(" ").map((n) => n[0]).join("")}
                         </div>
-                        <div className="flex-1 min-w-0">
+                        <div className="flex-1 min-w-0 overflow-x-hidden pt-16 md:pt-0">
                           <p className="text-sm truncate"><span className="font-medium">{item.name}</span> {item.action}</p>
                           <p className="text-xs text-muted-foreground">{item.time}</p>
                         </div>
@@ -828,13 +828,13 @@ function ContentLoadingSection() {
 // ===== MAIN PAGE =====
 export default function LoadersPage() {
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-dvh">
       <SidebarNav />
-      <main className="flex-1 overflow-y-auto">
+      <main className="flex-1 overflow-y-auto overflow-x-hidden pt-16 md:pt-0">
         {/* Hero */}
         <div className="relative overflow-hidden border-b border-border/50">
           <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent" />
-          <div className="relative px-6 md:px-10 py-12 md:py-16 max-w-7xl mx-auto">
+          <div className="relative section-padding py-12 md:py-16 max-w-7xl mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
@@ -853,7 +853,7 @@ export default function LoadersPage() {
           </div>
         </div>
 
-        <div className="px-6 md:px-10 py-10 max-w-7xl mx-auto space-y-6">
+        <div className="section-padding py-10 max-w-7xl mx-auto space-y-6">
           {/* Cube Loader + Spinners */}
           <motion.div
             variants={staggerContainer}
@@ -900,7 +900,7 @@ export default function LoadersPage() {
         </div>
 
         {/* Footer */}
-        <div className="px-6 md:px-10 py-8 border-t border-border/50 text-center">
+        <div className="section-padding py-8 border-t border-border/50 text-center">
           <motion.p
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}

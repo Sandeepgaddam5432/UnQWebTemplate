@@ -153,7 +153,7 @@ function SidebarDemo() {
       >
         {/* Logo area */}
         <div className="flex items-center gap-2 px-3 py-4 border-b">
-          <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+          <div className="h-8 touch-target w-8 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
             <span className="text-primary font-bold text-sm">U</span>
           </div>
           <AnimatePresence>
@@ -290,9 +290,9 @@ export default function NavigationShowcase() {
   const [expandableTab, setExpandableTab] = useState<number | null>(0);
 
   return (
-    <div className="flex min-h-screen bg-background">
+    <div className="flex min-h-dvh bg-background">
       <SidebarNav />
-      <main className="flex-1 overflow-y-auto">
+      <main className="flex-1 overflow-y-auto overflow-x-hidden pt-16 md:pt-0">
         {/* Page Header */}
         <div className="border-b border-border/50 bg-background/80 backdrop-blur-xl sticky top-0 z-20">
           <div className="px-6 md:px-10 py-8">
@@ -328,7 +328,7 @@ export default function NavigationShowcase() {
             <Card className="overflow-hidden border-border/50">
               <CardHeader>
                 <div className="flex items-center gap-2">
-                  <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <div className="h-8 touch-target w-8 rounded-lg bg-primary/10 flex items-center justify-center">
                     <Layers className="h-4 w-4 text-primary" />
                   </div>
                   <div>
@@ -373,7 +373,7 @@ export default function NavigationShowcase() {
             <Card className="overflow-hidden border-border/50">
               <CardHeader>
                 <div className="flex items-center gap-2">
-                  <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <div className="h-8 touch-target w-8 rounded-lg bg-primary/10 flex items-center justify-center">
                     <Zap className="h-4 w-4 text-primary" />
                   </div>
                   <div>
@@ -418,7 +418,7 @@ export default function NavigationShowcase() {
             <Card className="overflow-hidden border-border/50">
               <CardHeader>
                 <div className="flex items-center gap-2">
-                  <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <div className="h-8 touch-target w-8 rounded-lg bg-primary/10 flex items-center justify-center">
                     <Navigation className="h-4 w-4 text-primary" />
                   </div>
                   <div>
@@ -515,7 +515,7 @@ export default function NavigationShowcase() {
             <Card className="overflow-hidden border-border/50">
               <CardHeader>
                 <div className="flex items-center gap-2">
-                  <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <div className="h-8 touch-target w-8 rounded-lg bg-primary/10 flex items-center justify-center">
                     <MapPin className="h-4 w-4 text-primary" />
                   </div>
                   <div>
@@ -620,7 +620,7 @@ export default function NavigationShowcase() {
             <Card className="overflow-hidden border-border/50">
               <CardHeader>
                 <div className="flex items-center gap-2">
-                  <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <div className="h-8 touch-target w-8 rounded-lg bg-primary/10 flex items-center justify-center">
                     <Globe className="h-4 w-4 text-primary" />
                   </div>
                   <div>
@@ -652,7 +652,7 @@ export default function NavigationShowcase() {
           >
             <div className="mb-6">
               <div className="flex items-center gap-3 mb-3">
-                <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                <div className="h-8 touch-target w-8 rounded-lg bg-primary/10 flex items-center justify-center">
                   <LayoutDashboard className="h-4 w-4 text-primary" />
                 </div>
                 <div>
@@ -696,7 +696,7 @@ export default function NavigationShowcase() {
             <Card className="overflow-hidden border-border/50">
               <CardHeader>
                 <div className="flex items-center gap-2">
-                  <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <div className="h-8 touch-target w-8 rounded-lg bg-primary/10 flex items-center justify-center">
                     <Star className="h-4 w-4 text-primary" />
                   </div>
                   <div>
@@ -715,7 +715,7 @@ export default function NavigationShowcase() {
                     <div className="rounded-xl border bg-card overflow-hidden">
                       <div className="flex items-center justify-between px-4 py-3 border-b">
                         <div className="flex items-center gap-2">
-                          <div className="h-7 w-7 rounded-lg bg-primary/10 flex items-center justify-center">
+                          <div className="h-7 touch-target w-7 rounded-lg bg-primary/10 flex items-center justify-center">
                             <span className="text-primary font-bold text-xs">U</span>
                           </div>
                           <span className="font-semibold text-sm">UnQWeb</span>
@@ -723,7 +723,7 @@ export default function NavigationShowcase() {
                         <div className="flex items-center gap-3">
                           <Search className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-foreground transition-colors" />
                           <Bell className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-foreground transition-colors" />
-                          <div className="h-7 w-7 rounded-full bg-primary/10 flex items-center justify-center">
+                          <div className="h-7 touch-target w-7 rounded-full bg-primary/10 flex items-center justify-center">
                             <User className="h-3.5 w-3.5 text-primary" />
                           </div>
                         </div>
@@ -739,7 +739,7 @@ export default function NavigationShowcase() {
                     <div className="rounded-xl border bg-card overflow-hidden">
                       <div className="flex items-center justify-between px-4 py-3">
                         <div className="flex items-center gap-2">
-                          <div className="h-7 w-7 rounded-lg bg-primary/10 flex items-center justify-center">
+                          <div className="h-7 touch-target w-7 rounded-lg bg-primary/10 flex items-center justify-center">
                             <span className="text-primary font-bold text-xs">U</span>
                           </div>
                         </div>
@@ -768,7 +768,7 @@ export default function NavigationShowcase() {
                     <div className="rounded-xl overflow-hidden bg-gradient-to-r from-primary/20 via-violet-500/20 to-rose-500/20 p-4">
                       <div className="flex items-center justify-between px-4 py-3 rounded-xl bg-white/10 dark:bg-white/5 backdrop-blur-xl border border-white/20">
                         <div className="flex items-center gap-2">
-                          <div className="h-7 w-7 rounded-lg bg-white/10 flex items-center justify-center">
+                          <div className="h-7 touch-target w-7 rounded-lg bg-white/10 flex items-center justify-center">
                             <span className="text-white font-bold text-xs">U</span>
                           </div>
                           <span className="font-semibold text-sm text-white">UnQWeb</span>
@@ -784,7 +784,7 @@ export default function NavigationShowcase() {
                           ))}
                         </div>
                         <Button
-                          size="sm"
+                         
                           className="bg-white/10 text-white border border-white/20 hover:bg-white/20 backdrop-blur-sm"
                         >
                           Sign In

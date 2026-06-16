@@ -362,13 +362,13 @@ export default function DashboardPage() {
   });
 
   return (
-    <div className="flex min-h-screen bg-background">
+    <div className="flex min-h-dvh bg-background">
       <SidebarNav />
 
-      <main className="flex-1 min-w-0">
+      <main className="flex-1 min-w-0 overflow-x-hidden pt-16 md:pt-0">
         {/* Page Header */}
         <div className="border-b border-border/50 bg-card/30 backdrop-blur-sm sticky top-0 z-20">
-          <div className="px-6 md:px-8 py-6">
+          <div className="section-padding py-6">
             <motion.div
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -377,7 +377,7 @@ export default function DashboardPage() {
             >
               <div>
                 <div className="flex items-center gap-3 mb-1">
-                  <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">
+                  <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-foreground">
                     Dashboard
                   </h1>
                   <Badge variant="default" className="text-xs">
@@ -396,10 +396,10 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <div className="px-6 md:px-8 py-8 space-y-8">
+        <div className="section-padding py-8 space-y-8">
           {/* Stats Row */}
           <AnimatedSection>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
               {stats.map((stat, index) => {
                 const Icon = stat.icon;
                 return (
@@ -410,7 +410,7 @@ export default function DashboardPage() {
                     viewport={{ once: true }}
                     transition={{ duration: 0.4, delay: index * 0.1 }}
                   >
-                    <Card className="relative overflow-hidden group hover:shadow-lg transition-shadow duration-300 border-border/50">
+                    <Card className="relative overflow-hidden group hover:shadow-lg transition-shadow card-hover duration-300 border-border/50">
                       <CardContent className="p-5">
                         <div className="flex items-start justify-between">
                           <div className={`p-2.5 rounded-xl ${stat.bgColor}`}>
@@ -660,7 +660,7 @@ export default function DashboardPage() {
                 Number Ticker
               </Badge>
             </div>
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
               {[
                 { title: "Page Views", value: 284593, prefix: "", suffix: "", change: "+18.7%", isPositive: true, color: "text-primary", bgColor: "bg-primary/10" },
                 { title: "Bounce Rate", value: 24, prefix: "", suffix: "%", change: "-3.2%", isPositive: true, color: "text-emerald-500", bgColor: "bg-emerald-500/10" },
@@ -674,7 +674,7 @@ export default function DashboardPage() {
                   viewport={{ once: true }}
                   transition={{ duration: 0.4, delay: index * 0.1 }}
                 >
-                  <Card className="relative overflow-hidden group hover:shadow-lg transition-shadow duration-300 border-border/50">
+                  <Card className="relative overflow-hidden group hover:shadow-lg transition-shadow card-hover duration-300 border-border/50">
                     <CardContent className="p-5">
                       <div className="flex items-start justify-between">
                         <div className={`p-2.5 rounded-xl ${stat.bgColor}`}>
@@ -697,7 +697,7 @@ export default function DashboardPage() {
                         <p className="text-2xl font-bold tracking-tight text-foreground">
                           <NumberTicker
                             value={stat.value}
-                            className="text-2xl font-bold tracking-tight"
+                            className="text-2xl font-bold tracking-tight text-balance"
                             delay={index * 0.15}
                           />
                           <span className="text-lg text-muted-foreground">{stat.suffix}</span>
@@ -780,7 +780,7 @@ export default function DashboardPage() {
                       className="flex items-center gap-3 px-4 py-3 rounded-xl border border-border/50 bg-muted/30 min-w-[280px]"
                     >
                       <div className={`h-2 w-2 rounded-full ${item.color} shrink-0`} />
-                      <div className="flex-1 min-w-0">
+                      <div className="flex-1 min-w-0 overflow-x-hidden pt-16 md:pt-0">
                         <p className="text-sm text-foreground truncate">
                           <span className="font-medium">{item.user}</span>{" "}
                           <span className="text-muted-foreground">{item.action}</span>

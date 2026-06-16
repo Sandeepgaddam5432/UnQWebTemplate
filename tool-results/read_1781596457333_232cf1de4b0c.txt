@@ -1,0 +1,843 @@
+     1→"use client";
+     2→
+     3→import React, { useState } from "react";
+     4→import { motion, AnimatePresence } from "framer-motion";
+     5→import { SidebarNav } from "@/components/navigation/sidebar";
+     6→import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+     7→import { Button } from "@/components/ui/button";
+     8→import { Badge } from "@/components/ui/badge";
+     9→import { Progress } from "@/components/ui/progress";
+    10→import { Skeleton } from "@/components/ui/skeleton";
+    11→import { HoverCard, HoverCardTrigger, HoverCardContent } from "@/components/ui/hover-card";
+    12→import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
+    13→import { Separator } from "@/components/ui/separator";
+    14→import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+    15→import { AlertBanner } from "@/components/ui/alert-banner";
+    16→import { ShamayimToggleSwitch } from "@/components/ui/shamayim-toggle-switch";
+    17→import {
+    18→  MessageSquare,
+    19→  Bell,
+    20→  CheckCircle2,
+    21→  AlertCircle,
+    22→  AlertTriangle,
+    23→  XCircle,
+    24→  Info,
+    25→  Sparkles,
+    26→  ThumbsUp,
+    27→  Zap,
+    28→  Shield,
+    29→  Volume2,
+    30→  Wifi,
+    31→  Bluetooth,
+    32→  Monitor,
+    33→  Moon,
+    34→  Sun,
+    35→  MousePointerClick,
+    36→  Touchpad,
+    37→} from "lucide-react";
+    38→import { toast } from "sonner";
+    39→
+    40→// ===== ANIMATION VARIANTS =====
+    41→const sectionVariants = {
+    42→  hidden: { opacity: 0, y: 40 },
+    43→  visible: {
+    44→    opacity: 1,
+    45→    y: 0,
+    46→    transition: { duration: 0.7, ease: [0.25, 0.4, 0.25, 1] },
+    47→  },
+    48→};
+    49→
+    50→const staggerContainer = {
+    51→  hidden: { opacity: 0 },
+    52→  visible: {
+    53→    opacity: 1,
+    54→    transition: { staggerChildren: 0.08, delayChildren: 0.1 },
+    55→  },
+    56→};
+    57→
+    58→const staggerItem = {
+    59→  hidden: { opacity: 0, y: 20 },
+    60→  visible: {
+    61→    opacity: 1,
+    62→    y: 0,
+    63→    transition: { duration: 0.5, ease: "easeOut" },
+    64→  },
+    65→};
+    66→
+    67→// ===== ALERT BANNER SECTION =====
+    68→function AlertBannerSection() {
+    69→  const [alerts, setAlerts] = useState({
+    70→    default: true,
+    71→    success: true,
+    72→    destructive: true,
+    73→    warning: true,
+    74→  });
+    75→
+    76→  const dismissAlert = (key: keyof typeof alerts) => {
+    77→    setAlerts((prev) => ({ ...prev, [key]: false }));
+    78→  };
+    79→
+    80→  const resetAlerts = () => {
+    81→    setAlerts({ default: true, success: true, destructive: true, warning: true });
+    82→  };
+    83→
+    84→  return (
+    85→    <motion.div variants={staggerItem}>
+    86→      <Card className="border-border/50 bg-card/50 backdrop-blur-sm">
+    87→        <CardHeader>
+    88→          <div className="flex items-center justify-between">
+    89→            <div className="flex items-center gap-3">
+    90→              <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-primary/10 border border-primary/20">
+    91→                <AlertCircle className="h-5 w-5 text-primary" />
+    92→              </div>
+    93→              <div>
+    94→                <CardTitle className="text-lg">Alert Banners</CardTitle>
+    95→                <CardDescription>All 4 variants with dismiss functionality</CardDescription>
+    96→              </div>
+    97→            </div>
+    98→            <Button size="sm" variant="outline" onClick={resetAlerts} className="gap-1.5">
+    99→              <Sparkles className="h-3.5 w-3.5" /> Reset
+   100→            </Button>
+   101→          </div>
+   102→        </CardHeader>
+   103→        <CardContent className="space-y-4">
+   104→          <AnimatePresence>
+   105→            {alerts.default && (
+   106→              <AlertBanner
+   107→                variant="default"
+   108→                title="System Update Available"
+   109→                description="A new version of UnQWebTemplate is available. Update now to get the latest features."
+   110→                onDismiss={() => dismissAlert("default")}
+   111→                primaryAction={{ label: "Update Now", onClick: () => toast.info("Updating...") }}
+   112→                secondaryAction={{ label: "Later", onClick: () => dismissAlert("default") }}
+   113→              />
+   114→            )}
+   115→          </AnimatePresence>
+   116→          <AnimatePresence>
+   117→            {alerts.success && (
+   118→              <AlertBanner
+   119→                variant="success"
+   120→                title="Deployment Successful"
+   121→                description="Your application has been deployed to production successfully."
+   122→                onDismiss={() => dismissAlert("success")}
+   123→                primaryAction={{ label: "View Deployment", onClick: () => toast.success("Opening deployment dashboard...") }}
+   124→              />
+   125→            )}
+   126→          </AnimatePresence>
+   127→          <AnimatePresence>
+   128→            {alerts.destructive && (
+   129→              <AlertBanner
+   130→                variant="destructive"
+   131→                title="Critical Error Detected"
+   132→                description="Database connection failed. Please check your configuration and try again."
+   133→                onDismiss={() => dismissAlert("destructive")}
+   134→                primaryAction={{ label: "Retry Connection", onClick: () => toast.error("Retrying connection...") }}
+   135→              />
+   136→            )}
+   137→          </AnimatePresence>
+   138→          <AnimatePresence>
+   139→            {alerts.warning && (
+   140→              <AlertBanner
+   141→                variant="warning"
+   142→                title="Storage Almost Full"
+   143→                description="You've used 92% of your storage quota. Consider upgrading your plan."
+   144→                onDismiss={() => dismissAlert("warning")}
+   145→                primaryAction={{ label: "Upgrade Plan", onClick: () => toast.warning("Opening upgrade page...") }}
+   146→                secondaryAction={{ label: "Manage Storage", onClick: () => toast.info("Opening storage manager...") }}
+   147→              />
+   148→            )}
+   149→          </AnimatePresence>
+   150→        </CardContent>
+   151→      </Card>
+   152→    </motion.div>
+   153→  );
+   154→}
+   155→
+   156→// ===== TOAST NOTIFICATIONS SECTION =====
+   157→function ToastSection() {
+   158→  return (
+   159→    <motion.div variants={staggerItem}>
+   160→      <Card className="border-border/50 bg-card/50 backdrop-blur-sm">
+   161→        <CardHeader>
+   162→          <div className="flex items-center gap-3">
+   163→            <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-primary/10 border border-primary/20">
+   164→              <Bell className="h-5 w-5 text-primary" />
+   165→            </div>
+   166→            <div>
+   167→              <CardTitle className="text-lg">Toast Notifications</CardTitle>
+   168→              <CardDescription>Click buttons to trigger different toast messages</CardDescription>
+   169→            </div>
+   170→          </div>
+   171→        </CardHeader>
+   172→        <CardContent>
+   173→          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+   174→            <Button
+   175→              variant="outline"
+   176→              className="gap-2"
+   177→              onClick={() => toast("Event created", { description: "Monday, January 3rd at 6:00 PM" })}
+   178→            >
+   179→              <Info className="h-4 w-4" /> Default
+   180→            </Button>
+   181→            <Button
+   182→              variant="outline"
+   183→              className="gap-2 hover:border-green-500/50 hover:text-green-500"
+   184→              onClick={() => toast.success("Changes saved", { description: "Your profile has been updated successfully." })}
+   185→            >
+   186→              <CheckCircle2 className="h-4 w-4" /> Success
+   187→            </Button>
+   188→            <Button
+   189→              variant="outline"
+   190→              className="gap-2 hover:border-red-500/50 hover:text-red-500"
+   191→              onClick={() => toast.error("Error occurred", { description: "Failed to save changes. Please try again." })}
+   192→            >
+   193→              <XCircle className="h-4 w-4" /> Error
+   194→            </Button>
+   195→            <Button
+   196→              variant="outline"
+   197→              className="gap-2 hover:border-yellow-500/50 hover:text-yellow-500"
+   198→              onClick={() => toast.warning("Warning", { description: "You are about to perform an irreversible action." })}
+   199→            >
+   200→              <AlertTriangle className="h-4 w-4" /> Warning
+   201→            </Button>
+   202→            <Button
+   203→              variant="outline"
+   204→              className="gap-2"
+   205→              onClick={() => toast("Message from Sarah", { description: "Hey! Can we discuss the new feature tomorrow?" })}
+   206→            >
+   207→              <MessageSquare className="h-4 w-4" /> Message
+   208→            </Button>
+   209→            <Button
+   210→              variant="outline"
+   211→              className="gap-2"
+   212→              onClick={() => toast.promise(
+   213→                new Promise((resolve) => setTimeout(resolve, 2000)),
+   214→                { loading: "Processing...", success: "Done!", error: "Failed!" }
+   215→              )}
+   216→            >
+   217→              <Zap className="h-4 w-4" /> Promise
+   218→            </Button>
+   219→            <Button
+   220→              variant="outline"
+   221→              className="gap-2"
+   222→              onClick={() => {
+   223→                toast("Custom action", {
+   224→                  description: "With an action button",
+   225→                  action: { label: "Undo", onClick: () => toast.info("Action undone!") },
+   226→                });
+   227→              }}
+   228→            >
+   229→              <MousePointerClick className="h-4 w-4" /> With Action
+   230→            </Button>
+   231→            <Button
+   232→              variant="outline"
+   233→              className="gap-2"
+   234→              onClick={() => {
+   235→                toast("Event 1", { description: "First notification" });
+   236→                setTimeout(() => toast.success("Event 2", { description: "Second notification" }), 300);
+   237→                setTimeout(() => toast("Event 3", { description: "Third notification" }), 600);
+   238→              }}
+   239→            >
+   240→              <Sparkles className="h-4 w-4" /> Multiple
+   241→            </Button>
+   242→          </div>
+   243→        </CardContent>
+   244→      </Card>
+   245→    </motion.div>
+   246→  );
+   247→}
+   248→
+   249→// ===== SHAMAYIM TOGGLE SWITCH SECTION =====
+   250→function ToggleSwitchSection() {
+   251→  const [states, setStates] = useState<Record<string, boolean>>({
+   252→    conic: true,
+   253→    dots: false,
+   254→    grid: true,
+   255→    waves: false,
+   256→    zigzag: true,
+   257→    checker: false,
+   258→    hex: true,
+   259→    linear: false,
+   260→  });
+   261→
+   262→  const patterns = [
+   263→    { key: "conic", label: "Conic", pattern: "conic" as const },
+   264→    { key: "dots", label: "Dots", pattern: "dots" as const },
+   265→    { key: "grid", label: "Grid", pattern: "grid" as const },
+   266→    { key: "waves", label: "Waves", pattern: "waves" as const },
+   267→    { key: "zigzag", label: "Zigzag", pattern: "zigzag" as const },
+   268→    { key: "checker", label: "Checker", pattern: "checker" as const },
+   269→    { key: "hex", label: "Hex", pattern: "hex" as const },
+   270→    { key: "linear", label: "Linear", pattern: "linear" as const },
+   271→  ];
+   272→
+   273→  return (
+   274→    <motion.div variants={staggerItem}>
+   275→      <Card className="border-border/50 bg-card/50 backdrop-blur-sm">
+   276→        <CardHeader>
+   277→          <div className="flex items-center gap-3">
+   278→            <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-primary/10 border border-primary/20">
+   279→              <Zap className="h-5 w-5 text-primary" />
+   280→            </div>
+   281→            <div>
+   282→              <CardTitle className="text-lg">Shamayim Toggle Switches</CardTitle>
+   283→              <CardDescription>Multiple toggle patterns with unique visual styles</CardDescription>
+   284→            </div>
+   285→          </div>
+   286→        </CardHeader>
+   287→        <CardContent>
+   288→          <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
+   289→            {patterns.map((p) => (
+   290→              <div key={p.key} className="flex flex-col items-center gap-3 p-4 rounded-xl bg-muted/20 hover:bg-muted/40 transition-colors">
+   291→                <ShamayimToggleSwitch
+   292→                  defaultState={states[p.key]}
+   293→                  pattern={p.pattern}
+   294→                  onChange={(val) => setStates((prev) => ({ ...prev, [p.key]: val }))}
+   295→                />
+   296→                <div className="text-center">
+   297→                  <p className="text-sm font-medium">{p.label}</p>
+   298→                  <p className="text-xs text-muted-foreground">{states[p.key] ? "On" : "Off"}</p>
+   299→                </div>
+   300→              </div>
+   301→            ))}
+   302→          </div>
+   303→        </CardContent>
+   304→      </Card>
+   305→    </motion.div>
+   306→  );
+   307→}
+   308→
+   309→// ===== PROGRESS BARS SECTION =====
+   310→function ProgressSection() {
+   311→  const progressData = [
+   312→    { label: "Project Alpha", value: 85, color: "bg-primary" },
+   313→    { label: "Project Beta", value: 62, color: "bg-primary/80" },
+   314→    { label: "Project Gamma", value: 45, color: "bg-primary/60" },
+   315→    { label: "Project Delta", value: 28, color: "bg-primary/40" },
+   316→    { label: "Storage Used", value: 72, color: "bg-primary" },
+   317→    { label: "API Quota", value: 91, color: "bg-red-500" },
+   318→  ];
+   319→
+   320→  return (
+   321→    <motion.div variants={staggerItem}>
+   322→      <Card className="border-border/50 bg-card/50 backdrop-blur-sm">
+   323→        <CardHeader>
+   324→          <div className="flex items-center gap-3">
+   325→            <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-primary/10 border border-primary/20">
+   326→              <Volume2 className="h-5 w-5 text-primary" />
+   327→            </div>
+   328→            <div>
+   329→              <CardTitle className="text-lg">Progress Bars</CardTitle>
+   330→              <CardDescription>Different progress values and styles</CardDescription>
+   331→            </div>
+   332→          </div>
+   333→        </CardHeader>
+   334→        <CardContent className="space-y-5">
+   335→          {progressData.map((item) => (
+   336→            <div key={item.label} className="space-y-2">
+   337→              <div className="flex items-center justify-between text-sm">
+   338→                <span className="font-medium">{item.label}</span>
+   339→                <span className="text-muted-foreground">{item.value}%</span>
+   340→              </div>
+   341→              <Progress value={item.value} className="h-2.5" />
+   342→            </div>
+   343→          ))}
+   344→
+   345→          <Separator className="my-4" />
+   346→
+   347→          {/* Animated progress */}
+   348→          <div className="space-y-3">
+   349→            <h4 className="text-sm font-semibold">Animated Progress</h4>
+   350→            <div className="space-y-2">
+   351→              <div className="flex items-center gap-3">
+   352→                <div className="flex-1">
+   353→                  <Progress value={75} className="h-3" />
+   354→                </div>
+   355→                <Badge variant="secondary">75%</Badge>
+   356→              </div>
+   357→              <div className="flex items-center gap-3">
+   358→                <div className="flex-1">
+   359→                  <Progress value={50} className="h-4" />
+   360→                </div>
+   361→                <Badge variant="secondary">50%</Badge>
+   362→              </div>
+   363→              <div className="flex items-center gap-3">
+   364→                <div className="flex-1">
+   365→                  <Progress value={30} className="h-5" />
+   366→                </div>
+   367→                <Badge variant="secondary">30%</Badge>
+   368→              </div>
+   369→            </div>
+   370→          </div>
+   371→        </CardContent>
+   372→      </Card>
+   373→    </motion.div>
+   374→  );
+   375→}
+   376→
+   377→// ===== SKELETON LOADERS SECTION =====
+   378→function SkeletonSection() {
+   379→  return (
+   380→    <motion.div variants={staggerItem}>
+   381→      <Card className="border-border/50 bg-card/50 backdrop-blur-sm">
+   382→        <CardHeader>
+   383→          <div className="flex items-center gap-3">
+   384→            <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-primary/10 border border-primary/20">
+   385→              <Monitor className="h-5 w-5 text-primary" />
+   386→            </div>
+   387→            <div>
+   388→              <CardTitle className="text-lg">Skeleton Loaders</CardTitle>
+   389→              <CardDescription>Loading states for cards, text, avatars</CardDescription>
+   390→            </div>
+   391→          </div>
+   392→        </CardHeader>
+   393→        <CardContent>
+   394→          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+   395→            {/* Card Skeleton */}
+   396→            <div className="space-y-3">
+   397→              <p className="text-xs text-muted-foreground font-semibold uppercase tracking-wider">Card Skeleton</p>
+   398→              <div className="rounded-xl border border-border/50 p-6 space-y-4">
+   399→                <Skeleton className="h-40 w-full rounded-lg" />
+   400→                <Skeleton className="h-4 w-3/4" />
+   401→                <Skeleton className="h-4 w-1/2" />
+   402→                <div className="flex items-center gap-3">
+   403→                  <Skeleton className="h-8 w-8 rounded-full" />
+   404→                  <div className="space-y-2 flex-1">
+   405→                    <Skeleton className="h-3 w-1/3" />
+   406→                    <Skeleton className="h-3 w-1/4" />
+   407→                  </div>
+   408→                </div>
+   409→              </div>
+   410→            </div>
+   411→
+   412→            {/* List Skeleton */}
+   413→            <div className="space-y-3">
+   414→              <p className="text-xs text-muted-foreground font-semibold uppercase tracking-wider">List Skeleton</p>
+   415→              <div className="rounded-xl border border-border/50 p-4 space-y-4">
+   416→                {Array.from({ length: 5 }).map((_, i) => (
+   417→                  <div key={i} className="flex items-center gap-3">
+   418→                    <Skeleton className="h-10 w-10 rounded-full flex-shrink-0" />
+   419→                    <div className="flex-1 space-y-2">
+   420→                      <Skeleton className="h-3.5 w-2/3" />
+   421→                      <Skeleton className="h-3 w-1/3" />
+   422→                    </div>
+   423→                    <Skeleton className="h-6 w-16 rounded-md" />
+   424→                  </div>
+   425→                ))}
+   426→              </div>
+   427→            </div>
+   428→
+   429→            {/* Table Skeleton */}
+   430→            <div className="space-y-3">
+   431→              <p className="text-xs text-muted-foreground font-semibold uppercase tracking-wider">Table Skeleton</p>
+   432→              <div className="rounded-xl border border-border/50 overflow-hidden">
+   433→                <div className="bg-muted/30 p-4 flex gap-4">
+   434→                  <Skeleton className="h-4 w-1/4" />
+   435→                  <Skeleton className="h-4 w-1/4" />
+   436→                  <Skeleton className="h-4 w-1/4" />
+   437→                  <Skeleton className="h-4 w-1/4" />
+   438→                </div>
+   439→                {Array.from({ length: 5 }).map((_, i) => (
+   440→                  <div key={i} className="p-4 flex gap-4 border-t border-border/50">
+   441→                    <Skeleton className="h-4 w-1/4" />
+   442→                    <Skeleton className="h-4 w-1/4" />
+   443→                    <Skeleton className="h-4 w-1/4" />
+   444→                    <Skeleton className="h-4 w-1/4" />
+   445→                  </div>
+   446→                ))}
+   447→              </div>
+   448→            </div>
+   449→
+   450→            {/* Profile Skeleton */}
+   451→            <div className="space-y-3">
+   452→              <p className="text-xs text-muted-foreground font-semibold uppercase tracking-wider">Profile Skeleton</p>
+   453→              <div className="rounded-xl border border-border/50 p-6 flex flex-col items-center space-y-4">
+   454→                <Skeleton className="h-20 w-20 rounded-full" />
+   455→                <Skeleton className="h-5 w-32" />
+   456→                <Skeleton className="h-3 w-48" />
+   457→                <div className="flex gap-4 w-full justify-center">
+   458→                  <Skeleton className="h-8 w-20 rounded-md" />
+   459→                  <Skeleton className="h-8 w-20 rounded-md" />
+   460→                </div>
+   461→              </div>
+   462→            </div>
+   463→
+   464→            {/* Article Skeleton */}
+   465→            <div className="space-y-3">
+   466→              <p className="text-xs text-muted-foreground font-semibold uppercase tracking-wider">Article Skeleton</p>
+   467→              <div className="rounded-xl border border-border/50 p-6 space-y-4">
+   468→                <Skeleton className="h-6 w-3/4" />
+   469→                <div className="flex items-center gap-2">
+   470→                  <Skeleton className="h-6 w-6 rounded-full" />
+   471→                  <Skeleton className="h-3 w-24" />
+   472→                  <Skeleton className="h-3 w-16" />
+   473→                </div>
+   474→                <Skeleton className="h-4 w-full" />
+   475→                <Skeleton className="h-4 w-full" />
+   476→                <Skeleton className="h-4 w-5/6" />
+   477→              </div>
+   478→            </div>
+   479→
+   480→            {/* Grid Skeleton */}
+   481→            <div className="space-y-3">
+   482→              <p className="text-xs text-muted-foreground font-semibold uppercase tracking-wider">Grid Skeleton</p>
+   483→              <div className="grid grid-cols-2 gap-3">
+   484→                {Array.from({ length: 4 }).map((_, i) => (
+   485→                  <div key={i} className="rounded-lg border border-border/50 p-3 space-y-2">
+   486→                    <Skeleton className="h-16 w-full rounded-md" />
+   487→                    <Skeleton className="h-3 w-2/3" />
+   488→                    <Skeleton className="h-3 w-1/2" />
+   489→                  </div>
+   490→                ))}
+   491→              </div>
+   492→            </div>
+   493→          </div>
+   494→        </CardContent>
+   495→      </Card>
+   496→    </motion.div>
+   497→  );
+   498→}
+   499→
+   500→// ===== HOVER CARDS SECTION =====
+   501→function HoverCardSection() {
+   502→  const users = [
+   503→    { name: "Sandeep Gaddam", role: "Creator & Lead Dev", avatar: "SG", bio: "Full-stack developer passionate about UI/UX and open source.", stats: { projects: 24, followers: "2.4k", stars: "8.9k" } },
+   504→    { name: "Ava Thompson", role: "Senior Developer", avatar: "AT", bio: "React enthusiast and TypeScript advocate.", stats: { projects: 18, followers: "1.2k", stars: "3.5k" } },
+   505→    { name: "Marcus Chen", role: "Lead Designer", avatar: "MC", bio: "Design systems expert with an eye for detail.", stats: { projects: 15, followers: "980", stars: "2.1k" } },
+   506→  ];
+   507→
+   508→  return (
+   509→    <motion.div variants={staggerItem}>
+   510→      <Card className="border-border/50 bg-card/50 backdrop-blur-sm">
+   511→        <CardHeader>
+   512→          <div className="flex items-center gap-3">
+   513→            <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-primary/10 border border-primary/20">
+   514→              <MousePointerClick className="h-5 w-5 text-primary" />
+   515→            </div>
+   516→            <div>
+   517→              <CardTitle className="text-lg">Hover Cards</CardTitle>
+   518→              <CardDescription>Hover over names to see user info cards</CardDescription>
+   519→            </div>
+   520→          </div>
+   521→        </CardHeader>
+   522→        <CardContent>
+   523→          <div className="space-y-6">
+   524→            <div className="flex flex-wrap items-center gap-4">
+   525→              <span className="text-sm text-muted-foreground">Team members:</span>
+   526→              {users.map((user) => (
+   527→                <HoverCard key={user.name}>
+   528→                  <HoverCardTrigger asChild>
+   529→                    <Button variant="link" className="p-0 h-auto text-primary font-medium">
+   530→                      {user.name}
+   531→                    </Button>
+   532→                  </HoverCardTrigger>
+   533→                  <HoverCardContent className="w-72">
+   534→                    <div className="flex gap-3">
+   535→                      <Avatar className="h-12 w-12">
+   536→                        <AvatarFallback className="bg-primary/10 text-primary font-bold">{user.avatar}</AvatarFallback>
+   537→                      </Avatar>
+   538→                      <div className="flex-1">
+   539→                        <h4 className="text-sm font-semibold">{user.name}</h4>
+   540→                        <p className="text-xs text-muted-foreground">{user.role}</p>
+   541→                      </div>
+   542→                    </div>
+   543→                    <p className="mt-3 text-xs text-muted-foreground">{user.bio}</p>
+   544→                    <Separator className="my-3" />
+   545→                    <div className="flex justify-between text-xs">
+   546→                      <div className="text-center">
+   547→                        <p className="font-bold">{user.stats.projects}</p>
+   548→                        <p className="text-muted-foreground">Projects</p>
+   549→                      </div>
+   550→                      <div className="text-center">
+   551→                        <p className="font-bold">{user.stats.followers}</p>
+   552→                        <p className="text-muted-foreground">Followers</p>
+   553→                      </div>
+   554→                      <div className="text-center">
+   555→                        <p className="font-bold">{user.stats.stars}</p>
+   556→                        <p className="text-muted-foreground">Stars</p>
+   557→                      </div>
+   558→                    </div>
+   559→                  </HoverCardContent>
+   560→                </HoverCard>
+   561→              ))}
+   562→            </div>
+   563→
+   564→            {/* Hover card with image */}
+   565→            <div className="p-4 rounded-xl bg-muted/20">
+   566→              <HoverCard>
+   567→                <HoverCardTrigger asChild>
+   568→                  <Button variant="outline" className="gap-2">
+   569→                    <Avatar className="h-6 w-6">
+   570→                      <AvatarFallback className="bg-primary/10 text-primary text-xs">SG</AvatarFallback>
+   571→                    </Avatar>
+   572→                    View Creator Profile
+   573→                  </Button>
+   574→                </HoverCardTrigger>
+   575→                <HoverCardContent className="w-80">
+   576→                  <div className="flex gap-4">
+   577→                    <Avatar className="h-14 w-14 border-2 border-primary/20">
+   578→                      <AvatarFallback className="bg-primary text-primary-foreground font-bold text-lg">SG</AvatarFallback>
+   579→                    </Avatar>
+   580→                    <div>
+   581→                      <h4 className="text-sm font-semibold">Sandeep Gaddam</h4>
+   582→                      <p className="text-xs text-primary">Creator of UnQWebTemplate</p>
+   583→                      <p className="mt-2 text-xs text-muted-foreground">Building premium web templates with modern technologies.</p>
+   584→                    </div>
+   585→                  </div>
+   586→                  <div className="mt-3 flex gap-2">
+   587→                    <Badge variant="secondary" className="text-xs gap-1">
+   588→                      <Sparkles className="h-3 w-3" /> Next.js
+   589→                    </Badge>
+   590→                    <Badge variant="secondary" className="text-xs gap-1">
+   591→                      <Zap className="h-3 w-3" /> TypeScript
+   592→                    </Badge>
+   593→                    <Badge variant="secondary" className="text-xs gap-1">
+   594→                      <Shield className="h-3 w-3" /> Tailwind
+   595→                    </Badge>
+   596→                  </div>
+   597→                </HoverCardContent>
+   598→              </HoverCard>
+   599→            </div>
+   600→          </div>
+   601→        </CardContent>
+   602→      </Card>
+   603→    </motion.div>
+   604→  );
+   605→}
+   606→
+   607→// ===== TOOLTIP SECTION =====
+   608→function TooltipSection() {
+   609→  return (
+   610→    <motion.div variants={staggerItem}>
+   611→      <Card className="border-border/50 bg-card/50 backdrop-blur-sm">
+   612→        <CardHeader>
+   613→          <div className="flex items-center gap-3">
+   614→            <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-primary/10 border border-primary/20">
+   615→              <Info className="h-5 w-5 text-primary" />
+   616→            </div>
+   617→            <div>
+   618→              <CardTitle className="text-lg">Tooltips</CardTitle>
+   619→              <CardDescription>Hover to see tooltip positions and content</CardDescription>
+   620→            </div>
+   621→          </div>
+   622→        </CardHeader>
+   623→        <CardContent>
+   624→          <TooltipProvider delayDuration={200}>
+   625→            <div className="flex flex-wrap items-center justify-center gap-6 py-8">
+   626→              <Tooltip>
+   627→                <TooltipTrigger asChild>
+   628→                  <Button variant="outline" size="icon">
+   629→                    <Wifi className="h-4 w-4" />
+   630→                  </Button>
+   631→                </TooltipTrigger>
+   632→                <TooltipContent side="top">
+   633→                  <p>Top: Network Status</p>
+   634→                </TooltipContent>
+   635→              </Tooltip>
+   636→
+   637→              <Tooltip>
+   638→                <TooltipTrigger asChild>
+   639→                  <Button variant="outline" size="icon">
+   640→                    <Bluetooth className="h-4 w-4" />
+   641→                  </Button>
+   642→                </TooltipTrigger>
+   643→                <TooltipContent side="right">
+   644→                  <p>Right: Bluetooth</p>
+   645→                </TooltipContent>
+   646→              </Tooltip>
+   647→
+   648→              <Tooltip>
+   649→                <TooltipTrigger asChild>
+   650→                  <Button variant="outline" size="icon">
+   651→                    <Volume2 className="h-4 w-4" />
+   652→                  </Button>
+   653→                </TooltipTrigger>
+   654→                <TooltipContent side="bottom">
+   655→                  <p>Bottom: Volume Control</p>
+   656→                </TooltipContent>
+   657→              </Tooltip>
+   658→
+   659→              <Tooltip>
+   660→                <TooltipTrigger asChild>
+   661→                  <Button variant="outline" size="icon">
+   662→                    <Monitor className="h-4 w-4" />
+   663→                  </Button>
+   664→                </TooltipTrigger>
+   665→                <TooltipContent side="left">
+   666→                  <p>Left: Display Settings</p>
+   667→                </TooltipContent>
+   668→              </Tooltip>
+   669→
+   670→              <Tooltip>
+   671→                <TooltipTrigger asChild>
+   672→                  <Button variant="outline" className="gap-2">
+   673→                    <Moon className="h-4 w-4" /> Dark Mode
+   674→                  </Button>
+   675→                </TooltipTrigger>
+   676→                <TooltipContent>
+   677→                  <p>Toggle between light and dark themes</p>
+   678→                </TooltipContent>
+   679→              </Tooltip>
+   680→
+   681→              <Tooltip>
+   682→                <TooltipTrigger asChild>
+   683→                  <Button variant="outline" className="gap-2">
+   684→                    <Shield className="h-4 w-4" /> Security
+   685→                  </Button>
+   686→                </TooltipTrigger>
+   687→                <TooltipContent>
+   688→                  <p>Manage security and privacy settings</p>
+   689→                </TooltipContent>
+   690→              </Tooltip>
+   691→
+   692→              <Tooltip>
+   693→                <TooltipTrigger asChild>
+   694→                  <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center cursor-default">
+   695→                    <Sun className="h-4 w-4 text-primary-foreground" />
+   696→                  </div>
+   697→                </TooltipTrigger>
+   698→                <TooltipContent>
+   699→                  <p>Custom trigger element tooltip</p>
+   700→                </TooltipContent>
+   701→              </Tooltip>
+   702→            </div>
+   703→
+   704→            {/* Rich tooltip example */}
+   705→            <div className="mt-4 p-4 rounded-xl bg-muted/20">
+   706→              <h4 className="text-sm font-semibold mb-3">Rich Tooltips with Content</h4>
+   707→              <div className="flex flex-wrap gap-3">
+   708→                <Tooltip>
+   709→                  <TooltipTrigger asChild>
+   710→                    <Badge variant="secondary" className="cursor-default gap-1 px-3 py-1.5">
+   711→                      <Zap className="h-3 w-3" /> Performance
+   712→                    </Badge>
+   713→                  </TooltipTrigger>
+   714→                  <TooltipContent className="max-w-48">
+   715→                    <p className="font-medium">Performance Score</p>
+   716→                    <p className="text-xs text-muted-foreground mt-1">Your app scores 98/100 on Lighthouse performance audit.</p>
+   717→                  </TooltipContent>
+   718→                </Tooltip>
+   719→
+   720→                <Tooltip>
+   721→                  <TooltipTrigger asChild>
+   722→                    <Badge variant="secondary" className="cursor-default gap-1 px-3 py-1.5">
+   723→                      <ThumbsUp className="h-3 w-3" /> UX Score
+   724→                    </Badge>
+   725→                  </TooltipTrigger>
+   726→                  <TooltipContent className="max-w-48">
+   727→                    <p className="font-medium">UX Rating</p>
+   728→                    <p className="text-xs text-muted-foreground mt-1">4.9/5.0 average rating from user feedback surveys.</p>
+   729→                  </TooltipContent>
+   730→                </Tooltip>
+   731→
+   732→                <Tooltip>
+   733→                  <TooltipTrigger asChild>
+   734→                    <Badge variant="secondary" className="cursor-default gap-1 px-3 py-1.5">
+   735→                      <Shield className="h-3 w-3" /> Security
+   736→                    </Badge>
+   737→                  </TooltipTrigger>
+   738→                  <TooltipContent className="max-w-48">
+   739→                    <p className="font-medium">Security Grade</p>
+   740→                    <p className="text-xs text-muted-foreground mt-1">A+ security rating. All dependencies are up to date.</p>
+   741→                  </TooltipContent>
+   742→                </Tooltip>
+   743→              </div>
+   744→            </div>
+   745→          </TooltipProvider>
+   746→        </CardContent>
+   747→      </Card>
+   748→    </motion.div>
+   749→  );
+   750→}
+   751→
+   752→// ===== MAIN PAGE =====
+   753→export default function FeedbackPage() {
+   754→  return (
+   755→    <div className="flex min-h-screen">
+   756→      <SidebarNav />
+   757→      <main className="flex-1 overflow-y-auto">
+   758→        {/* Hero */}
+   759→        <div className="relative overflow-hidden border-b border-border/50">
+   760→          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent" />
+   761→          <div className="relative px-6 md:px-10 py-12 md:py-16 max-w-7xl mx-auto">
+   762→            <motion.div
+   763→              initial={{ opacity: 0, y: 30 }}
+   764→              animate={{ opacity: 1, y: 0 }}
+   765→              transition={{ duration: 0.8, ease: [0.25, 0.4, 0.25, 1] }}
+   766→            >
+   767→              <Badge variant="secondary" className="mb-4 gap-1.5 px-3 py-1">
+   768→                <MessageSquare className="h-3 w-3" /> Feedback Showcase
+   769→              </Badge>
+   770→              <h1 className="text-3xl md:text-5xl font-bold tracking-tight mb-3">
+   771→                Feedback <span className="text-primary">Components</span>
+   772→              </h1>
+   773→              <p className="text-muted-foreground text-lg max-w-2xl">
+   774→                Alert banners, toast notifications, toggle switches, progress indicators, skeleton loaders, hover cards, and tooltips.
+   775→              </p>
+   776→            </motion.div>
+   777→          </div>
+   778→        </div>
+   779→
+   780→        <div className="px-6 md:px-10 py-10 max-w-7xl mx-auto space-y-6">
+   781→          {/* Alert Banners */}
+   782→          <motion.div
+   783→            variants={staggerContainer}
+   784→            initial="hidden"
+   785→            whileInView="visible"
+   786→            viewport={{ once: true, margin: "-50px" }}
+   787→          >
+   788→            <AlertBannerSection />
+   789→          </motion.div>
+   790→
+   791→          {/* Toast + Toggle Switches */}
+   792→          <motion.div
+   793→            variants={staggerContainer}
+   794→            initial="hidden"
+   795→            whileInView="visible"
+   796→            viewport={{ once: true, margin: "-50px" }}
+   797→            className="grid grid-cols-1 lg:grid-cols-2 gap-6"
+   798→          >
+   799→            <ToastSection />
+   800→            <ToggleSwitchSection />
+   801→          </motion.div>
+   802→
+   803→          {/* Progress Bars + Skeleton */}
+   804→          <motion.div
+   805→            variants={staggerContainer}
+   806→            initial="hidden"
+   807→            whileInView="visible"
+   808→            viewport={{ once: true, margin: "-50px" }}
+   809→            className="grid grid-cols-1 lg:grid-cols-2 gap-6"
+   810→          >
+   811→            <ProgressSection />
+   812→            <SkeletonSection />
+   813→          </motion.div>
+   814→
+   815→          {/* Hover Cards + Tooltips */}
+   816→          <motion.div
+   817→            variants={staggerContainer}
+   818→            initial="hidden"
+   819→            whileInView="visible"
+   820→            viewport={{ once: true, margin: "-50px" }}
+   821→            className="grid grid-cols-1 lg:grid-cols-2 gap-6"
+   822→          >
+   823→            <HoverCardSection />
+   824→            <TooltipSection />
+   825→          </motion.div>
+   826→        </div>
+   827→
+   828→        {/* Footer */}
+   829→        <div className="px-6 md:px-10 py-8 border-t border-border/50 text-center">
+   830→          <motion.p
+   831→            initial={{ opacity: 0 }}
+   832→            whileInView={{ opacity: 1 }}
+   833→            viewport={{ once: true }}
+   834→            className="text-sm text-muted-foreground"
+   835→          >
+   836→            UnQWebTemplate — Built with ❤️ by Sandeep Gaddam
+   837→          </motion.p>
+   838→        </div>
+   839→      </main>
+   840→    </div>
+   841→  );
+   842→}
+   843→

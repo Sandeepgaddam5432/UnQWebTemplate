@@ -1,0 +1,955 @@
+     1→"use client";
+     2→
+     3→import React from "react";
+     4→import { motion } from "framer-motion";
+     5→import { SidebarNav } from "@/components/navigation/sidebar";
+     6→import { BlurFade } from "@/components/ui/blur-fade";
+     7→import { MagicCard } from "@/components/ui/magic-card";
+     8→import { BorderBeam } from "@/components/ui/border-beam";
+     9→import { DotPattern } from "@/components/ui/dot-pattern";
+    10→import { GridPattern } from "@/components/ui/grid-pattern";
+    11→import { AnimatedGridPattern } from "@/components/ui/animated-grid-pattern";
+    12→import { Particles } from "@/components/ui/particles";
+    13→import { Badge } from "@/components/ui/badge";
+    14→import { Button } from "@/components/ui/button";
+    15→import { Card, CardContent } from "@/components/ui/card";
+    16→import {
+    17→  ArrowRight,
+    18→  Sparkles,
+    19→  Check,
+    20→  Star,
+    21→  Zap,
+    22→  Shield,
+    23→  Globe,
+    24→  Layers,
+    25→  Code2,
+    26→  Rocket,
+    27→  Heart,
+    28→  Users,
+    29→  Menu,
+    30→  Mail,
+    31→  Phone,
+    32→  MapPin,
+    33→  ChevronRight,
+    34→  Play,
+    35→  Lock,
+    36→  BarChart3,
+    37→  Cloud,
+    38→  MessageSquare,
+    39→  Twitter,
+    40→  Github,
+    41→  Linkedin,
+    42→} from "lucide-react";
+    43→
+    44→// ===== ANIMATION VARIANTS =====
+    45→const sectionVariants = {
+    46→  hidden: { opacity: 0, y: 40 },
+    47→  visible: {
+    48→    opacity: 1,
+    49→    y: 0,
+    50→    transition: { duration: 0.7, ease: [0.25, 0.4, 0.25, 1] },
+    51→  },
+    52→};
+    53→
+    54→const staggerContainer = {
+    55→  hidden: { opacity: 0 },
+    56→  visible: {
+    57→    opacity: 1,
+    58→    transition: { staggerChildren: 0.08, delayChildren: 0.1 },
+    59→  },
+    60→};
+    61→
+    62→const staggerItem = {
+    63→  hidden: { opacity: 0, y: 25 },
+    64→  visible: {
+    65→    opacity: 1,
+    66→    y: 0,
+    67→    transition: { duration: 0.5, ease: "easeOut" },
+    68→  },
+    69→};
+    70→
+    71→// ===== BLOCK PREVIEW WRAPPER =====
+    72→function BlockPreview({
+    73→  title,
+    74→  description,
+    75→  children,
+    76→}: {
+    77→  title: string;
+    78→  description: string;
+    79→  children: React.ReactNode;
+    80→}) {
+    81→  return (
+    82→    <motion.div variants={staggerItem}>
+    83→      <MagicCard
+    84→        className="rounded-xl overflow-hidden"
+    85→        gradientFrom="#c96442"
+    86→        gradientTo="#d97757"
+    87→        gradientSize={250}
+    88→      >
+    89→        <div className="bg-background rounded-xl overflow-hidden">
+    90→          {/* Preview Area */}
+    91→          <div className="relative overflow-hidden bg-muted/30 border-b border-border/50 min-h-[220px]">
+    92→            {children}
+    93→          </div>
+    94→          {/* Info Area */}
+    95→          <div className="p-5">
+    96→            <h3 className="font-semibold text-base">{title}</h3>
+    97→            <p className="text-sm text-muted-foreground mt-1 leading-relaxed">
+    98→              {description}
+    99→            </p>
+   100→          </div>
+   101→        </div>
+   102→      </MagicCard>
+   103→    </motion.div>
+   104→  );
+   105→}
+   106→
+   107→// ===== HERO BLOCKS =====
+   108→function HeroGeometric() {
+   109→  return (
+   110→    <div className="relative p-8 flex flex-col items-center justify-center text-center min-h-[220px]">
+   111→      <GridPattern
+   112→        width={20}
+   113→        height={20}
+   114→        className="absolute inset-0 opacity-20 [mask-image:radial-gradient(ellipse_at_center,black,transparent_70%)]"
+   115→      />
+   116→      <Badge variant="outline" className="mb-3 text-xs border-primary/30 text-primary z-10">
+   117→        New Release
+   118→      </Badge>
+   119→      <h3 className="text-xl font-bold z-10">Build Something Amazing</h3>
+   120→      <p className="text-xs text-muted-foreground mt-2 z-10 max-w-[200px]">
+   121→        The modern platform for developers.
+   122→      </p>
+   123→      <Button size="sm" className="mt-4 z-10 h-8 text-xs">
+   124→        Get Started <ArrowRight className="ml-1 h-3 w-3" />
+   125→      </Button>
+   126→    </div>
+   127→  );
+   128→}
+   129→
+   130→function HeroMinimal() {
+   131→  return (
+   132→    <div className="p-8 flex flex-col items-center justify-center text-center min-h-[220px]">
+   133→      <h3 className="text-2xl font-bold tracking-tight">
+   134→        Simple. Powerful. <span className="text-primary">Yours.</span>
+   135→      </h3>
+   136→      <p className="text-xs text-muted-foreground mt-3 max-w-[220px]">
+   137→        Everything you need, nothing you don&apos;t.
+   138→      </p>
+   139→      <div className="mt-5 flex gap-2">
+   140→        <Button size="sm" className="h-8 text-xs">
+   141→          Start Free
+   142→        </Button>
+   143→        <Button size="sm" variant="outline" className="h-8 text-xs">
+   144→          Learn More
+   145→        </Button>
+   146→      </div>
+   147→    </div>
+   148→  );
+   149→}
+   150→
+   151→function HeroSplit() {
+   152→  return (
+   153→    <div className="grid grid-cols-2 min-h-[220px]">
+   154→      <div className="p-6 flex flex-col justify-center">
+   155→        <h3 className="text-lg font-bold leading-tight">
+   156→          Ship products <span className="text-primary">10x faster</span>
+   157→        </h3>
+   158→        <p className="text-[10px] text-muted-foreground mt-2 leading-relaxed">
+   159→          Automated workflows, real-time collaboration, and AI assistance built in.
+   160→        </p>
+   161→        <Button size="sm" className="mt-4 h-7 text-[10px] w-fit">
+   162→          Try Now <ArrowRight className="ml-1 h-2.5 w-2.5" />
+   163→        </Button>
+   164→      </div>
+   165→      <div className="bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
+   166→        <div className="p-4 rounded-xl bg-background/60 backdrop-blur-sm border border-border/50">
+   167→          <Code2 className="h-8 w-8 text-primary" />
+   168→        </div>
+   169→      </div>
+   170→    </div>
+   171→  );
+   172→}
+   173→
+   174→function HeroCentered() {
+   175→  return (
+   176→    <div className="relative p-8 flex flex-col items-center justify-center text-center min-h-[220px]">
+   177→      <DotPattern className="absolute inset-0 opacity-20" />
+   178→      <div className="relative z-10">
+   179→        <div className="flex justify-center gap-3 mb-4">
+   180→          <div className="p-2 rounded-lg bg-primary/10">
+   181→            <Zap className="h-4 w-4 text-primary" />
+   182→          </div>
+   183→          <div className="p-2 rounded-lg bg-primary/10">
+   184→            <Shield className="h-4 w-4 text-primary" />
+   185→          </div>
+   186→          <div className="p-2 rounded-lg bg-primary/10">
+   187→            <Globe className="h-4 w-4 text-primary" />
+   188→          </div>
+   189→        </div>
+   190→        <h3 className="text-xl font-bold">One Platform. Infinite Possibilities.</h3>
+   191→        <p className="text-xs text-muted-foreground mt-2">
+   192→          Unify your stack. Amplify your impact.
+   193→        </p>
+   194→        <div className="relative mt-4 inline-block">
+   195→          <Button size="sm" className="h-8 text-xs">
+   196→            Get Started
+   197→          </Button>
+   198→          <BorderBeam size={40} duration={4} colorFrom="#c96442" colorTo="#d97757" />
+   199→        </div>
+   200→      </div>
+   201→    </div>
+   202→  );
+   203→}
+   204→
+   205→// ===== FEATURE BLOCKS =====
+   206→function FeatureGrid() {
+   207→  const items = [
+   208→    { icon: Zap, title: "Fast", desc: "Edge-optimized" },
+   209→    { icon: Shield, title: "Secure", desc: "E2E encrypted" },
+   210→    { icon: BarChart3, title: "Analytics", desc: "Real-time data" },
+   211→    { icon: Cloud, title: "Scalable", desc: "Auto-scaling" },
+   212→  ];
+   213→  return (
+   214→    <div className="p-6 min-h-[220px]">
+   215→      <h4 className="text-sm font-bold mb-4 text-center">Features</h4>
+   216→      <div className="grid grid-cols-2 gap-3">
+   217→        {items.map((item) => (
+   218→          <div
+   219→            key={item.title}
+   220→            className="p-3 rounded-lg border border-border/50 bg-background hover:border-primary/30 transition-colors"
+   221→          >
+   222→            <item.icon className="h-4 w-4 text-primary mb-1.5" />
+   223→            <p className="text-xs font-semibold">{item.title}</p>
+   224→            <p className="text-[10px] text-muted-foreground">{item.desc}</p>
+   225→          </div>
+   226→        ))}
+   227→      </div>
+   228→    </div>
+   229→  );
+   230→}
+   231→
+   232→function FeatureList() {
+   233→  const items = [
+   234→    { icon: Rocket, title: "Deploy in seconds" },
+   235→    { icon: Lock, title: "Enterprise security" },
+   236→    { icon: Layers, title: "Composable architecture" },
+   237→  ];
+   238→  return (
+   239→    <div className="p-6 min-h-[220px] flex flex-col justify-center">
+   240→      <h4 className="text-sm font-bold mb-4">Why Choose Us</h4>
+   241→      <div className="space-y-3">
+   242→        {items.map((item) => (
+   243→          <div key={item.title} className="flex items-center gap-3">
+   244→            <div className="p-1.5 rounded-md bg-primary/10">
+   245→              <item.icon className="h-3.5 w-3.5 text-primary" />
+   246→            </div>
+   247→            <span className="text-xs font-medium">{item.title}</span>
+   248→          </div>
+   249→        ))}
+   250→      </div>
+   251→    </div>
+   252→  );
+   253→}
+   254→
+   255→function FeatureBento() {
+   256→  return (
+   257→    <div className="p-6 min-h-[220px]">
+   258→      <div className="grid grid-cols-3 gap-2 h-full">
+   259→        <div className="col-span-2 row-span-2 rounded-lg bg-gradient-to-br from-primary/15 to-primary/5 p-4 flex flex-col justify-end">
+   260→          <Zap className="h-5 w-5 text-primary mb-2" />
+   261→          <p className="text-xs font-bold">Lightning Fast</p>
+   262→          <p className="text-[10px] text-muted-foreground">Sub-second response times globally</p>
+   263→        </div>
+   264→        <div className="rounded-lg bg-primary/10 p-3 flex flex-col justify-center">
+   265→          <Shield className="h-4 w-4 text-primary mb-1" />
+   266→          <p className="text-[10px] font-semibold">Secure</p>
+   267→        </div>
+   268→        <div className="rounded-lg bg-primary/10 p-3 flex flex-col justify-center">
+   269→          <Globe className="h-4 w-4 text-primary mb-1" />
+   270→          <p className="text-[10px] font-semibold">Global</p>
+   271→        </div>
+   272→      </div>
+   273→    </div>
+   274→  );
+   275→}
+   276→
+   277→function FeatureCards() {
+   278→  return (
+   279→    <div className="p-6 min-h-[220px]">
+   280→      <div className="space-y-2">
+   281→        {[
+   282→          { title: "Performance", value: "99.9%", desc: "Uptime guarantee" },
+   283→          { title: "Speed", value: "<50ms", desc: "Average latency" },
+   284→          { title: "Scale", value: "10M+", desc: "Requests per second" },
+   285→        ].map((item) => (
+   286→          <div key={item.title} className="flex items-center justify-between p-2.5 rounded-lg border border-border/50">
+   287→            <div>
+   288→              <p className="text-[10px] text-muted-foreground">{item.title}</p>
+   289→              <p className="text-sm font-bold text-primary">{item.value}</p>
+   290→            </div>
+   291→            <span className="text-[10px] text-muted-foreground">{item.desc}</span>
+   292→          </div>
+   293→        ))}
+   294→      </div>
+   295→    </div>
+   296→  );
+   297→}
+   298→
+   299→// ===== CTA BLOCKS =====
+   300→function CTAGradient() {
+   301→  return (
+   302→    <div className="relative p-8 flex flex-col items-center justify-center text-center min-h-[220px] bg-gradient-to-br from-primary/20 via-primary/10 to-transparent">
+   303→      <h4 className="text-lg font-bold">Ready to Start?</h4>
+   304→      <p className="text-xs text-muted-foreground mt-2 max-w-[200px]">
+   305→        Join thousands building the future.
+   306→      </p>
+   307→      <Button size="sm" className="mt-4 h-8 text-xs">
+   308→        Get Started <ArrowRight className="ml-1 h-3 w-3" />
+   309→      </Button>
+   310→    </div>
+   311→  );
+   312→}
+   313→
+   314→function CTASimple() {
+   315→  return (
+   316→    <div className="p-8 flex flex-col items-center justify-center text-center min-h-[220px] border-t-2 border-primary/30">
+   317→      <h4 className="text-lg font-bold">Start Building Today</h4>
+   318→      <p className="text-xs text-muted-foreground mt-2">Free forever for small teams.</p>
+   319→      <div className="mt-4 flex gap-2">
+   320→        <Button size="sm" className="h-8 text-xs">Sign Up Free</Button>
+   321→        <Button size="sm" variant="outline" className="h-8 text-xs">View Docs</Button>
+   322→      </div>
+   323→    </div>
+   324→  );
+   325→}
+   326→
+   327→function CTANewsletter() {
+   328→  return (
+   329→    <div className="p-8 flex flex-col items-center justify-center text-center min-h-[220px]">
+   330→      <Mail className="h-6 w-6 text-primary mb-3" />
+   331→      <h4 className="text-sm font-bold">Stay in the Loop</h4>
+   332→      <p className="text-[10px] text-muted-foreground mt-1">Weekly insights, no spam.</p>
+   333→      <div className="mt-3 flex gap-2 w-full max-w-[200px]">
+   334→        <div className="flex-1 h-7 rounded-md border border-border/50 bg-background px-2 text-[10px] flex items-center text-muted-foreground">
+   335→          you@email.com
+   336→        </div>
+   337→        <Button size="sm" className="h-7 text-[10px] px-3">Go</Button>
+   338→      </div>
+   339→    </div>
+   340→  );
+   341→}
+   342→
+   343→function CTAWithSocial() {
+   344→  return (
+   345→    <div className="p-8 flex flex-col items-center justify-center text-center min-h-[220px]">
+   346→      <h4 className="text-sm font-bold">Connect With Us</h4>
+   347→      <p className="text-[10px] text-muted-foreground mt-1">Follow for updates & tips</p>
+   348→      <div className="mt-4 flex gap-3">
+   349→        {[Twitter, Github, Linkedin].map((Icon, i) => (
+   350→          <div
+   351→            key={i}
+   352→            className="p-2 rounded-lg border border-border/50 hover:border-primary/30 transition-colors cursor-pointer"
+   353→          >
+   354→            <Icon className="h-4 w-4 text-muted-foreground" />
+   355→          </div>
+   356→        ))}
+   357→      </div>
+   358→      <Button size="sm" variant="outline" className="mt-4 h-7 text-[10px]">
+   359→        Join Community
+   360→      </Button>
+   361→    </div>
+   362→  );
+   363→}
+   364→
+   365→// ===== PRICING BLOCKS =====
+   366→function PricingSimple() {
+   367→  return (
+   368→    <div className="p-6 min-h-[220px] flex flex-col items-center justify-center">
+   369→      <h4 className="text-xs text-muted-foreground uppercase tracking-wider mb-2">Pro Plan</h4>
+   370→      <div className="text-3xl font-bold">$29<span className="text-sm font-normal text-muted-foreground">/mo</span></div>
+   371→      <div className="mt-4 space-y-1.5">
+   372→        {["Unlimited projects", "Priority support", "API access"].map((f) => (
+   373→          <div key={f} className="flex items-center gap-1.5 text-[10px]">
+   374→            <Check className="h-3 w-3 text-primary" />
+   375→            <span>{f}</span>
+   376→          </div>
+   377→        ))}
+   378→      </div>
+   379→      <Button size="sm" className="mt-4 h-7 text-[10px]">Choose Plan</Button>
+   380→    </div>
+   381→  );
+   382→}
+   383→
+   384→function PricingToggle() {
+   385→  return (
+   386→    <div className="p-6 min-h-[220px]">
+   387→      <div className="flex items-center justify-center gap-2 mb-4">
+   388→        <span className="text-[10px] font-medium">Monthly</span>
+   389→        <div className="h-4 w-8 rounded-full bg-primary relative">
+   390→          <div className="absolute right-0.5 top-0.5 h-3 w-3 rounded-full bg-white" />
+   391→        </div>
+   392→        <span className="text-[10px] font-medium text-muted-foreground">Yearly</span>
+   393→        <Badge className="text-[8px] h-4 px-1.5 bg-primary/10 text-primary border-0">-20%</Badge>
+   394→      </div>
+   395→      <div className="grid grid-cols-3 gap-2">
+   396→        {[
+   397→          { name: "Free", price: "$0" },
+   398→          { name: "Pro", price: "$29" },
+   399→          { name: "Team", price: "$79" },
+   400→        ].map((plan) => (
+   401→          <div key={plan.name} className="text-center p-2 rounded-lg border border-border/50">
+   402→            <p className="text-[9px] text-muted-foreground">{plan.name}</p>
+   403→            <p className="text-sm font-bold">{plan.price}</p>
+   404→          </div>
+   405→        ))}
+   406→      </div>
+   407→    </div>
+   408→  );
+   409→}
+   410→
+   411→function PricingComparison() {
+   412→  return (
+   413→    <div className="p-6 min-h-[220px]">
+   414→      <div className="space-y-2">
+   415→        {[
+   416→          { feature: "Users", free: "1", pro: "10", ent: "∞" },
+   417→          { feature: "Storage", free: "1GB", pro: "100GB", ent: "∞" },
+   418→          { feature: "Support", free: "—", pro: "Priority", ent: "24/7" },
+   419→        ].map((row) => (
+   420→          <div key={row.feature} className="grid grid-cols-4 text-[10px]">
+   421→            <span className="font-medium">{row.feature}</span>
+   422→            <span className="text-center text-muted-foreground">{row.free}</span>
+   423→            <span className="text-center text-primary font-medium">{row.pro}</span>
+   424→            <span className="text-center text-muted-foreground">{row.ent}</span>
+   425→          </div>
+   426→        ))}
+   427→      </div>
+   428→    </div>
+   429→  );
+   430→}
+   431→
+   432→// ===== TESTIMONIAL BLOCKS =====
+   433→function TestimonialCards() {
+   434→  return (
+   435→    <div className="p-6 min-h-[220px]">
+   436→      <div className="grid grid-cols-2 gap-3 h-full">
+   437→        {[
+   438→          { name: "Alex R.", text: "Game changer for our team." },
+   439→          { name: "Sam L.", text: "Best investment we made." },
+   440→        ].map((t) => (
+   441→          <div key={t.name} className="p-3 rounded-lg border border-border/50 bg-background">
+   442→            <div className="flex gap-0.5 mb-2">
+   443→              {Array.from({ length: 5 }).map((_, i) => (
+   444→                <Star key={i} className="h-2.5 w-2.5 fill-yellow-500 text-yellow-500" />
+   445→              ))}
+   446→            </div>
+   447→            <p className="text-[10px] text-muted-foreground leading-relaxed">&ldquo;{t.text}&rdquo;</p>
+   448→            <p className="text-[10px] font-semibold mt-2">— {t.name}</p>
+   449→          </div>
+   450→        ))}
+   451→      </div>
+   452→    </div>
+   453→  );
+   454→}
+   455→
+   456→function TestimonialBanner() {
+   457→  return (
+   458→    <div className="p-6 min-h-[220px] flex flex-col items-center justify-center text-center">
+   459→      <div className="flex gap-0.5 mb-3">
+   460→        {Array.from({ length: 5 }).map((_, i) => (
+   461→          <Star key={i} className="h-4 w-4 fill-yellow-500 text-yellow-500" />
+   462→        ))}
+   463→      </div>
+   464→      <p className="text-xs leading-relaxed max-w-[220px] italic">
+   465→        &ldquo;This platform has completely transformed how we build products. 10/10 would recommend.&rdquo;
+   466→      </p>
+   467→      <div className="mt-3 flex items-center gap-2">
+   468→        <div className="h-7 w-7 rounded-full bg-primary/10 flex items-center justify-center">
+   469→          <span className="text-[9px] font-bold text-primary">MK</span>
+   470→        </div>
+   471→        <div className="text-left">
+   472→          <p className="text-[10px] font-semibold">Maria K.</p>
+   473→          <p className="text-[9px] text-muted-foreground">CEO, TechCo</p>
+   474→        </div>
+   475→      </div>
+   476→    </div>
+   477→  );
+   478→}
+   479→
+   480→function TestimonialGrid() {
+   481→  return (
+   482→    <div className="p-6 min-h-[220px]">
+   483→      <div className="space-y-2">
+   484→        {[
+   485→          { name: "JD", text: "Incredible DX. Shipped in half the time.", author: "Jake D." },
+   486→          { name: "LP", text: "Support team is world-class.", author: "Lisa P." },
+   487→          { name: "RW", text: "Replaced 3 tools with one.", author: "Ryan W." },
+   488→        ].map((t) => (
+   489→          <div key={t.name} className="flex items-start gap-2 p-2 rounded-lg hover:bg-muted/50 transition-colors">
+   490→            <div className="h-6 w-6 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+   491→              <span className="text-[8px] font-bold text-primary">{t.name}</span>
+   492→            </div>
+   493→            <div>
+   494→              <p className="text-[10px] leading-relaxed">{t.text}</p>
+   495→              <p className="text-[9px] text-muted-foreground mt-0.5">{t.author}</p>
+   496→            </div>
+   497→          </div>
+   498→        ))}
+   499→      </div>
+   500→    </div>
+   501→  );
+   502→}
+   503→
+   504→// ===== FOOTER BLOCKS =====
+   505→function FooterMinimal() {
+   506→  return (
+   507→    <div className="p-6 min-h-[220px]">
+   508→      <div className="flex items-center gap-2 mb-4">
+   509→        <div className="h-6 w-6 rounded-md bg-primary/10 flex items-center justify-center">
+   510→          <span className="text-[9px] font-bold text-primary">U</span>
+   511→        </div>
+   512→        <span className="text-xs font-bold">UnQWeb</span>
+   513→      </div>
+   514→      <div className="grid grid-cols-3 gap-4 mb-4">
+   515→        {["Product", "Company", "Legal"].map((col) => (
+   516→          <div key={col}>
+   517→            <p className="text-[9px] font-semibold mb-1.5">{col}</p>
+   518→            <div className="space-y-1">
+   519→              <div className="h-2 w-12 bg-muted rounded" />
+   520→              <div className="h-2 w-10 bg-muted rounded" />
+   521→              <div className="h-2 w-14 bg-muted rounded" />
+   522→            </div>
+   523→          </div>
+   524→        ))}
+   525→      </div>
+   526→      <div className="border-t border-border/50 pt-3 flex justify-between items-center">
+   527→        <span className="text-[9px] text-muted-foreground">&copy; 2025 UnQWeb</span>
+   528→        <div className="flex gap-2">
+   529→          {[Twitter, Github, Linkedin].map((Icon, i) => (
+   530→            <Icon key={i} className="h-3 w-3 text-muted-foreground" />
+   531→          ))}
+   532→        </div>
+   533→      </div>
+   534→    </div>
+   535→  );
+   536→}
+   537→
+   538→function FooterRich() {
+   539→  return (
+   540→    <div className="p-6 min-h-[220px]">
+   541→      <div className="flex items-center justify-between mb-4">
+   542→        <div className="flex items-center gap-2">
+   543→          <div className="h-6 w-6 rounded-md bg-primary flex items-center justify-center">
+   544→            <span className="text-[9px] font-bold text-white">U</span>
+   545→          </div>
+   546→          <span className="text-xs font-bold">UnQWeb</span>
+   547→        </div>
+   548→        <Button size="sm" variant="outline" className="h-6 text-[9px] px-2">
+   549→          Get Started
+   550→        </Button>
+   551→      </div>
+   552→      <div className="grid grid-cols-4 gap-3 mb-4">
+   553→        {["Features", "Pricing", "Docs", "Blog", "About", "Careers", "Privacy", "Terms"].map((link) => (
+   554→          <span key={link} className="text-[9px] text-muted-foreground">{link}</span>
+   555→        ))}
+   556→      </div>
+   557→      <div className="border-t border-border/50 pt-3 flex justify-between items-center">
+   558→        <span className="text-[9px] text-muted-foreground">Built with ❤️ by Sandeep Gaddam</span>
+   559→        <div className="flex gap-2">
+   560→          {[Twitter, Github, Linkedin].map((Icon, i) => (
+   561→            <div key={i} className="p-1 rounded border border-border/50">
+   562→              <Icon className="h-2.5 w-2.5 text-muted-foreground" />
+   563→            </div>
+   564→          ))}
+   565→        </div>
+   566→      </div>
+   567→    </div>
+   568→  );
+   569→}
+   570→
+   571→function FooterNewsletter() {
+   572→  return (
+   573→    <div className="p-6 min-h-[220px]">
+   574→      <div className="mb-4">
+   575→        <h4 className="text-xs font-bold mb-1">Subscribe to our newsletter</h4>
+   576→        <p className="text-[9px] text-muted-foreground">Get the latest updates delivered to your inbox.</p>
+   577→        <div className="mt-2 flex gap-1.5">
+   578→          <div className="flex-1 h-6 rounded border border-border/50 bg-background px-2 text-[9px] flex items-center text-muted-foreground">
+   579→            Email address
+   580→          </div>
+   581→          <Button size="sm" className="h-6 text-[9px] px-2">Subscribe</Button>
+   582→        </div>
+   583→      </div>
+   584→      <div className="grid grid-cols-3 gap-3 mb-3">
+   585→        {["Product", "Resources", "Company"].map((col) => (
+   586→          <div key={col}>
+   587→            <p className="text-[9px] font-semibold mb-1">{col}</p>
+   588→            <div className="space-y-0.5">
+   589→              <div className="h-1.5 w-10 bg-muted rounded" />
+   590→              <div className="h-1.5 w-12 bg-muted rounded" />
+   591→              <div className="h-1.5 w-8 bg-muted rounded" />
+   592→            </div>
+   593→          </div>
+   594→        ))}
+   595→      </div>
+   596→      <div className="border-t border-border/50 pt-2 text-center">
+   597→        <span className="text-[8px] text-muted-foreground">&copy; 2025 UnQWeb Template</span>
+   598→      </div>
+   599→    </div>
+   600→  );
+   601→}
+   602→
+   603→// ===== SECTION HEADER COMPONENT =====
+   604→function SectionHeader({
+   605→  label,
+   606→  title,
+   607→  highlight,
+   608→  description,
+   609→}: {
+   610→  label: string;
+   611→  title: string;
+   612→  highlight: string;
+   613→  description?: string;
+   614→}) {
+   615→  return (
+   616→    <motion.div
+   617→      variants={sectionVariants}
+   618→      initial="hidden"
+   619→      whileInView="visible"
+   620→      viewport={{ once: true, margin: "-80px" }}
+   621→      className="mb-10"
+   622→    >
+   623→      <Badge variant="outline" className="mb-3 border-primary/30 text-primary">
+   624→        {label}
+   625→      </Badge>
+   626→      <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">
+   627→        {title} <span className="text-primary">{highlight}</span>
+   628→      </h2>
+   629→      {description && (
+   630→        <p className="mt-2 text-sm text-muted-foreground max-w-xl">
+   631→          {description}
+   632→        </p>
+   633→      )}
+   634→    </motion.div>
+   635→  );
+   636→}
+   637→
+   638→export default function BlocksPage() {
+   639→  return (
+   640→    <div className="flex min-h-screen">
+   641→      <SidebarNav />
+   642→      <main className="flex-1 overflow-y-auto">
+   643→        {/* ===== PAGE HEADER ===== */}
+   644→        <section className="relative pt-16 pb-12 px-6 overflow-hidden">
+   645→          <Particles
+   646→            className="absolute inset-0"
+   647→            quantity={30}
+   648→            color="#c96442"
+   649→            size={0.4}
+   650→          />
+   651→          <div className="relative z-10 max-w-4xl mx-auto text-center">
+   652→            <motion.div
+   653→              initial={{ opacity: 0, y: -20 }}
+   654→              animate={{ opacity: 1, y: 0 }}
+   655→              transition={{ duration: 0.6 }}
+   656→            >
+   657→              <Badge
+   658→                variant="outline"
+   659→                className="mb-4 px-4 py-1.5 border-primary/40 text-primary bg-primary/5"
+   660→              >
+   661→                <Layers className="w-3.5 h-3.5 mr-1.5" />
+   662→                Block Gallery
+   663→              </Badge>
+   664→            </motion.div>
+   665→            <BlurFade delay={0.1} inView>
+   666→              <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight">
+   667→                Blocks & Sections{" "}
+   668→                <span className="text-primary">Gallery</span>
+   669→              </h1>
+   670→            </BlurFade>
+   671→            <BlurFade delay={0.2} inView>
+   672→              <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+   673→                A curated collection of beautifully designed, ready-to-use page
+   674→                sections. Copy, customize, and ship.
+   675→              </p>
+   676→            </BlurFade>
+   677→          </div>
+   678→        </section>
+   679→
+   680→        {/* ===== HERO BLOCKS ===== */}
+   681→        <section className="py-16 px-6">
+   682→          <div className="max-w-6xl mx-auto">
+   683→            <SectionHeader
+   684→              label="Heroes"
+   685→              title="Hero"
+   686→              highlight="Blocks"
+   687→              description="Stunning hero sections to make a powerful first impression."
+   688→            />
+   689→            <motion.div
+   690→              variants={staggerContainer}
+   691→              initial="hidden"
+   692→              whileInView="visible"
+   693→              viewport={{ once: true, margin: "-50px" }}
+   694→              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"
+   695→            >
+   696→              <BlockPreview
+   697→                title="Geometric Hero"
+   698→                description="Grid pattern background with bold centered typography and badge accent."
+   699→              >
+   700→                <HeroGeometric />
+   701→              </BlockPreview>
+   702→              <BlockPreview
+   703→                title="Minimal Hero"
+   704→                description="Clean, distraction-free layout with focus on the message and dual CTAs."
+   705→              >
+   706→                <HeroMinimal />
+   707→              </BlockPreview>
+   708→              <BlockPreview
+   709→                title="Split Hero"
+   710→                description="Two-column layout with content on the left and visual/illustration on the right."
+   711→              >
+   712→                <HeroSplit />
+   713→              </BlockPreview>
+   714→              <BlockPreview
+   715→                title="Centered Hero"
+   716→                description="Dot pattern background with icon trio, animated border beam, and CTA."
+   717→              >
+   718→                <HeroCentered />
+   719→              </BlockPreview>
+   720→            </motion.div>
+   721→          </div>
+   722→        </section>
+   723→
+   724→        {/* ===== FEATURE BLOCKS ===== */}
+   725→        <section className="py-16 px-6 bg-muted/15">
+   726→          <div className="max-w-6xl mx-auto">
+   727→            <SectionHeader
+   728→              label="Features"
+   729→              title="Feature"
+   730→              highlight="Blocks"
+   731→              description="Versatile feature section layouts to showcase your product capabilities."
+   732→            />
+   733→            <motion.div
+   734→              variants={staggerContainer}
+   735→              initial="hidden"
+   736→              whileInView="visible"
+   737→              viewport={{ once: true, margin: "-50px" }}
+   738→              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"
+   739→            >
+   740→              <BlockPreview
+   741→                title="Feature Grid"
+   742→                description="2x2 grid of feature cards with icons, titles, and descriptions."
+   743→              >
+   744→                <FeatureGrid />
+   745→              </BlockPreview>
+   746→              <BlockPreview
+   747→                title="Feature List"
+   748→                description="Vertical list layout with icons and clean alignment."
+   749→              >
+   750→                <FeatureList />
+   751→              </BlockPreview>
+   752→              <BlockPreview
+   753→                title="Bento Features"
+   754→                description="Asymmetric bento-style layout with varying card sizes for visual hierarchy."
+   755→              >
+   756→                <FeatureBento />
+   757→              </BlockPreview>
+   758→              <BlockPreview
+   759→                title="Feature Stats"
+   760→                description="Data-driven feature showcase with metrics and stat highlights."
+   761→              >
+   762→                <FeatureCards />
+   763→              </BlockPreview>
+   764→            </motion.div>
+   765→          </div>
+   766→        </section>
+   767→
+   768→        {/* ===== CTA BLOCKS ===== */}
+   769→        <section className="py-16 px-6">
+   770→          <div className="max-w-6xl mx-auto">
+   771→            <SectionHeader
+   772→              label="CTA"
+   773→              title="Call-to-Action"
+   774→              highlight="Blocks"
+   775→              description="High-conversion CTA sections to drive user engagement."
+   776→            />
+   777→            <motion.div
+   778→              variants={staggerContainer}
+   779→              initial="hidden"
+   780→              whileInView="visible"
+   781→              viewport={{ once: true, margin: "-50px" }}
+   782→              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"
+   783→            >
+   784→              <BlockPreview
+   785→                title="Gradient CTA"
+   786→                description="Soft gradient background with centered copy and prominent action button."
+   787→              >
+   788→                <CTAGradient />
+   789→              </BlockPreview>
+   790→              <BlockPreview
+   791→                title="Simple CTA"
+   792→                description="Border-accented layout with dual buttons for primary and secondary actions."
+   793→              >
+   794→                <CTASimple />
+   795→              </BlockPreview>
+   796→              <BlockPreview
+   797→                title="Newsletter CTA"
+   798→                description="Email capture form with icon, description, and inline input field."
+   799→              >
+   800→                <CTANewsletter />
+   801→              </BlockPreview>
+   802→              <BlockPreview
+   803→                title="Social CTA"
+   804→                description="Social links and community-focused CTA with follow buttons."
+   805→              >
+   806→                <CTAWithSocial />
+   807→              </BlockPreview>
+   808→            </motion.div>
+   809→          </div>
+   810→        </section>
+   811→
+   812→        {/* ===== PRICING BLOCKS ===== */}
+   813→        <section className="py-16 px-6 bg-muted/15">
+   814→          <div className="max-w-6xl mx-auto">
+   815→            <SectionHeader
+   816→              label="Pricing"
+   817→              title="Pricing"
+   818→              highlight="Blocks"
+   819→              description="Clear pricing layouts to help users choose the right plan."
+   820→            />
+   821→            <motion.div
+   822→              variants={staggerContainer}
+   823→              initial="hidden"
+   824→              whileInView="visible"
+   825→              viewport={{ once: true, margin: "-50px" }}
+   826→              className="grid grid-cols-1 sm:grid-cols-3 gap-5"
+   827→            >
+   828→              <BlockPreview
+   829→                title="Simple Pricing"
+   830→                description="Single tier focus with feature list and prominent price point."
+   831→              >
+   832→                <PricingSimple />
+   833→              </BlockPreview>
+   834→              <BlockPreview
+   835→                title="Toggle Pricing"
+   836→                description="Monthly/yearly toggle with multi-tier comparison grid."
+   837→              >
+   838→                <PricingToggle />
+   839→              </BlockPreview>
+   840→              <BlockPreview
+   841→                title="Comparison Table"
+   842→                description="Feature-by-feature comparison across plan tiers."
+   843→              >
+   844→                <PricingComparison />
+   845→              </BlockPreview>
+   846→            </motion.div>
+   847→          </div>
+   848→        </section>
+   849→
+   850→        {/* ===== TESTIMONIAL BLOCKS ===== */}
+   851→        <section className="py-16 px-6">
+   852→          <div className="max-w-6xl mx-auto">
+   853→            <SectionHeader
+   854→              label="Testimonials"
+   855→              title="Testimonial"
+   856→              highlight="Blocks"
+   857→              description="Social proof sections to build trust and credibility."
+   858→            />
+   859→            <motion.div
+   860→              variants={staggerContainer}
+   861→              initial="hidden"
+   862→              whileInView="visible"
+   863→              viewport={{ once: true, margin: "-50px" }}
+   864→              className="grid grid-cols-1 sm:grid-cols-3 gap-5"
+   865→            >
+   866→              <BlockPreview
+   867→                title="Card Testimonials"
+   868→                description="Side-by-side testimonial cards with star ratings and quotes."
+   869→              >
+   870→                <TestimonialCards />
+   871→              </BlockPreview>
+   872→              <BlockPreview
+   873→                title="Banner Testimonial"
+   874→                description="Featured quote layout with large text, avatar, and attribution."
+   875→              >
+   876→                <TestimonialBanner />
+   877→              </BlockPreview>
+   878→              <BlockPreview
+   879→                title="List Testimonials"
+   880→                description="Compact list-style testimonials with avatars and brief quotes."
+   881→              >
+   882→                <TestimonialGrid />
+   883→              </BlockPreview>
+   884→            </motion.div>
+   885→          </div>
+   886→        </section>
+   887→
+   888→        {/* ===== FOOTER BLOCKS ===== */}
+   889→        <section className="py-16 px-6 bg-muted/15">
+   890→          <div className="max-w-6xl mx-auto">
+   891→            <SectionHeader
+   892→              label="Footers"
+   893→              title="Footer"
+   894→              highlight="Blocks"
+   895→              description="Complete footer layouts with navigation, social links, and branding."
+   896→            />
+   897→            <motion.div
+   898→              variants={staggerContainer}
+   899→              initial="hidden"
+   900→              whileInView="visible"
+   901→              viewport={{ once: true, margin: "-50px" }}
+   902→              className="grid grid-cols-1 sm:grid-cols-3 gap-5"
+   903→            >
+   904→              <BlockPreview
+   905→                title="Minimal Footer"
+   906→                description="Clean footer with logo, link columns, social icons, and copyright."
+   907→              >
+   908→                <FooterMinimal />
+   909→              </BlockPreview>
+   910→              <BlockPreview
+   911→                title="Rich Footer"
+   912→                description="Full-featured footer with CTA button, link grid, and attribution."
+   913→              >
+   914→                <FooterRich />
+   915→              </BlockPreview>
+   916→              <BlockPreview
+   917→                title="Newsletter Footer"
+   918→                description="Footer with newsletter signup, navigation columns, and subscribe form."
+   919→              >
+   920→                <FooterNewsletter />
+   921→              </BlockPreview>
+   922→            </motion.div>
+   923→          </div>
+   924→        </section>
+   925→
+   926→        {/* ===== BOTTOM CTA ===== */}
+   927→        <section className="py-20 px-6 border-t border-border/50">
+   928→          <div className="max-w-2xl mx-auto text-center">
+   929→            <BlurFade inView>
+   930→              <div className="flex justify-center mb-4">
+   931→                <div className="p-3 rounded-xl bg-primary/10">
+   932→                  <Sparkles className="h-6 w-6 text-primary" />
+   933→                </div>
+   934→              </div>
+   935→              <h2 className="text-2xl font-bold">
+   936→                Need a custom block?
+   937→              </h2>
+   938→              <p className="mt-2 text-muted-foreground">
+   939→                All blocks are fully customizable. Mix, match, and make them
+   940→                yours.
+   941→              </p>
+   942→              <div className="mt-6 flex justify-center gap-3">
+   943→                <Button>
+   944→                  Browse Components
+   945→                  <ArrowRight className="ml-2 h-4 w-4" />
+   946→                </Button>
+   947→              </div>
+   948→            </BlurFade>
+   949→          </div>
+   950→        </section>
+   951→      </main>
+   952→    </div>
+   953→  );
+   954→}
+   955→

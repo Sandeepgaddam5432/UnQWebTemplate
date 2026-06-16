@@ -219,7 +219,7 @@ function StatsCards() {
   ];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
       {stats.map((stat) => {
         const Icon = stat.icon;
         const isUp = stat.trend === "up";
@@ -421,7 +421,7 @@ function CollectionView() {
             {categories.map((cat) => (
               <Button
                 key={cat}
-                size="sm"
+               
                 variant={filter === cat ? "default" : "outline"}
                 onClick={() => setFilter(cat)}
                 className="text-xs"
@@ -467,13 +467,13 @@ function CollectionView() {
 // ===== MAIN PAGE =====
 export default function DataDisplayPage() {
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-dvh">
       <SidebarNav />
-      <main className="flex-1 overflow-y-auto">
+      <main className="flex-1 overflow-y-auto overflow-x-hidden pt-16 md:pt-0">
         {/* Hero */}
         <div className="relative overflow-hidden border-b border-border/50">
           <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent" />
-          <div className="relative px-6 md:px-10 py-12 md:py-16 max-w-7xl mx-auto">
+          <div className="relative section-padding py-12 md:py-16 max-w-7xl mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
@@ -492,7 +492,7 @@ export default function DataDisplayPage() {
           </div>
         </div>
 
-        <div className="px-6 md:px-10 py-10 max-w-7xl mx-auto space-y-10">
+        <div className="section-padding py-10 max-w-7xl mx-auto space-y-10">
           {/* Stats Cards */}
           <motion.div
             variants={staggerContainer}
@@ -613,7 +613,7 @@ export default function DataDisplayPage() {
         </div>
 
         {/* Footer */}
-        <div className="px-6 md:px-10 py-8 border-t border-border/50 text-center">
+        <div className="section-padding py-8 border-t border-border/50 text-center">
           <motion.p
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}

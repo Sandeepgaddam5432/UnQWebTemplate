@@ -219,9 +219,9 @@ const companyNames = [
 
 export default function SaaSPage() {
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-dvh">
       <SidebarNav />
-      <main className="flex-1 overflow-y-auto">
+      <main className="flex-1 overflow-y-auto overflow-x-hidden pt-16 md:pt-0">
         {/* ===== HERO SECTION ===== */}
         <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
           <DotPattern
@@ -277,7 +277,7 @@ export default function SaaSPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.8, duration: 0.6 }}
-              className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed"
+              className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed text-pretty"
             >
               The all-in-one platform to launch, grow, and scale your SaaS
               product. From idea to IPO, we&apos;ve got you covered.
@@ -330,7 +330,7 @@ export default function SaaSPage() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-100px" }}
-              className="grid grid-cols-2 lg:grid-cols-4 gap-8"
+              className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-8"
             >
               {[
                 { value: 50000, suffix: "+", label: "Active Users", icon: Users },
@@ -349,7 +349,7 @@ export default function SaaSPage() {
                         <stat.icon className="h-6 w-6 text-primary" />
                       </div>
                     </div>
-                    <div className="text-3xl sm:text-4xl font-bold tracking-tight">
+                    <div className="text-3xl sm:text-4xl font-bold tracking-tight text-balance">
                       {stat.prefix}
                       <NumberTicker
                         value={stat.value}
@@ -379,11 +379,11 @@ export default function SaaSPage() {
               <Badge variant="outline" className="mb-4 border-primary/30 text-primary">
                 Features
               </Badge>
-              <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
+              <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-balance">
                 Everything you need to{" "}
                 <span className="text-primary">succeed</span>
               </h2>
-              <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">
+              <p className="mt-4 text-muted-foreground max-w-2xl mx-auto text-pretty">
                 A complete toolkit designed for modern SaaS teams. Build faster,
                 deploy smarter, and scale with confidence.
               </p>
@@ -394,7 +394,7 @@ export default function SaaSPage() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-50px" }}
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
+              className="grid grid-cols-1 sm:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4"
             >
               {features.map((feature) => (
                 <motion.div key={feature.title} variants={staggerItem}>
@@ -411,7 +411,7 @@ export default function SaaSPage() {
                           <feature.icon className="h-5 w-5 text-primary" />
                         </div>
                         <h3 className="font-semibold text-base mb-2">{feature.title}</h3>
-                        <p className="text-sm text-muted-foreground leading-relaxed">
+                        <p className="text-sm text-muted-foreground leading-relaxed text-pretty">
                           {feature.description}
                         </p>
                       </CardContent>
@@ -436,11 +436,11 @@ export default function SaaSPage() {
               <Badge variant="outline" className="mb-4 border-primary/30 text-primary">
                 Pricing
               </Badge>
-              <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
+              <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-balance">
                 Simple, transparent{" "}
                 <span className="text-primary">pricing</span>
               </h2>
-              <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">
+              <p className="mt-4 text-muted-foreground max-w-2xl mx-auto text-pretty">
                 No hidden fees. No surprises. Start free and scale as you grow.
               </p>
             </motion.div>
@@ -450,7 +450,7 @@ export default function SaaSPage() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-50px" }}
-              className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch"
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch"
             >
               {pricingTiers.map((tier) => (
                 <motion.div key={tier.name} variants={staggerItem}>
@@ -530,11 +530,11 @@ export default function SaaSPage() {
               <Badge variant="outline" className="mb-4 border-primary/30 text-primary">
                 Testimonials
               </Badge>
-              <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
+              <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-balance">
                 Loved by{" "}
                 <span className="text-primary">thousands</span>
               </h2>
-              <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">
+              <p className="mt-4 text-muted-foreground max-w-2xl mx-auto text-pretty">
                 Don&apos;t just take our word for it. Hear from the teams that
                 trust us.
               </p>
@@ -553,7 +553,7 @@ export default function SaaSPage() {
                           {t.avatar}
                         </AvatarFallback>
                       </Avatar>
-                      <div className="flex-1 min-w-0">
+                      <div className="flex-1 min-w-0 overflow-x-hidden pt-16 md:pt-0">
                         <div className="flex items-center gap-2 mb-1">
                           <span className="font-semibold text-sm">
                             {t.name}
@@ -570,7 +570,7 @@ export default function SaaSPage() {
                             />
                           ))}
                         </div>
-                        <p className="text-sm text-muted-foreground leading-relaxed">
+                        <p className="text-sm text-muted-foreground leading-relaxed text-pretty">
                           {t.content}
                         </p>
                       </div>
@@ -603,11 +603,11 @@ export default function SaaSPage() {
               whileInView="visible"
               viewport={{ once: true, margin: "-100px" }}
             >
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-balance">
                 Ready to build the{" "}
                 <span className="text-primary">future</span>?
               </h2>
-              <p className="mt-4 text-lg text-muted-foreground max-w-xl mx-auto">
+              <p className="mt-4 text-lg text-muted-foreground max-w-xl mx-auto text-pretty">
                 Join thousands of teams already shipping faster with our
                 platform. Start your free trial today.
               </p>

@@ -64,12 +64,12 @@ export default function ComponentsShowcase() {
   const [tabValue, setTabValue] = useState("preview");
 
   return (
-    <div className="flex min-h-screen bg-background">
+    <div className="flex min-h-dvh bg-background">
       <SidebarNav />
-      <main className="flex-1 overflow-y-auto">
+      <main className="flex-1 overflow-y-auto overflow-x-hidden pt-16 md:pt-0">
         {/* Page Header */}
         <div className="border-b border-border/50 bg-background/80 backdrop-blur-xl sticky top-0 z-20">
-          <div className="px-6 md:px-10 py-8">
+          <div className="section-padding py-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -92,7 +92,7 @@ export default function ComponentsShowcase() {
           </div>
         </div>
 
-        <div className="px-6 md:px-10 py-8 space-y-10">
+        <div className="section-padding py-8 space-y-10">
           {/* ===== BUTTONS SECTION ===== */}
           <motion.section
             initial="hidden"
@@ -103,7 +103,7 @@ export default function ComponentsShowcase() {
             <Card className="overflow-hidden border-border/50">
               <CardHeader>
                 <div className="flex items-center gap-2">
-                  <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <div className="h-8 touch-target w-8 rounded-lg bg-primary/10 flex items-center justify-center">
                     <MousePointerClick className="h-4 w-4 text-primary" />
                   </div>
                   <div>
@@ -224,7 +224,7 @@ export default function ComponentsShowcase() {
             <Card className="overflow-hidden border-border/50">
               <CardHeader>
                 <div className="flex items-center gap-2">
-                  <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <div className="h-8 touch-target w-8 rounded-lg bg-primary/10 flex items-center justify-center">
                     <Bookmark className="h-4 w-4 text-primary" />
                   </div>
                   <div>
@@ -285,7 +285,7 @@ export default function ComponentsShowcase() {
             <Card className="overflow-hidden border-border/50">
               <CardHeader>
                 <div className="flex items-center gap-2">
-                  <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <div className="h-8 touch-target w-8 rounded-lg bg-primary/10 flex items-center justify-center">
                     <Layers className="h-4 w-4 text-primary" />
                   </div>
                   <div>
@@ -297,7 +297,7 @@ export default function ComponentsShowcase() {
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {/* Simple Card */}
                   <motion.div
                     whileHover={{ y: -4, transition: { duration: 0.2 } }}
@@ -361,7 +361,7 @@ export default function ComponentsShowcase() {
             <Card className="overflow-hidden border-border/50">
               <CardHeader>
                 <div className="flex items-center gap-2">
-                  <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <div className="h-8 touch-target w-8 rounded-lg bg-primary/10 flex items-center justify-center">
                     <Heart className="h-4 w-4 text-primary" />
                   </div>
                   <div>
@@ -379,7 +379,7 @@ export default function ComponentsShowcase() {
                     <p className="text-sm font-medium text-muted-foreground mb-4">Sizes</p>
                     <div className="flex items-end gap-4">
                       <div className="text-center">
-                        <Avatar className="h-8 w-8">
+                        <Avatar className="h-8 touch-target w-8">
                           <AvatarFallback className="bg-primary/10 text-primary text-xs">SM</AvatarFallback>
                         </Avatar>
                         <span className="text-xs text-muted-foreground mt-1">SM</span>
@@ -443,7 +443,7 @@ export default function ComponentsShowcase() {
             <Card className="overflow-hidden border-border/50">
               <CardHeader>
                 <div className="flex items-center gap-2">
-                  <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <div className="h-8 touch-target w-8 rounded-lg bg-primary/10 flex items-center justify-center">
                     <ChevronRight className="h-4 w-4 text-primary" />
                   </div>
                   <div>
@@ -506,7 +506,7 @@ export default function ComponentsShowcase() {
             <Card className="overflow-hidden border-border/50">
               <CardHeader>
                 <div className="flex items-center gap-2">
-                  <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <div className="h-8 touch-target w-8 rounded-lg bg-primary/10 flex items-center justify-center">
                     <Share2 className="h-4 w-4 text-primary" />
                   </div>
                   <div>
@@ -560,7 +560,7 @@ export default function ComponentsShowcase() {
             <Card className="overflow-hidden border-border/50">
               <CardHeader>
                 <div className="flex items-center gap-2">
-                  <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <div className="h-8 touch-target w-8 rounded-lg bg-primary/10 flex items-center justify-center">
                     <Layers className="h-4 w-4 text-primary" />
                   </div>
                   <div>
@@ -673,7 +673,7 @@ export default function ComponentsShowcase() {
             <Card className="overflow-hidden border-border/50 bg-gradient-to-br from-primary/5 via-transparent to-primary/5">
               <CardHeader>
                 <div className="flex items-center gap-2">
-                  <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <div className="h-8 touch-target w-8 rounded-lg bg-primary/10 flex items-center justify-center">
                     <Sparkles className="h-4 w-4 text-primary" />
                   </div>
                   <div>

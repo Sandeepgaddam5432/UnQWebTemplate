@@ -168,7 +168,7 @@ function MeshGradient() {
 // Glow Effects
 function GlowEffects() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       {[
         {
           title: "Neon Glow",
@@ -392,7 +392,7 @@ function GradientBorderCard() {
           animate={{ rotate: [0, 360] }}
           transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
         >
-          <Layers className="h-8 w-8 text-primary mb-3" />
+          <Layers className="h-8 touch-target w-8 text-primary mb-3" />
         </motion.div>
         <h4 className="text-xl font-bold text-white mb-2">Animated Gradient Border</h4>
         <p className="text-white/40 text-sm">CSS gradient animation on border</p>
@@ -424,14 +424,14 @@ function AnimatedBeamDemo() {
           ref={fromRef}
           className="relative z-10 flex flex-col items-center justify-center w-28 h-28 rounded-2xl border border-white/10 bg-white/5"
         >
-          <MonitorSmartphone className="h-8 w-8 text-primary mb-2" />
+          <MonitorSmartphone className="h-8 touch-target w-8 text-primary mb-2" />
           <span className="text-xs text-white/60 font-medium">Frontend</span>
         </div>
         <div
           ref={toRef}
           className="relative z-10 flex flex-col items-center justify-center w-28 h-28 rounded-2xl border border-white/10 bg-white/5"
         >
-          <Server className="h-8 w-8 text-purple-400 mb-2" />
+          <Server className="h-8 touch-target w-8 text-purple-400 mb-2" />
           <span className="text-xs text-white/60 font-medium">Backend</span>
         </div>
       </div>
@@ -464,11 +464,11 @@ function AnimatedBeamDemo() {
 
 export default function EffectsPage() {
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-dvh">
       <SidebarNav />
-      <main className="flex-1 overflow-y-auto">
+      <main className="flex-1 overflow-y-auto overflow-x-hidden pt-16 md:pt-0">
         {/* Hero Section */}
-        <div className="relative overflow-hidden bg-black py-20 px-6 md:px-12">
+        <div className="relative overflow-hidden bg-black py-20 section-padding">
           <motion.div
             className="absolute inset-0"
             style={{
@@ -486,7 +486,7 @@ export default function EffectsPage() {
               <Eye className="h-3 w-3 mr-1" />
               Visual Showcase
             </Badge>
-            <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4">
               Visual <span className="text-primary">Effects</span>
             </h1>
             <p className="text-white/50 text-lg max-w-2xl mx-auto">
@@ -496,7 +496,7 @@ export default function EffectsPage() {
           </motion.div>
         </div>
 
-        <div className="p-6 md:p-12 space-y-16 bg-[#0d0d0d]">
+        <div className="section-padding py-6 sm:py-12 space-y-16 bg-[#0d0d0d]">
           {/* Particle Text Effect */}
           <motion.section
             variants={sectionVariants}
@@ -595,7 +595,7 @@ export default function EffectsPage() {
                 SVG dot matrix patterns and animated gradient borders
               </p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <DotMatrix />
               <GradientBorderCard />
             </div>
@@ -655,7 +655,7 @@ export default function EffectsPage() {
                 Animated beam of light traveling along the border of a card
               </p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div className="relative rounded-2xl border border-white/10 bg-black/80 p-8 overflow-hidden">
                 <BorderBeam
                   size={80}
@@ -665,7 +665,7 @@ export default function EffectsPage() {
                   borderWidth={2}
                 />
                 <div className="flex flex-col items-center justify-center text-center min-h-[160px]">
-                  <Zap className="h-8 w-8 text-primary mb-3" />
+                  <Zap className="h-8 touch-target w-8 text-primary mb-3" />
                   <h4 className="text-lg font-bold text-white mb-1">Terracotta Beam</h4>
                   <p className="text-white/40 text-xs">Animated border beam in primary colors</p>
                 </div>
@@ -688,7 +688,7 @@ export default function EffectsPage() {
                   reverse
                 />
                 <div className="flex flex-col items-center justify-center text-center min-h-[160px]">
-                  <Layers className="h-8 w-8 text-purple-400 mb-3" />
+                  <Layers className="h-8 touch-target w-8 text-purple-400 mb-3" />
                   <h4 className="text-lg font-bold text-white mb-1">Dual Beam</h4>
                   <p className="text-white/40 text-xs">Two beams traveling in opposite directions</p>
                 </div>
@@ -764,7 +764,7 @@ export default function EffectsPage() {
                 Meteor shower effect on a dark card with subtle trails
               </p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div className="relative rounded-2xl border border-white/10 bg-black p-8 overflow-hidden min-h-[220px]">
                 <Meteors number={15} />
                 <div className="relative z-10 flex flex-col items-center justify-center text-center min-h-[160px]">

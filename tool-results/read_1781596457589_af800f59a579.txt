@@ -1,0 +1,917 @@
+     1→"use client";
+     2→
+     3→import React, { useState, useEffect, useCallback } from "react";
+     4→import { motion, AnimatePresence } from "framer-motion";
+     5→import { SidebarNav } from "@/components/navigation/sidebar";
+     6→import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+     7→import { Button } from "@/components/ui/button";
+     8→import { Badge } from "@/components/ui/badge";
+     9→import { Progress } from "@/components/ui/progress";
+    10→import { Skeleton } from "@/components/ui/skeleton";
+    11→import { Separator } from "@/components/ui/separator";
+    12→import { CubeLoader } from "@/components/ui/cube-loader";
+    13→import {
+    14→  Loader2,
+    15→  Sparkles,
+    16→  RefreshCw,
+    17→  RotateCcw,
+    18→  Loader,
+    19→  Atom,
+    20→  CircleDot,
+    21→  Zap,
+    22→  Monitor,
+    23→  Layout,
+    24→  List,
+    25→  Table,
+    26→  ImageIcon,
+    27→  CheckCircle2,
+    28→} from "lucide-react";
+    29→
+    30→// ===== ANIMATION VARIANTS =====
+    31→const sectionVariants = {
+    32→  hidden: { opacity: 0, y: 40 },
+    33→  visible: {
+    34→    opacity: 1,
+    35→    y: 0,
+    36→    transition: { duration: 0.7, ease: [0.25, 0.4, 0.25, 1] },
+    37→  },
+    38→};
+    39→
+    40→const staggerContainer = {
+    41→  hidden: { opacity: 0 },
+    42→  visible: {
+    43→    opacity: 1,
+    44→    transition: { staggerChildren: 0.08, delayChildren: 0.1 },
+    45→  },
+    46→};
+    47→
+    48→const staggerItem = {
+    49→  hidden: { opacity: 0, y: 20 },
+    50→  visible: {
+    51→    opacity: 1,
+    52→    y: 0,
+    53→    transition: { duration: 0.5, ease: "easeOut" },
+    54→  },
+    55→};
+    56→
+    57→// ===== CUSTOM SPINNING LOADERS =====
+    58→function RingSpinner() {
+    59→  return (
+    60→    <div className="relative w-12 h-12">
+    61→      <div className="absolute inset-0 rounded-full border-4 border-muted" />
+    62→      <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-primary animate-spin" />
+    63→    </div>
+    64→  );
+    65→}
+    66→
+    67→function DotsSpinner() {
+    68→  return (
+    69→    <div className="flex items-center gap-1.5">
+    70→      {[0, 1, 2].map((i) => (
+    71→        <motion.div
+    72→          key={i}
+    73→          className="w-3 h-3 rounded-full bg-primary"
+    74→          animate={{ y: [0, -12, 0] }}
+    75→          transition={{
+    76→            duration: 0.6,
+    77→            repeat: Infinity,
+    78→            delay: i * 0.15,
+    79→            ease: "easeInOut",
+    80→          }}
+    81→        />
+    82→      ))}
+    83→    </div>
+    84→  );
+    85→}
+    86→
+    87→function PulseSpinner() {
+    88→  return (
+    89→    <div className="relative w-12 h-12">
+    90→      <motion.div
+    91→        className="absolute inset-0 rounded-full bg-primary/30"
+    92→        animate={{ scale: [1, 1.5, 1], opacity: [0.5, 0, 0.5] }}
+    93→        transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+    94→      />
+    95→      <div className="absolute inset-2 rounded-full bg-primary animate-pulse" />
+    96→    </div>
+    97→  );
+    98→}
+    99→
+   100→function DoubleRingSpinner() {
+   101→  return (
+   102→    <div className="relative w-12 h-12">
+   103→      <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-primary border-r-primary/30 animate-spin" />
+   104→      <div className="absolute inset-2 rounded-full border-4 border-transparent border-b-primary border-l-primary/30 animate-spin" style={{ animationDirection: "reverse", animationDuration: "0.8s" }} />
+   105→    </div>
+   106→  );
+   107→}
+   108→
+   109→function WaveSpinner() {
+   110→  return (
+   111→    <div className="flex items-end gap-1">
+   112→      {[0, 1, 2, 3, 4].map((i) => (
+   113→        <motion.div
+   114→          key={i}
+   115→          className="w-2 bg-primary rounded-full"
+   116→          animate={{ height: [12, 32, 12] }}
+   117→          transition={{
+   118→            duration: 0.8,
+   119→            repeat: Infinity,
+   120→            delay: i * 0.1,
+   121→            ease: "easeInOut",
+   122→          }}
+   123→        />
+   124→      ))}
+   125→    </div>
+   126→  );
+   127→}
+   128→
+   129→function OrbitSpinner() {
+   130→  return (
+   131→    <div className="relative w-14 h-14">
+   132→      <motion.div
+   133→        className="absolute w-3 h-3 rounded-full bg-primary"
+   134→        animate={{ rotate: 360 }}
+   135→        transition={{ duration: 1.2, repeat: Infinity, ease: "linear" }}
+   136→        style={{ transformOrigin: "28px 28px" }}
+   137→      />
+   138→      <motion.div
+   139→        className="absolute w-2 h-2 rounded-full bg-primary/50"
+   140→        animate={{ rotate: -360 }}
+   141→        transition={{ duration: 1.8, repeat: Infinity, ease: "linear" }}
+   142→        style={{ transformOrigin: "28px 28px", top: 8, left: 8 }}
+   143→      />
+   144→      <div className="absolute inset-3 rounded-full border-2 border-dashed border-border" />
+   145→    </div>
+   146→  );
+   147→}
+   148→
+   149→// ===== CIRCULAR PROGRESS =====
+   150→function CircularProgress({ value, size = 80, strokeWidth = 6 }: { value: number; size?: number; strokeWidth?: number }) {
+   151→  const radius = (size - strokeWidth) / 2;
+   152→  const circumference = 2 * Math.PI * radius;
+   153→  const offset = circumference - (value / 100) * circumference;
+   154→
+   155→  return (
+   156→    <div className="relative" style={{ width: size, height: size }}>
+   157→      <svg width={size} height={size} className="-rotate-90">
+   158→        <circle
+   159→          cx={size / 2}
+   160→          cy={size / 2}
+   161→          r={radius}
+   162→          stroke="currentColor"
+   163→          strokeWidth={strokeWidth}
+   164→          fill="none"
+   165→          className="text-muted"
+   166→        />
+   167→        <circle
+   168→          cx={size / 2}
+   169→          cy={size / 2}
+   170→          r={radius}
+   171→          stroke="currentColor"
+   172→          strokeWidth={strokeWidth}
+   173→          fill="none"
+   174→          strokeLinecap="round"
+   175→          className="text-primary"
+   176→          strokeDasharray={circumference}
+   177→          strokeDashoffset={offset}
+   178→          style={{ transition: "stroke-dashoffset 1s ease-in-out" }}
+   179→        />
+   180→      </svg>
+   181→      <div className="absolute inset-0 flex items-center justify-center">
+   182→        <span className="text-sm font-bold">{value}%</span>
+   183→      </div>
+   184→    </div>
+   185→  );
+   186→}
+   187→
+   188→// ===== CUBE LOADER SECTION =====
+   189→function CubeLoaderSection() {
+   190→  const [key, setKey] = useState(0);
+   191→  const reload = () => setKey((k) => k + 1);
+   192→
+   193→  return (
+   194→    <motion.div variants={staggerItem}>
+   195→      <Card className="border-border/50 bg-card/50 backdrop-blur-sm">
+   196→        <CardHeader>
+   197→          <div className="flex items-center justify-between">
+   198→            <div className="flex items-center gap-3">
+   199→              <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-primary/10 border border-primary/20">
+   200→                <Atom className="h-5 w-5 text-primary" />
+   201→              </div>
+   202→              <div>
+   203→                <CardTitle className="text-lg">Cube Loader</CardTitle>
+   204→                <CardDescription>3D rotating cube animation</CardDescription>
+   205→              </div>
+   206→            </div>
+   207→            <Button size="sm" variant="outline" onClick={reload} className="gap-1.5">
+   208→              <RefreshCw className="h-3.5 w-3.5" /> Reload
+   209→            </Button>
+   210→          </div>
+   211→        </CardHeader>
+   212→        <CardContent>
+   213→          <div key={key} className="flex items-center justify-center py-8 bg-black/5 dark:bg-black/20 rounded-xl">
+   214→            <CubeLoader />
+   215→          </div>
+   216→        </CardContent>
+   217→      </Card>
+   218→    </motion.div>
+   219→  );
+   220→}
+   221→
+   222→// ===== SPINNING LOADERS SECTION =====
+   223→function SpinnersSection() {
+   224→  const [key, setKey] = useState(0);
+   225→  const reload = () => setKey((k) => k + 1);
+   226→
+   227→  const spinners = [
+   228→    { name: "Ring Spinner", component: <RingSpinner /> },
+   229→    { name: "Dots Bounce", component: <DotsSpinner /> },
+   230→    { name: "Pulse", component: <PulseSpinner /> },
+   231→    { name: "Double Ring", component: <DoubleRingSpinner /> },
+   232→    { name: "Wave", component: <WaveSpinner /> },
+   233→    { name: "Orbit", component: <OrbitSpinner /> },
+   234→    { name: "Framer Spin", component: <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: "linear" }}><Loader2 className="h-12 w-12 text-primary" /></motion.div> },
+   235→    { name: "Scale Pulse", component: <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 1, repeat: Infinity, ease: "easeInOut" }} className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center"><CircleDot className="h-6 w-6 text-primary" /></motion.div> },
+   236→  ];
+   237→
+   238→  return (
+   239→    <motion.div variants={staggerItem}>
+   240→      <Card className="border-border/50 bg-card/50 backdrop-blur-sm">
+   241→        <CardHeader>
+   242→          <div className="flex items-center justify-between">
+   243→            <div className="flex items-center gap-3">
+   244→              <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-primary/10 border border-primary/20">
+   245→                <Loader className="h-5 w-5 text-primary" />
+   246→              </div>
+   247→              <div>
+   248→                <CardTitle className="text-lg">Custom Spinners</CardTitle>
+   249→                <CardDescription>Different spinner styles using CSS and Framer Motion</CardDescription>
+   250→              </div>
+   251→            </div>
+   252→            <Button size="sm" variant="outline" onClick={reload} className="gap-1.5">
+   253→              <RefreshCw className="h-3.5 w-3.5" /> Reload
+   254→            </Button>
+   255→          </div>
+   256→        </CardHeader>
+   257→        <CardContent>
+   258→          <div key={key} className="grid grid-cols-2 sm:grid-cols-4 gap-6">
+   259→            {spinners.map((spinner) => (
+   260→              <div key={spinner.name} className="flex flex-col items-center gap-3 p-4 rounded-xl bg-muted/20 hover:bg-muted/40 transition-colors">
+   261→                {spinner.component}
+   262→                <p className="text-xs font-medium text-muted-foreground">{spinner.name}</p>
+   263→              </div>
+   264→            ))}
+   265→          </div>
+   266→        </CardContent>
+   267→      </Card>
+   268→    </motion.div>
+   269→  );
+   270→}
+   271→
+   272→// ===== SKELETON LOADING SECTION =====
+   273→function SkeletonLoadingSection() {
+   274→  const [key, setKey] = useState(0);
+   275→  const reload = () => setKey((k) => k + 1);
+   276→
+   277→  return (
+   278→    <motion.div variants={staggerItem}>
+   279→      <Card className="border-border/50 bg-card/50 backdrop-blur-sm">
+   280→        <CardHeader>
+   281→          <div className="flex items-center justify-between">
+   282→            <div className="flex items-center gap-3">
+   283→              <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-primary/10 border border-primary/20">
+   284→                <Layout className="h-5 w-5 text-primary" />
+   285→              </div>
+   286→              <div>
+   287→                <CardTitle className="text-lg">Skeleton Loading States</CardTitle>
+   288→                <CardDescription>Full page, card, list, and table skeletons</CardDescription>
+   289→              </div>
+   290→            </div>
+   291→            <Button size="sm" variant="outline" onClick={reload} className="gap-1.5">
+   292→              <RefreshCw className="h-3.5 w-3.5" /> Reload
+   293→            </Button>
+   294→          </div>
+   295→        </CardHeader>
+   296→        <CardContent key={key}>
+   297→          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+   298→            {/* Full Page Skeleton */}
+   299→            <div className="space-y-2">
+   300→              <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+   301→                <Monitor className="h-3.5 w-3.5" /> Full Page
+   302→              </div>
+   303→              <div className="rounded-xl border border-border/50 overflow-hidden">
+   304→                <div className="p-4 border-b border-border/50 bg-muted/20 flex gap-3">
+   305→                  <Skeleton className="h-8 w-8 rounded-lg" />
+   306→                  <Skeleton className="h-8 flex-1" />
+   307→                  <Skeleton className="h-8 w-20" />
+   308→                </div>
+   309→                <div className="p-6 space-y-4">
+   310→                  <Skeleton className="h-8 w-1/3" />
+   311→                  <Skeleton className="h-4 w-full" />
+   312→                  <Skeleton className="h-4 w-5/6" />
+   313→                  <div className="grid grid-cols-3 gap-4 pt-4">
+   314→                    <Skeleton className="h-24 rounded-lg" />
+   315→                    <Skeleton className="h-24 rounded-lg" />
+   316→                    <Skeleton className="h-24 rounded-lg" />
+   317→                  </div>
+   318→                  <Skeleton className="h-40 w-full rounded-lg" />
+   319→                </div>
+   320→              </div>
+   321→            </div>
+   322→
+   323→            {/* Card Skeleton */}
+   324→            <div className="space-y-2">
+   325→              <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+   326→                <ImageIcon className="h-3.5 w-3.5" /> Card
+   327→              </div>
+   328→              <div className="rounded-xl border border-border/50 p-5 space-y-4">
+   329→                <Skeleton className="h-36 w-full rounded-lg" />
+   330→                <div className="space-y-2">
+   331→                  <Skeleton className="h-5 w-3/4" />
+   332→                  <Skeleton className="h-4 w-full" />
+   333→                  <Skeleton className="h-4 w-5/6" />
+   334→                </div>
+   335→                <div className="flex items-center justify-between">
+   336→                  <div className="flex items-center gap-2">
+   337→                    <Skeleton className="h-8 w-8 rounded-full" />
+   338→                    <Skeleton className="h-3 w-24" />
+   339→                  </div>
+   340→                  <Skeleton className="h-8 w-20 rounded-md" />
+   341→                </div>
+   342→              </div>
+   343→            </div>
+   344→
+   345→            {/* List Skeleton */}
+   346→            <div className="space-y-2">
+   347→              <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+   348→                <List className="h-3.5 w-3.5" /> List
+   349→              </div>
+   350→              <div className="rounded-xl border border-border/50 divide-y divide-border/50">
+   351→                {Array.from({ length: 6 }).map((_, i) => (
+   352→                  <div key={i} className="flex items-center gap-3 p-3">
+   353→                    <Skeleton className="h-10 w-10 rounded-full flex-shrink-0" />
+   354→                    <div className="flex-1 space-y-1.5">
+   355→                      <Skeleton className="h-3.5 w-2/3" />
+   356→                      <Skeleton className="h-3 w-1/2" />
+   357→                    </div>
+   358→                    <Skeleton className="h-6 w-16 rounded-md" />
+   359→                  </div>
+   360→                ))}
+   361→              </div>
+   362→            </div>
+   363→
+   364→            {/* Table Skeleton */}
+   365→            <div className="space-y-2">
+   366→              <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+   367→                <Table className="h-3.5 w-3.5" /> Table
+   368→              </div>
+   369→              <div className="rounded-xl border border-border/50 overflow-hidden">
+   370→                <div className="bg-muted/30 p-3 flex gap-4">
+   371→                  <Skeleton className="h-4 w-1/5" />
+   372→                  <Skeleton className="h-4 w-1/5" />
+   373→                  <Skeleton className="h-4 w-1/5" />
+   374→                  <Skeleton className="h-4 w-1/5" />
+   375→                  <Skeleton className="h-4 w-1/5" />
+   376→                </div>
+   377→                {Array.from({ length: 5 }).map((_, i) => (
+   378→                  <div key={i} className="p-3 flex gap-4 border-t border-border/50">
+   379→                    <Skeleton className="h-4 w-1/5" />
+   380→                    <Skeleton className="h-4 w-1/5" />
+   381→                    <Skeleton className="h-4 w-1/5" />
+   382→                    <Skeleton className="h-4 w-1/5" />
+   383→                    <Skeleton className="h-4 w-1/5" />
+   384→                  </div>
+   385→                ))}
+   386→              </div>
+   387→            </div>
+   388→          </div>
+   389→        </CardContent>
+   390→      </Card>
+   391→    </motion.div>
+   392→  );
+   393→}
+   394→
+   395→// ===== PROGRESS INDICATORS SECTION =====
+   396→function ProgressIndicatorsSection() {
+   397→  const [key, setKey] = useState(0);
+   398→  const [linearProgress, setLinearProgress] = useState(0);
+   399→
+   400→  const reload = () => {
+   401→    setKey((k) => k + 1);
+   402→    setLinearProgress(0);
+   403→  };
+   404→
+   405→  useEffect(() => {
+   406→    const timer = setInterval(() => {
+   407→      setLinearProgress((prev) => {
+   408→        if (prev >= 100) {
+   409→          clearInterval(timer);
+   410→          return 100;
+   411→        }
+   412→        return prev + 2;
+   413→      });
+   414→    }, 60);
+   415→    return () => clearInterval(timer);
+   416→  }, [key]);
+   417→
+   418→  return (
+   419→    <motion.div variants={staggerItem}>
+   420→      <Card className="border-border/50 bg-card/50 backdrop-blur-sm">
+   421→        <CardHeader>
+   422→          <div className="flex items-center justify-between">
+   423→            <div className="flex items-center gap-3">
+   424→              <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-primary/10 border border-primary/20">
+   425→                <Zap className="h-5 w-5 text-primary" />
+   426→              </div>
+   427→              <div>
+   428→                <CardTitle className="text-lg">Progress Indicators</CardTitle>
+   429→                <CardDescription>Linear, circular, and animated progress</CardDescription>
+   430→              </div>
+   431→            </div>
+   432→            <Button size="sm" variant="outline" onClick={reload} className="gap-1.5">
+   433→              <RefreshCw className="h-3.5 w-3.5" /> Reload
+   434→            </Button>
+   435→          </div>
+   436→        </CardHeader>
+   437→        <CardContent key={key} className="space-y-8">
+   438→          {/* Linear Progress */}
+   439→          <div className="space-y-4">
+   440→            <h4 className="text-sm font-semibold">Linear Progress</h4>
+   441→            <div className="space-y-3">
+   442→              <div className="space-y-1.5">
+   443→                <div className="flex justify-between text-sm">
+   444→                  <span className="text-muted-foreground">Auto-progress</span>
+   445→                  <span className="font-mono text-xs">{linearProgress}%</span>
+   446→                </div>
+   447→                <Progress value={linearProgress} className="h-3" />
+   448→              </div>
+   449→              <div className="space-y-1.5">
+   450→                <span className="text-sm text-muted-foreground">Determinant</span>
+   451→                <Progress value={75} className="h-2" />
+   452→              </div>
+   453→              <div className="space-y-1.5">
+   454→                <span className="text-sm text-muted-foreground">Low</span>
+   455→                <Progress value={25} className="h-2" />
+   456→              </div>
+   457→              <div className="space-y-1.5">
+   458→                <span className="text-sm text-muted-foreground">Indeterminate</span>
+   459→                <div className="h-2 w-full rounded-full bg-muted overflow-hidden">
+   460→                  <motion.div
+   461→                    className="h-full bg-primary rounded-full"
+   462→                    initial={{ width: "0%", marginLeft: "0%" }}
+   463→                    animate={{ width: "40%", marginLeft: ["0%", "60%", "0%"] }}
+   464→                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+   465→                  />
+   466→                </div>
+   467→              </div>
+   468→            </div>
+   469→          </div>
+   470→
+   471→          <Separator />
+   472→
+   473→          {/* Circular Progress */}
+   474→          <div className="space-y-4">
+   475→            <h4 className="text-sm font-semibold">Circular Progress</h4>
+   476→            <div className="flex flex-wrap items-center gap-8">
+   477→              <div className="flex flex-col items-center gap-2">
+   478→                <CircularProgress value={25} />
+   479→                <span className="text-xs text-muted-foreground">25%</span>
+   480→              </div>
+   481→              <div className="flex flex-col items-center gap-2">
+   482→                <CircularProgress value={50} />
+   483→                <span className="text-xs text-muted-foreground">50%</span>
+   484→              </div>
+   485→              <div className="flex flex-col items-center gap-2">
+   486→                <CircularProgress value={75} />
+   487→                <span className="text-xs text-muted-foreground">75%</span>
+   488→              </div>
+   489→              <div className="flex flex-col items-center gap-2">
+   490→                <CircularProgress value={100} />
+   491→                <span className="text-xs text-muted-foreground">100%</span>
+   492→              </div>
+   493→              <div className="flex flex-col items-center gap-2">
+   494→                <CircularProgress value={linearProgress} size={100} strokeWidth={8} />
+   495→                <span className="text-xs text-muted-foreground">Auto</span>
+   496→              </div>
+   497→            </div>
+   498→          </div>
+   499→        </CardContent>
+   500→      </Card>
+   501→    </motion.div>
+   502→  );
+   503→}
+   504→
+   505→// ===== PAGE TRANSITION LOADER =====
+   506→function PageTransitionSection() {
+   507→  const [loading, setLoading] = useState(true);
+   508→  const [key, setKey] = useState(0);
+   509→
+   510→  const reload = useCallback(() => {
+   511→    setLoading(true);
+   512→    setKey((k) => k + 1);
+   513→  }, []);
+   514→
+   515→  useEffect(() => {
+   516→    const timer = setTimeout(() => setLoading(false), 2500);
+   517→    return () => clearTimeout(timer);
+   518→  }, [key]);
+   519→
+   520→  return (
+   521→    <motion.div variants={staggerItem}>
+   522→      <Card className="border-border/50 bg-card/50 backdrop-blur-sm">
+   523→        <CardHeader>
+   524→          <div className="flex items-center justify-between">
+   525→            <div className="flex items-center gap-3">
+   526→              <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-primary/10 border border-primary/20">
+   527→                <RotateCcw className="h-5 w-5 text-primary" />
+   528→              </div>
+   529→              <div>
+   530→                <CardTitle className="text-lg">Page Transition Loader</CardTitle>
+   531→                <CardDescription>Full-page loading animation simulation</CardDescription>
+   532→              </div>
+   533→            </div>
+   534→            <Button size="sm" variant="outline" onClick={reload} className="gap-1.5">
+   535→              <RefreshCw className="h-3.5 w-3.5" /> Reload
+   536→            </Button>
+   537→          </div>
+   538→        </CardHeader>
+   539→        <CardContent>
+   540→          <div key={key} className="relative rounded-xl overflow-hidden border border-border/50 min-h-[280px]">
+   541→            <AnimatePresence mode="wait">
+   542→              {loading ? (
+   543→                <motion.div
+   544→                  key="loading"
+   545→                  initial={{ opacity: 0 }}
+   546→                  animate={{ opacity: 1 }}
+   547→                  exit={{ opacity: 0, scale: 1.05 }}
+   548→                  transition={{ duration: 0.4 }}
+   549→                  className="absolute inset-0 flex flex-col items-center justify-center bg-background/95 backdrop-blur-sm z-10"
+   550→                >
+   551→                  <motion.div
+   552→                    initial={{ scale: 0.8, opacity: 0 }}
+   553→                    animate={{ scale: 1, opacity: 1 }}
+   554→                    transition={{ delay: 0.1, duration: 0.4 }}
+   555→                    className="flex flex-col items-center gap-6"
+   556→                  >
+   557→                    <div className="relative">
+   558→                      <motion.div
+   559→                        className="w-16 h-16 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center"
+   560→                        animate={{ rotate: [0, 90, 180, 270, 360] }}
+   561→                        transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+   562→                      >
+   563→                        <span className="text-primary font-bold text-xl">U</span>
+   564→                      </motion.div>
+   565→                      <motion.div
+   566→                        className="absolute -inset-2 rounded-2xl border border-primary/10"
+   567→                        animate={{ scale: [1, 1.3, 1], opacity: [0.5, 0, 0.5] }}
+   568→                        transition={{ duration: 1.5, repeat: Infinity }}
+   569→                      />
+   570→                    </div>
+   571→                    <div className="text-center space-y-2">
+   572→                      <h3 className="font-semibold">Loading UnQWebTemplate</h3>
+   573→                      <p className="text-sm text-muted-foreground">Preparing your experience...</p>
+   574→                    </div>
+   575→                    <div className="w-48">
+   576→                      <motion.div
+   577→                        initial={{ width: "0%" }}
+   578→                        animate={{ width: "100%" }}
+   579→                        transition={{ duration: 2, ease: "easeInOut" }}
+   580→                        className="h-1.5 bg-primary rounded-full"
+   581→                      />
+   582→                    </div>
+   583→                  </motion.div>
+   584→                </motion.div>
+   585→              ) : (
+   586→                <motion.div
+   587→                  key="content"
+   588→                  initial={{ opacity: 0, y: 20 }}
+   589→                  animate={{ opacity: 1, y: 0 }}
+   590→                  transition={{ duration: 0.6, ease: [0.25, 0.4, 0.25, 1] }}
+   591→                  className="p-6 space-y-4"
+   592→                >
+   593→                  <div className="flex items-center gap-3">
+   594→                    <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground font-bold text-sm">U</div>
+   595→                    <h3 className="font-bold">Welcome to UnQWebTemplate</h3>
+   596→                  </div>
+   597→                  <p className="text-sm text-muted-foreground">The page has loaded successfully. This simulates how a full-page loading animation works with smooth transitions between loading and content states.</p>
+   598→                  <div className="grid grid-cols-3 gap-3">
+   599→                    <div className="p-3 rounded-lg bg-muted/30 text-center">
+   600→                      <p className="text-lg font-bold text-primary">2.5s</p>
+   601→                      <p className="text-xs text-muted-foreground">Load Time</p>
+   602→                    </div>
+   603→                    <div className="p-3 rounded-lg bg-muted/30 text-center">
+   604→                      <p className="text-lg font-bold text-green-500">100%</p>
+   605→                      <p className="text-xs text-muted-foreground">Complete</p>
+   606→                    </div>
+   607→                    <div className="p-3 rounded-lg bg-muted/30 text-center">
+   608→                      <p className="text-lg font-bold text-blue-500">0</p>
+   609→                      <p className="text-xs text-muted-foreground">Errors</p>
+   610→                    </div>
+   611→                  </div>
+   612→                </motion.div>
+   613→              )}
+   614→            </AnimatePresence>
+   615→          </div>
+   616→        </CardContent>
+   617→      </Card>
+   618→    </motion.div>
+   619→  );
+   620→}
+   621→
+   622→// ===== CONTENT LOADING STATES =====
+   623→function ContentLoadingSection() {
+   624→  const [loading, setLoading] = useState<Record<string, boolean>>({
+   625→    card1: true,
+   626→    card2: true,
+   627→    card3: true,
+   628→    list: true,
+   629→    stats: true,
+   630→  });
+   631→
+   632→  const reloadAll = () => {
+   633→    setLoading({ card1: true, card2: true, card3: true, list: true, stats: true });
+   634→  };
+   635→
+   636→  const loadContent = (key: string) => {
+   637→    setTimeout(() => {
+   638→      setLoading((prev) => ({ ...prev, [key]: false }));
+   639→    }, 800 + Math.random() * 1200);
+   640→  };
+   641→
+   642→  useEffect(() => {
+   643→    Object.keys(loading).forEach((key, i) => {
+   644→      setTimeout(() => loadContent(key), i * 300);
+   645→    });
+   646→  }, []);
+   647→
+   648→  const reloadAndLoad = () => {
+   649→    reloadAll();
+   650→    Object.keys(loading).forEach((key, i) => {
+   651→      setTimeout(() => loadContent(key), i * 300 + 800);
+   652→    });
+   653→  };
+   654→
+   655→  return (
+   656→    <motion.div variants={staggerItem}>
+   657→      <Card className="border-border/50 bg-card/50 backdrop-blur-sm">
+   658→        <CardHeader>
+   659→          <div className="flex items-center justify-between">
+   660→            <div className="flex items-center gap-3">
+   661→              <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-primary/10 border border-primary/20">
+   662→                <Sparkles className="h-5 w-5 text-primary" />
+   663→              </div>
+   664→              <div>
+   665→                <CardTitle className="text-lg">Content Loading States</CardTitle>
+   666→                <CardDescription>See how content appears after loading completes</CardDescription>
+   667→              </div>
+   668→            </div>
+   669→            <Button size="sm" variant="outline" onClick={reloadAndLoad} className="gap-1.5">
+   670→              <RefreshCw className="h-3.5 w-3.5" /> Reload
+   671→            </Button>
+   672→          </div>
+   673→        </CardHeader>
+   674→        <CardContent>
+   675→          <div className="space-y-6">
+   676→            {/* Stats cards loading */}
+   677→            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+   678→              {(["card1", "card2", "card3"] as const).map((key, i) => {
+   679→                const data = [
+   680→                  { label: "Total Users", value: "12,847", icon: "👥", change: "+12.5%" },
+   681→                  { label: "Revenue", value: "$48,290", icon: "💰", change: "+8.3%" },
+   682→                  { label: "Active Now", value: "1,429", icon: "🟢", change: "+2.1%" },
+   683→                ][i];
+   684→
+   685→                return (
+   686→                  <div key={key} className="p-4 rounded-xl border border-border/50 bg-muted/10">
+   687→                    <AnimatePresence mode="wait">
+   688→                      {loading[key] ? (
+   689→                        <motion.div
+   690→                          key="loading"
+   691→                          initial={{ opacity: 1 }}
+   692→                          exit={{ opacity: 0 }}
+   693→                          className="space-y-3"
+   694→                        >
+   695→                          <Skeleton className="h-4 w-20" />
+   696→                          <Skeleton className="h-8 w-28" />
+   697→                          <Skeleton className="h-3 w-16" />
+   698→                        </motion.div>
+   699→                      ) : (
+   700→                        <motion.div
+   701→                          key="content"
+   702→                          initial={{ opacity: 0, y: 10 }}
+   703→                          animate={{ opacity: 1, y: 0 }}
+   704→                          transition={{ duration: 0.4 }}
+   705→                        >
+   706→                          <div className="flex items-center justify-between">
+   707→                            <span className="text-sm text-muted-foreground">{data.label}</span>
+   708→                            <span className="text-lg">{data.icon}</span>
+   709→                          </div>
+   710→                          <p className="text-2xl font-bold mt-1">{data.value}</p>
+   711→                          <p className="text-xs text-green-500 mt-1">{data.change} from last month</p>
+   712→                        </motion.div>
+   713→                      )}
+   714→                    </AnimatePresence>
+   715→                  </div>
+   716→                );
+   717→              })}
+   718→            </div>
+   719→
+   720→            {/* List loading */}
+   721→            <div className="rounded-xl border border-border/50 overflow-hidden">
+   722→              <div className="p-3 border-b border-border/50 bg-muted/20">
+   723→                <h4 className="text-sm font-semibold">Recent Activity</h4>
+   724→              </div>
+   725→              <AnimatePresence mode="wait">
+   726→                {loading.list ? (
+   727→                  <motion.div key="list-loading" className="divide-y divide-border/50">
+   728→                    {Array.from({ length: 4 }).map((_, i) => (
+   729→                      <div key={i} className="flex items-center gap-3 p-3">
+   730→                        <Skeleton className="h-8 w-8 rounded-full" />
+   731→                        <div className="flex-1 space-y-1.5">
+   732→                          <Skeleton className="h-3 w-2/3" />
+   733→                          <Skeleton className="h-3 w-1/3" />
+   734→                        </div>
+   735→                        <Skeleton className="h-5 w-16 rounded-md" />
+   736→                      </div>
+   737→                    ))}
+   738→                  </motion.div>
+   739→                ) : (
+   740→                  <motion.div
+   741→                    key="list-content"
+   742→                    initial={{ opacity: 0 }}
+   743→                    animate={{ opacity: 1 }}
+   744→                    transition={{ duration: 0.4 }}
+   745→                    className="divide-y divide-border/50"
+   746→                  >
+   747→                    {[
+   748→                      { name: "Sandeep Gaddam", action: "deployed v2.1.0", time: "2m ago", status: "success" },
+   749→                      { name: "Ava Thompson", action: "merged PR #142", time: "15m ago", status: "info" },
+   750→                      { name: "Marcus Chen", action: "updated design tokens", time: "1h ago", status: "warning" },
+   751→                      { name: "Elena Rodriguez", action: "resolved 3 issues", time: "3h ago", status: "success" },
+   752→                    ].map((item, i) => (
+   753→                      <motion.div
+   754→                        key={item.name}
+   755→                        initial={{ opacity: 0, x: -10 }}
+   756→                        animate={{ opacity: 1, x: 0 }}
+   757→                        transition={{ delay: i * 0.1 }}
+   758→                        className="flex items-center gap-3 p-3 hover:bg-muted/20 transition-colors"
+   759→                      >
+   760→                        <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold text-primary">
+   761→                          {item.name.split(" ").map((n) => n[0]).join("")}
+   762→                        </div>
+   763→                        <div className="flex-1 min-w-0">
+   764→                          <p className="text-sm truncate"><span className="font-medium">{item.name}</span> {item.action}</p>
+   765→                          <p className="text-xs text-muted-foreground">{item.time}</p>
+   766→                        </div>
+   767→                        <Badge variant="secondary" className="text-xs">{item.status}</Badge>
+   768→                      </motion.div>
+   769→                    ))}
+   770→                  </motion.div>
+   771→                )}
+   772→              </AnimatePresence>
+   773→            </div>
+   774→
+   775→            {/* Stats with progress */}
+   776→            <div className="rounded-xl border border-border/50 p-4">
+   777→              <AnimatePresence mode="wait">
+   778→                {loading.stats ? (
+   779→                  <motion.div key="stats-loading" className="space-y-3">
+   780→                    {Array.from({ length: 3 }).map((_, i) => (
+   781→                      <div key={i} className="space-y-2">
+   782→                        <div className="flex justify-between">
+   783→                          <Skeleton className="h-4 w-24" />
+   784→                          <Skeleton className="h-4 w-8" />
+   785→                        </div>
+   786→                        <Skeleton className="h-2 w-full rounded-full" />
+   787→                      </div>
+   788→                    ))}
+   789→                  </motion.div>
+   790→                ) : (
+   791→                  <motion.div
+   792→                    key="stats-content"
+   793→                    initial={{ opacity: 0 }}
+   794→                    animate={{ opacity: 1 }}
+   795→                    transition={{ duration: 0.4 }}
+   796→                    className="space-y-4"
+   797→                  >
+   798→                    {[
+   799→                      { label: "Build Progress", value: 95 },
+   800→                      { label: "Test Coverage", value: 78 },
+   801→                      { label: "Deployment", value: 62 },
+   802→                    ].map((item, i) => (
+   803→                      <motion.div
+   804→                        key={item.label}
+   805→                        initial={{ opacity: 0, x: -10 }}
+   806→                        animate={{ opacity: 1, x: 0 }}
+   807→                        transition={{ delay: i * 0.15 }}
+   808→                        className="space-y-2"
+   809→                      >
+   810→                        <div className="flex justify-between text-sm">
+   811→                          <span className="font-medium">{item.label}</span>
+   812→                          <span className="text-muted-foreground">{item.value}%</span>
+   813→                        </div>
+   814→                        <Progress value={item.value} className="h-2" />
+   815→                      </motion.div>
+   816→                    ))}
+   817→                  </motion.div>
+   818→                )}
+   819→              </AnimatePresence>
+   820→            </div>
+   821→          </div>
+   822→        </CardContent>
+   823→      </Card>
+   824→    </motion.div>
+   825→  );
+   826→}
+   827→
+   828→// ===== MAIN PAGE =====
+   829→export default function LoadersPage() {
+   830→  return (
+   831→    <div className="flex min-h-screen">
+   832→      <SidebarNav />
+   833→      <main className="flex-1 overflow-y-auto">
+   834→        {/* Hero */}
+   835→        <div className="relative overflow-hidden border-b border-border/50">
+   836→          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent" />
+   837→          <div className="relative px-6 md:px-10 py-12 md:py-16 max-w-7xl mx-auto">
+   838→            <motion.div
+   839→              initial={{ opacity: 0, y: 30 }}
+   840→              animate={{ opacity: 1, y: 0 }}
+   841→              transition={{ duration: 0.8, ease: [0.25, 0.4, 0.25, 1] }}
+   842→            >
+   843→              <Badge variant="secondary" className="mb-4 gap-1.5 px-3 py-1">
+   844→                <Loader2 className="h-3 w-3 animate-spin" /> Loaders Showcase
+   845→              </Badge>
+   846→              <h1 className="text-3xl md:text-5xl font-bold tracking-tight mb-3">
+   847→                Loading <span className="text-primary">Animations</span>
+   848→              </h1>
+   849→              <p className="text-muted-foreground text-lg max-w-2xl">
+   850→                Captivating loading states, spinners, skeleton screens, and progress indicators with replay functionality.
+   851→              </p>
+   852→            </motion.div>
+   853→          </div>
+   854→        </div>
+   855→
+   856→        <div className="px-6 md:px-10 py-10 max-w-7xl mx-auto space-y-6">
+   857→          {/* Cube Loader + Spinners */}
+   858→          <motion.div
+   859→            variants={staggerContainer}
+   860→            initial="hidden"
+   861→            whileInView="visible"
+   862→            viewport={{ once: true, margin: "-50px" }}
+   863→            className="grid grid-cols-1 lg:grid-cols-2 gap-6"
+   864→          >
+   865→            <CubeLoaderSection />
+   866→            <SpinnersSection />
+   867→          </motion.div>
+   868→
+   869→          {/* Skeleton Loading */}
+   870→          <motion.div
+   871→            variants={staggerContainer}
+   872→            initial="hidden"
+   873→            whileInView="visible"
+   874→            viewport={{ once: true, margin: "-50px" }}
+   875→          >
+   876→            <SkeletonLoadingSection />
+   877→          </motion.div>
+   878→
+   879→          {/* Progress + Page Transition */}
+   880→          <motion.div
+   881→            variants={staggerContainer}
+   882→            initial="hidden"
+   883→            whileInView="visible"
+   884→            viewport={{ once: true, margin: "-50px" }}
+   885→            className="grid grid-cols-1 lg:grid-cols-2 gap-6"
+   886→          >
+   887→            <ProgressIndicatorsSection />
+   888→            <PageTransitionSection />
+   889→          </motion.div>
+   890→
+   891→          {/* Content Loading States */}
+   892→          <motion.div
+   893→            variants={staggerContainer}
+   894→            initial="hidden"
+   895→            whileInView="visible"
+   896→            viewport={{ once: true, margin: "-50px" }}
+   897→          >
+   898→            <ContentLoadingSection />
+   899→          </motion.div>
+   900→        </div>
+   901→
+   902→        {/* Footer */}
+   903→        <div className="px-6 md:px-10 py-8 border-t border-border/50 text-center">
+   904→          <motion.p
+   905→            initial={{ opacity: 0 }}
+   906→            whileInView={{ opacity: 1 }}
+   907→            viewport={{ once: true }}
+   908→            className="text-sm text-muted-foreground"
+   909→          >
+   910→            UnQWebTemplate — Built with ❤️ by Sandeep Gaddam
+   911→          </motion.p>
+   912→        </div>
+   913→      </main>
+   914→    </div>
+   915→  );
+   916→}
+   917→

@@ -153,9 +153,9 @@ export default function MarketingPage() {
   const heroOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-dvh">
       <SidebarNav />
-      <main className="flex-1 overflow-y-auto">
+      <main className="flex-1 overflow-y-auto overflow-x-hidden pt-16 md:pt-0">
         {/* ===== ANNOUNCEMENT BAR ===== */}
         <div className="bg-gradient-to-r from-primary to-[#d97757] text-primary-foreground py-2.5 px-4">
           <Marquee pauseOnHover className="[--duration:30s] [--gap:2rem]">
@@ -312,7 +312,7 @@ export default function MarketingPage() {
               <Badge variant="outline" className="mb-4 border-primary/30 text-primary">
                 Compare
               </Badge>
-              <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
+              <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-balance">
                 See how we <span className="text-primary">stack up</span>
               </h2>
               <p className="mt-4 text-muted-foreground">
@@ -394,7 +394,7 @@ export default function MarketingPage() {
               <Badge variant="outline" className="mb-4 border-primary/30 text-primary">
                 Social Proof
               </Badge>
-              <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
+              <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-balance">
                 Numbers that speak{" "}
                 <span className="text-primary">for themselves</span>
               </h2>
@@ -406,7 +406,7 @@ export default function MarketingPage() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-50px" }}
-              className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-16"
+              className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 mb-16"
             >
               {[
                 { value: 50000, suffix: "+", label: "Marketing Teams", icon: Users },
@@ -416,7 +416,7 @@ export default function MarketingPage() {
               ].map((stat, i) => (
                 <motion.div key={stat.label} variants={staggerItem}>
                   <BlurFade delay={i * 0.12} inView>
-                    <Card className="p-6 text-center hover:shadow-md transition-shadow hover:border-primary/20">
+                    <Card className="p-6 text-center hover:shadow-md transition-shadow card-hover hover:border-primary/20">
                       <div className="flex justify-center mb-3">
                         <div className="p-3 rounded-xl bg-primary/10">
                           <stat.icon className="h-5 w-5 text-primary" />
@@ -444,11 +444,11 @@ export default function MarketingPage() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              className="grid grid-cols-1 md:grid-cols-3 gap-6"
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
             >
               {socialTestimonials.map((t) => (
                 <motion.div key={t.name} variants={staggerItem}>
-                  <Card className="p-6 h-full hover:shadow-md transition-all hover:border-primary/20">
+                  <Card className="p-6 h-full hover:shadow-md transition-all card-hover hover:border-primary/20">
                     <div className="flex gap-0.5 mb-4">
                       {Array.from({ length: 5 }).map((_, i) => (
                         <Star
@@ -493,7 +493,7 @@ export default function MarketingPage() {
               <Badge variant="outline" className="mb-4 border-primary/30 text-primary">
                 FAQ
               </Badge>
-              <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
+              <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-balance">
                 Frequently asked{" "}
                 <span className="text-primary">questions</span>
               </h2>
@@ -546,14 +546,14 @@ export default function MarketingPage() {
             >
               <div className="flex justify-center mb-6">
                 <div className="p-4 rounded-2xl bg-primary/10">
-                  <Send className="h-8 w-8 text-primary" />
+                  <Send className="h-8 touch-target w-8 text-primary" />
                 </div>
               </div>
-              <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
+              <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-balance">
                 Stay ahead of the{" "}
                 <span className="text-primary">curve</span>
               </h2>
-              <p className="mt-4 text-muted-foreground max-w-lg mx-auto">
+              <p className="mt-4 text-muted-foreground max-w-lg mx-auto text-pretty">
                 Get weekly insights on marketing trends, growth strategies, and
                 product updates. Join 25,000+ marketers.
               </p>

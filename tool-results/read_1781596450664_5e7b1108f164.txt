@@ -1,0 +1,726 @@
+     1→"use client";
+     2→
+     3→import React, { useState } from "react";
+     4→import { motion } from "framer-motion";
+     5→import { SidebarNav } from "@/components/navigation/sidebar";
+     6→import { Button } from "@/components/ui/button";
+     7→import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
+     8→import { Badge } from "@/components/ui/badge";
+     9→import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+    10→import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
+    11→import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+    12→import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+    13→import { Separator } from "@/components/ui/separator";
+    14→import {
+    15→  ArrowRight,
+    16→  Bell,
+    17→  Bookmark,
+    18→  ChevronRight,
+    19→  Download,
+    20→  Heart,
+    21→  Mail,
+    22→  Plus,
+    23→  Search,
+    24→  Settings,
+    25→  Share2,
+    26→  Star,
+    27→  Trash2,
+    28→  Zap,
+    29→  Sparkles,
+    30→  Component,
+    31→  Layers,
+    32→  Eye,
+    33→  MousePointerClick,
+    34→} from "lucide-react";
+    35→
+    36→// Animation variants
+    37→const sectionVariants = {
+    38→  hidden: { opacity: 0, y: 40 },
+    39→  visible: {
+    40→    opacity: 1,
+    41→    y: 0,
+    42→    transition: { duration: 0.7, ease: [0.25, 0.4, 0.25, 1] },
+    43→  },
+    44→};
+    45→
+    46→const staggerContainer = {
+    47→  hidden: { opacity: 0 },
+    48→  visible: {
+    49→    opacity: 1,
+    50→    transition: { staggerChildren: 0.08, delayChildren: 0.1 },
+    51→  },
+    52→};
+    53→
+    54→const staggerItem = {
+    55→  hidden: { opacity: 0, y: 20 },
+    56→  visible: {
+    57→    opacity: 1,
+    58→    y: 0,
+    59→    transition: { duration: 0.5, ease: "easeOut" },
+    60→  },
+    61→};
+    62→
+    63→export default function ComponentsShowcase() {
+    64→  const [tabValue, setTabValue] = useState("preview");
+    65→
+    66→  return (
+    67→    <div className="flex min-h-screen bg-background">
+    68→      <SidebarNav />
+    69→      <main className="flex-1 overflow-y-auto">
+    70→        {/* Page Header */}
+    71→        <div className="border-b border-border/50 bg-background/80 backdrop-blur-xl sticky top-0 z-20">
+    72→          <div className="px-6 md:px-10 py-8">
+    73→            <motion.div
+    74→              initial={{ opacity: 0, y: 20 }}
+    75→              animate={{ opacity: 1, y: 0 }}
+    76→              transition={{ duration: 0.6 }}
+    77→            >
+    78→              <div className="flex items-center gap-3 mb-3">
+    79→                <Badge className="bg-primary/10 text-primary border-primary/20 hover:bg-primary/20">
+    80→                  <Component className="h-3 w-3 mr-1" />
+    81→                  30+ Components
+    82→                </Badge>
+    83→              </div>
+    84→              <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-2">
+    85→                Component Showcase
+    86→              </h1>
+    87→              <p className="text-muted-foreground text-base md:text-lg max-w-2xl">
+    88→                Every component in UnQWebTemplate, meticulously crafted with shadcn/ui.
+    89→                Interactive, accessible, and beautifully animated.
+    90→              </p>
+    91→            </motion.div>
+    92→          </div>
+    93→        </div>
+    94→
+    95→        <div className="px-6 md:px-10 py-8 space-y-10">
+    96→          {/* ===== BUTTONS SECTION ===== */}
+    97→          <motion.section
+    98→            initial="hidden"
+    99→            whileInView="visible"
+   100→            viewport={{ once: true, margin: "-50px" }}
+   101→            variants={sectionVariants}
+   102→          >
+   103→            <Card className="overflow-hidden border-border/50">
+   104→              <CardHeader>
+   105→                <div className="flex items-center gap-2">
+   106→                  <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+   107→                    <MousePointerClick className="h-4 w-4 text-primary" />
+   108→                  </div>
+   109→                  <div>
+   110→                    <CardTitle>Buttons</CardTitle>
+   111→                    <CardDescription>
+   112→                      All button variants, sizes, and icon combinations
+   113→                    </CardDescription>
+   114→                  </div>
+   115→                </div>
+   116→              </CardHeader>
+   117→              <CardContent className="space-y-8">
+   118→                {/* Variants */}
+   119→                <div>
+   120→                  <p className="text-sm font-medium text-muted-foreground mb-4">Variants</p>
+   121→                  <motion.div
+   122→                    variants={staggerContainer}
+   123→                    initial="hidden"
+   124→                    whileInView="visible"
+   125→                    viewport={{ once: true }}
+   126→                    className="flex flex-wrap gap-3"
+   127→                  >
+   128→                    {[
+   129→                      { variant: "default" as const, label: "Default" },
+   130→                      { variant: "secondary" as const, label: "Secondary" },
+   131→                      { variant: "destructive" as const, label: "Destructive" },
+   132→                      { variant: "outline" as const, label: "Outline" },
+   133→                      { variant: "ghost" as const, label: "Ghost" },
+   134→                      { variant: "link" as const, label: "Link" },
+   135→                    ].map((btn) => (
+   136→                      <motion.div key={btn.variant} variants={staggerItem}>
+   137→                        <Button variant={btn.variant}>{btn.label}</Button>
+   138→                      </motion.div>
+   139→                    ))}
+   140→                  </motion.div>
+   141→                </div>
+   142→
+   143→                <Separator />
+   144→
+   145→                {/* Sizes */}
+   146→                <div>
+   147→                  <p className="text-sm font-medium text-muted-foreground mb-4">Sizes</p>
+   148→                  <motion.div
+   149→                    variants={staggerContainer}
+   150→                    initial="hidden"
+   151→                    whileInView="visible"
+   152→                    viewport={{ once: true }}
+   153→                    className="flex flex-wrap items-center gap-3"
+   154→                  >
+   155→                    <motion.div variants={staggerItem}>
+   156→                      <Button size="sm">Small</Button>
+   157→                    </motion.div>
+   158→                    <motion.div variants={staggerItem}>
+   159→                      <Button size="default">Default</Button>
+   160→                    </motion.div>
+   161→                    <motion.div variants={staggerItem}>
+   162→                      <Button size="lg">Large</Button>
+   163→                    </motion.div>
+   164→                    <motion.div variants={staggerItem}>
+   165→                      <Button size="icon"><Star className="h-4 w-4" /></Button>
+   166→                    </motion.div>
+   167→                  </motion.div>
+   168→                </div>
+   169→
+   170→                <Separator />
+   171→
+   172→                {/* With Icons */}
+   173→                <div>
+   174→                  <p className="text-sm font-medium text-muted-foreground mb-4">With Icons</p>
+   175→                  <motion.div
+   176→                    variants={staggerContainer}
+   177→                    initial="hidden"
+   178→                    whileInView="visible"
+   179→                    viewport={{ once: true }}
+   180→                    className="flex flex-wrap gap-3"
+   181→                  >
+   182→                    <motion.div variants={staggerItem}>
+   183→                      <Button><Mail className="h-4 w-4" /> Email</Button>
+   184→                    </motion.div>
+   185→                    <motion.div variants={staggerItem}>
+   186→                      <Button variant="secondary"><Download className="h-4 w-4" /> Download</Button>
+   187→                    </motion.div>
+   188→                    <motion.div variants={staggerItem}>
+   189→                      <Button variant="outline"><Search className="h-4 w-4" /> Search</Button>
+   190→                    </motion.div>
+   191→                    <motion.div variants={staggerItem}>
+   192→                      <Button variant="destructive"><Trash2 className="h-4 w-4" /> Delete</Button>
+   193→                    </motion.div>
+   194→                    <motion.div variants={staggerItem}>
+   195→                      <Button><Plus className="h-4 w-4" /> Add New</Button>
+   196→                    </motion.div>
+   197→                    <motion.div variants={staggerItem}>
+   198→                      <Button variant="outline">Continue <ArrowRight className="h-4 w-4" /></Button>
+   199→                    </motion.div>
+   200→                  </motion.div>
+   201→                </div>
+   202→
+   203→                <Separator />
+   204→
+   205→                {/* States */}
+   206→                <div>
+   207→                  <p className="text-sm font-medium text-muted-foreground mb-4">States</p>
+   208→                  <div className="flex flex-wrap gap-3">
+   209→                    <Button disabled>Disabled</Button>
+   210→                    <Button variant="outline" disabled>Disabled Outline</Button>
+   211→                  </div>
+   212→                </div>
+   213→              </CardContent>
+   214→            </Card>
+   215→          </motion.section>
+   216→
+   217→          {/* ===== BADGES SECTION ===== */}
+   218→          <motion.section
+   219→            initial="hidden"
+   220→            whileInView="visible"
+   221→            viewport={{ once: true, margin: "-50px" }}
+   222→            variants={sectionVariants}
+   223→          >
+   224→            <Card className="overflow-hidden border-border/50">
+   225→              <CardHeader>
+   226→                <div className="flex items-center gap-2">
+   227→                  <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+   228→                    <Bookmark className="h-4 w-4 text-primary" />
+   229→                  </div>
+   230→                  <div>
+   231→                    <CardTitle>Badges</CardTitle>
+   232→                    <CardDescription>
+   233→                      Status indicators, labels, and category markers
+   234→                    </CardDescription>
+   235→                  </div>
+   236→                </div>
+   237→              </CardHeader>
+   238→              <CardContent>
+   239→                <motion.div
+   240→                  variants={staggerContainer}
+   241→                  initial="hidden"
+   242→                  whileInView="visible"
+   243→                  viewport={{ once: true }}
+   244→                  className="flex flex-wrap gap-3"
+   245→                >
+   246→                  <motion.div variants={staggerItem}>
+   247→                    <Badge>Default</Badge>
+   248→                  </motion.div>
+   249→                  <motion.div variants={staggerItem}>
+   250→                    <Badge variant="secondary">Secondary</Badge>
+   251→                  </motion.div>
+   252→                  <motion.div variants={staggerItem}>
+   253→                    <Badge variant="destructive">Destructive</Badge>
+   254→                  </motion.div>
+   255→                  <motion.div variants={staggerItem}>
+   256→                    <Badge variant="outline">Outline</Badge>
+   257→                  </motion.div>
+   258→                  <motion.div variants={staggerItem}>
+   259→                    <Badge className="bg-emerald-500/10 text-emerald-500 border-emerald-500/20">
+   260→                      <Zap className="h-3 w-3 mr-1" /> Active
+   261→                    </Badge>
+   262→                  </motion.div>
+   263→                  <motion.div variants={staggerItem}>
+   264→                    <Badge className="bg-amber-500/10 text-amber-500 border-amber-500/20">
+   265→                      <Star className="h-3 w-3 mr-1 fill-amber-500" /> Featured
+   266→                    </Badge>
+   267→                  </motion.div>
+   268→                  <motion.div variants={staggerItem}>
+   269→                    <Badge className="bg-primary/10 text-primary border-primary/20">
+   270→                      <Sparkles className="h-3 w-3 mr-1" /> New
+   271→                    </Badge>
+   272→                  </motion.div>
+   273→                </motion.div>
+   274→              </CardContent>
+   275→            </Card>
+   276→          </motion.section>
+   277→
+   278→          {/* ===== CARDS SECTION ===== */}
+   279→          <motion.section
+   280→            initial="hidden"
+   281→            whileInView="visible"
+   282→            viewport={{ once: true, margin: "-50px" }}
+   283→            variants={sectionVariants}
+   284→          >
+   285→            <Card className="overflow-hidden border-border/50">
+   286→              <CardHeader>
+   287→                <div className="flex items-center gap-2">
+   288→                  <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+   289→                    <Layers className="h-4 w-4 text-primary" />
+   290→                  </div>
+   291→                  <div>
+   292→                    <CardTitle>Cards</CardTitle>
+   293→                    <CardDescription>
+   294→                      Versatile card layouts with headers, content, and footers
+   295→                    </CardDescription>
+   296→                  </div>
+   297→                </div>
+   298→              </CardHeader>
+   299→              <CardContent>
+   300→                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+   301→                  {/* Simple Card */}
+   302→                  <motion.div
+   303→                    whileHover={{ y: -4, transition: { duration: 0.2 } }}
+   304→                    className="rounded-xl border bg-card p-6 shadow-sm"
+   305→                  >
+   306→                    <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+   307→                      <Zap className="h-5 w-5 text-primary" />
+   308→                    </div>
+   309→                    <h3 className="font-semibold mb-2">Simple Card</h3>
+   310→                    <p className="text-sm text-muted-foreground">
+   311→                      A clean, minimal card with an icon, title, and description. Perfect for feature highlights.
+   312→                    </p>
+   313→                  </motion.div>
+   314→
+   315→                  {/* Card with Header & Footer */}
+   316→                  <motion.div
+   317→                    whileHover={{ y: -4, transition: { duration: 0.2 } }}
+   318→                    className="rounded-xl border bg-card shadow-sm flex flex-col"
+   319→                  >
+   320→                    <div className="p-6 pb-3">
+   321→                      <h3 className="font-semibold mb-1">Header & Footer</h3>
+   322→                      <p className="text-sm text-muted-foreground">Card with structured sections</p>
+   323→                    </div>
+   324→                    <div className="px-6 py-4 flex-1">
+   325→                      <div className="h-20 rounded-lg bg-muted/50 flex items-center justify-center">
+   326→                        <Eye className="h-6 w-6 text-muted-foreground/40" />
+   327→                      </div>
+   328→                    </div>
+   329→                    <div className="px-6 py-3 border-t flex justify-between items-center">
+   330→                      <span className="text-xs text-muted-foreground">Footer info</span>
+   331→                      <Button variant="ghost" size="sm">Action</Button>
+   332→                    </div>
+   333→                  </motion.div>
+   334→
+   335→                  {/* Gradient Card */}
+   336→                  <motion.div
+   337→                    whileHover={{ y: -4, transition: { duration: 0.2 } }}
+   338→                    className="rounded-xl border bg-gradient-to-br from-primary/5 via-transparent to-primary/10 p-6 shadow-sm relative overflow-hidden"
+   339→                  >
+   340→                    <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-full -translate-y-8 translate-x-8 blur-xl" />
+   341→                    <div className="relative">
+   342→                      <Badge className="bg-primary/10 text-primary border-primary/20 mb-3">Premium</Badge>
+   343→                      <h3 className="font-semibold mb-2">Gradient Card</h3>
+   344→                      <p className="text-sm text-muted-foreground">
+   345→                        Cards with subtle gradients and glow effects for a premium feel.
+   346→                      </p>
+   347→                    </div>
+   348→                  </motion.div>
+   349→                </div>
+   350→              </CardContent>
+   351→            </Card>
+   352→          </motion.section>
+   353→
+   354→          {/* ===== AVATARS SECTION ===== */}
+   355→          <motion.section
+   356→            initial="hidden"
+   357→            whileInView="visible"
+   358→            viewport={{ once: true, margin: "-50px" }}
+   359→            variants={sectionVariants}
+   360→          >
+   361→            <Card className="overflow-hidden border-border/50">
+   362→              <CardHeader>
+   363→                <div className="flex items-center gap-2">
+   364→                  <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+   365→                    <Heart className="h-4 w-4 text-primary" />
+   366→                  </div>
+   367→                  <div>
+   368→                    <CardTitle>Avatars</CardTitle>
+   369→                    <CardDescription>
+   370→                      User representations with images and fallbacks
+   371→                    </CardDescription>
+   372→                  </div>
+   373→                </div>
+   374→              </CardHeader>
+   375→              <CardContent>
+   376→                <div className="space-y-6">
+   377→                  {/* Sizes */}
+   378→                  <div>
+   379→                    <p className="text-sm font-medium text-muted-foreground mb-4">Sizes</p>
+   380→                    <div className="flex items-end gap-4">
+   381→                      <div className="text-center">
+   382→                        <Avatar className="h-8 w-8">
+   383→                          <AvatarFallback className="bg-primary/10 text-primary text-xs">SM</AvatarFallback>
+   384→                        </Avatar>
+   385→                        <span className="text-xs text-muted-foreground mt-1">SM</span>
+   386→                      </div>
+   387→                      <div className="text-center">
+   388→                        <Avatar className="h-10 w-10">
+   389→                          <AvatarFallback className="bg-primary/10 text-primary text-sm">MD</AvatarFallback>
+   390→                        </Avatar>
+   391→                        <span className="text-xs text-muted-foreground mt-1">MD</span>
+   392→                      </div>
+   393→                      <div className="text-center">
+   394→                        <Avatar className="h-14 w-14">
+   395→                          <AvatarFallback className="bg-primary/10 text-primary text-lg">LG</AvatarFallback>
+   396→                        </Avatar>
+   397→                        <span className="text-xs text-muted-foreground mt-1">LG</span>
+   398→                      </div>
+   399→                      <div className="text-center">
+   400→                        <Avatar className="h-20 w-20">
+   401→                          <AvatarFallback className="bg-primary/10 text-primary text-2xl">XL</AvatarFallback>
+   402→                        </Avatar>
+   403→                        <span className="text-xs text-muted-foreground mt-1">XL</span>
+   404→                      </div>
+   405→                    </div>
+   406→                  </div>
+   407→
+   408→                  <Separator />
+   409→
+   410→                  {/* With Images & Fallbacks */}
+   411→                  <div>
+   412→                    <p className="text-sm font-medium text-muted-foreground mb-4">With Images & Fallbacks</p>
+   413→                    <div className="flex -space-x-3">
+   414→                      {[
+   415→                        { name: "SG", img: "https://randomuser.me/api/portraits/men/32.jpg", color: "bg-primary/10 text-primary" },
+   416→                        { name: "PS", img: "https://randomuser.me/api/portraits/women/44.jpg", color: "bg-emerald-500/10 text-emerald-500" },
+   417→                        { name: "MC", img: "https://randomuser.me/api/portraits/men/46.jpg", color: "bg-amber-500/10 text-amber-500" },
+   418→                        { name: "EV", img: "", color: "bg-rose-500/10 text-rose-500" },
+   419→                        { name: "RK", img: "", color: "bg-violet-500/10 text-violet-500" },
+   420→                      ].map((avatar, i) => (
+   421→                        <Avatar key={i} className="border-2 border-background h-10 w-10">
+   422→                          {avatar.img && <AvatarImage src={avatar.img} alt={avatar.name} />}
+   423→                          <AvatarFallback className={avatar.color}>{avatar.name}</AvatarFallback>
+   424→                        </Avatar>
+   425→                      ))}
+   426→                      <div className="flex items-center justify-center h-10 w-10 rounded-full bg-muted border-2 border-background text-xs font-medium text-muted-foreground">
+   427→                        +12
+   428→                      </div>
+   429→                    </div>
+   430→                  </div>
+   431→                </div>
+   432→              </CardContent>
+   433→            </Card>
+   434→          </motion.section>
+   435→
+   436→          {/* ===== ACCORDION SECTION ===== */}
+   437→          <motion.section
+   438→            initial="hidden"
+   439→            whileInView="visible"
+   440→            viewport={{ once: true, margin: "-50px" }}
+   441→            variants={sectionVariants}
+   442→          >
+   443→            <Card className="overflow-hidden border-border/50">
+   444→              <CardHeader>
+   445→                <div className="flex items-center gap-2">
+   446→                  <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+   447→                    <ChevronRight className="h-4 w-4 text-primary" />
+   448→                  </div>
+   449→                  <div>
+   450→                    <CardTitle>Accordion</CardTitle>
+   451→                    <CardDescription>
+   452→                      Collapsible content sections with smooth animations
+   453→                    </CardDescription>
+   454→                  </div>
+   455→                </div>
+   456→              </CardHeader>
+   457→              <CardContent>
+   458→                <Accordion type="single" collapsible className="w-full">
+   459→                  {[
+   460→                    {
+   461→                      value: "item-1",
+   462→                      title: "What makes UnQWebTemplate different?",
+   463→                      content:
+   464→                        "UnQWebTemplate combines cinematic animations, glassmorphism effects, and a carefully curated terracotta color palette. Every component is built with accessibility and performance in mind, powered by Next.js 16 and shadcn/ui.",
+   465→                    },
+   466→                    {
+   467→                      value: "item-2",
+   468→                      title: "Is it production-ready?",
+   469→                      content:
+   470→                        "Absolutely. With 15+ pre-built pages, 30+ components, TypeScript throughout, and comprehensive dark mode support, UnQWebTemplate is designed for real-world production applications from day one.",
+   471→                    },
+   472→                    {
+   473→                      value: "item-3",
+   474→                      title: "How does the AI integration work?",
+   475→                      content:
+   476→                        "The template includes a built-in AI generation studio and API playground. These tools leverage cutting-edge AI APIs to help you generate content, images, and code directly within your application.",
+   477→                    },
+   478→                    {
+   479→                      value: "item-4",
+   480→                      title: "Can I customize the theme?",
+   481→                      content:
+   482→                        "Yes! The entire color system is built on CSS variables, making it trivial to swap the terracotta palette for any color scheme. Dark and light modes are fully supported with seamless transitions.",
+   483→                    },
+   484→                  ].map((item) => (
+   485→                    <AccordionItem key={item.value} value={item.value}>
+   486→                      <AccordionTrigger className="text-left hover:no-underline">
+   487→                        {item.title}
+   488→                      </AccordionTrigger>
+   489→                      <AccordionContent className="text-muted-foreground">
+   490→                        {item.content}
+   491→                      </AccordionContent>
+   492→                    </AccordionItem>
+   493→                  ))}
+   494→                </Accordion>
+   495→              </CardContent>
+   496→            </Card>
+   497→          </motion.section>
+   498→
+   499→          {/* ===== DIALOG SECTION ===== */}
+   500→          <motion.section
+   501→            initial="hidden"
+   502→            whileInView="visible"
+   503→            viewport={{ once: true, margin: "-50px" }}
+   504→            variants={sectionVariants}
+   505→          >
+   506→            <Card className="overflow-hidden border-border/50">
+   507→              <CardHeader>
+   508→                <div className="flex items-center gap-2">
+   509→                  <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+   510→                    <Share2 className="h-4 w-4 text-primary" />
+   511→                  </div>
+   512→                  <div>
+   513→                    <CardTitle>Dialog</CardTitle>
+   514→                    <CardDescription>
+   515→                      Modal overlays for confirmations, forms, and detailed content
+   516→                    </CardDescription>
+   517→                  </div>
+   518→                </div>
+   519→              </CardHeader>
+   520→              <CardContent>
+   521→                <Dialog>
+   522→                  <DialogTrigger asChild>
+   523→                    <Button variant="outline">
+   524→                      <Settings className="h-4 w-4" /> Open Dialog
+   525→                    </Button>
+   526→                  </DialogTrigger>
+   527→                  <DialogContent>
+   528→                    <DialogHeader>
+   529→                      <DialogTitle>Confirm Action</DialogTitle>
+   530→                      <DialogDescription>
+   531→                        This is a beautifully styled dialog with smooth enter/exit
+   532→                        animations. Use dialogs for confirmations, forms, or focused content.
+   533→                      </DialogDescription>
+   534→                    </DialogHeader>
+   535→                    <div className="py-4">
+   536→                      <div className="rounded-lg bg-muted/50 p-4 border">
+   537→                        <p className="text-sm text-muted-foreground">
+   538→                          Dialogs in UnQWebTemplate feature backdrop blur, smooth transitions,
+   539→                          and full keyboard accessibility. Press Escape to close.
+   540→                        </p>
+   541→                      </div>
+   542→                    </div>
+   543→                    <div className="flex justify-end gap-2">
+   544→                      <Button variant="outline">Cancel</Button>
+   545→                      <Button>Confirm</Button>
+   546→                    </div>
+   547→                  </DialogContent>
+   548→                </Dialog>
+   549→              </CardContent>
+   550→            </Card>
+   551→          </motion.section>
+   552→
+   553→          {/* ===== TABS SECTION ===== */}
+   554→          <motion.section
+   555→            initial="hidden"
+   556→            whileInView="visible"
+   557→            viewport={{ once: true, margin: "-50px" }}
+   558→            variants={sectionVariants}
+   559→          >
+   560→            <Card className="overflow-hidden border-border/50">
+   561→              <CardHeader>
+   562→                <div className="flex items-center gap-2">
+   563→                  <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+   564→                    <Layers className="h-4 w-4 text-primary" />
+   565→                  </div>
+   566→                  <div>
+   567→                    <CardTitle>Tabs</CardTitle>
+   568→                    <CardDescription>
+   569→                      Organize content into switchable panels with animated transitions
+   570→                    </CardDescription>
+   571→                  </div>
+   572→                </div>
+   573→              </CardHeader>
+   574→              <CardContent>
+   575→                <Tabs value={tabValue} onValueChange={setTabValue}>
+   576→                  <TabsList className="mb-4">
+   577→                    <TabsTrigger value="preview">Preview</TabsTrigger>
+   578→                    <TabsTrigger value="code">Code</TabsTrigger>
+   579→                    <TabsTrigger value="docs">Docs</TabsTrigger>
+   580→                  </TabsList>
+   581→                  <TabsContent value="preview">
+   582→                    <motion.div
+   583→                      key="preview"
+   584→                      initial={{ opacity: 0, x: -10 }}
+   585→                      animate={{ opacity: 1, x: 0 }}
+   586→                      transition={{ duration: 0.3 }}
+   587→                      className="rounded-lg border bg-muted/30 p-6"
+   588→                    >
+   589→                      <div className="flex items-center gap-4 mb-4">
+   590→                        <Avatar className="h-12 w-12">
+   591→                          <AvatarFallback className="bg-primary/10 text-primary">UN</AvatarFallback>
+   592→                        </Avatar>
+   593→                        <div>
+   594→                          <h3 className="font-semibold">UnQWebTemplate</h3>
+   595→                          <p className="text-sm text-muted-foreground">Premium Next.js UI Template</p>
+   596→                        </div>
+   597→                      </div>
+   598→                      <p className="text-sm text-muted-foreground">
+   599→                        This is the preview panel showing a sample component layout with
+   600→                        avatar, heading, and description text.
+   601→                      </p>
+   602→                    </motion.div>
+   603→                  </TabsContent>
+   604→                  <TabsContent value="code">
+   605→                    <motion.div
+   606→                      key="code"
+   607→                      initial={{ opacity: 0, x: -10 }}
+   608→                      animate={{ opacity: 1, x: 0 }}
+   609→                      transition={{ duration: 0.3 }}
+   610→                      className="rounded-lg bg-muted/50 p-6 font-mono text-sm"
+   611→                    >
+   612→                      <div className="text-muted-foreground">
+   613→                        <span className="text-primary">import</span>{" "}
+   614→                        {"{ Button }"}{" "}
+   615→                        <span className="text-primary">from</span>{" "}
+   616→                        <span className="text-emerald-500">"@/components/ui/button"</span>;{"\n\n"}
+   617→                        <span className="text-primary">export default</span>{" "}
+   618→                        <span className="text-amber-500">function</span>{" "}
+   619→                        <span className="text-foreground">Page</span>() {"{"}{"\n"}
+   620→                        {"  "}{"return"} (
+   621→                        <span className="text-primary">{"<Button>"}</span>
+   622→                        Click
+   623→                        <span className="text-primary">{"</Button>"}</span>
+   624→                        );{"\n"}
+   625→                        {"}"}
+   626→                      </div>
+   627→                    </motion.div>
+   628→                  </TabsContent>
+   629→                  <TabsContent value="docs">
+   630→                    <motion.div
+   631→                      key="docs"
+   632→                      initial={{ opacity: 0, x: -10 }}
+   633→                      animate={{ opacity: 1, x: 0 }}
+   634→                      transition={{ duration: 0.3 }}
+   635→                      className="rounded-lg border p-6"
+   636→                    >
+   637→                      <h3 className="font-semibold mb-2">Tab Component API</h3>
+   638→                      <p className="text-sm text-muted-foreground mb-4">
+   639→                        Tabs organize content across different screens, data sets, and interactions.
+   640→                      </p>
+   641→                      <div className="space-y-2">
+   642→                        <div className="flex items-center gap-2 text-sm">
+   643→                          <Badge variant="outline" className="font-mono">Tabs</Badge>
+   644→                          <span className="text-muted-foreground">Root container component</span>
+   645→                        </div>
+   646→                        <div className="flex items-center gap-2 text-sm">
+   647→                          <Badge variant="outline" className="font-mono">TabsList</Badge>
+   648→                          <span className="text-muted-foreground">Container for tab triggers</span>
+   649→                        </div>
+   650→                        <div className="flex items-center gap-2 text-sm">
+   651→                          <Badge variant="outline" className="font-mono">TabsTrigger</Badge>
+   652→                          <span className="text-muted-foreground">Button to activate a tab</span>
+   653→                        </div>
+   654→                        <div className="flex items-center gap-2 text-sm">
+   655→                          <Badge variant="outline" className="font-mono">TabsContent</Badge>
+   656→                          <span className="text-muted-foreground">Panel for tab content</span>
+   657→                        </div>
+   658→                      </div>
+   659→                    </motion.div>
+   660→                  </TabsContent>
+   661→                </Tabs>
+   662→              </CardContent>
+   663→            </Card>
+   664→          </motion.section>
+   665→
+   666→          {/* ===== COMBINED SHOWCASE ===== */}
+   667→          <motion.section
+   668→            initial="hidden"
+   669→            whileInView="visible"
+   670→            viewport={{ once: true, margin: "-50px" }}
+   671→            variants={sectionVariants}
+   672→          >
+   673→            <Card className="overflow-hidden border-border/50 bg-gradient-to-br from-primary/5 via-transparent to-primary/5">
+   674→              <CardHeader>
+   675→                <div className="flex items-center gap-2">
+   676→                  <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+   677→                    <Sparkles className="h-4 w-4 text-primary" />
+   678→                  </div>
+   679→                  <div>
+   680→                    <CardTitle>Combined Example</CardTitle>
+   681→                    <CardDescription>
+   682→                      All components working together in a real-world layout
+   683→                    </CardDescription>
+   684→                  </div>
+   685→                </div>
+   686→              </CardHeader>
+   687→              <CardContent>
+   688→                <div className="rounded-xl border bg-card p-6 space-y-4">
+   689→                  <div className="flex items-center justify-between">
+   690→                    <div className="flex items-center gap-3">
+   691→                      <Avatar className="h-10 w-10">
+   692→                        <AvatarImage src="https://randomuser.me/api/portraits/men/32.jpg" alt="User" />
+   693→                        <AvatarFallback className="bg-primary/10 text-primary">SG</AvatarFallback>
+   694→                      </Avatar>
+   695→                      <div>
+   696→                        <p className="text-sm font-medium">Sandeep Gaddam</p>
+   697→                        <p className="text-xs text-muted-foreground">Creator of UnQWebTemplate</p>
+   698→                      </div>
+   699→                    </div>
+   700→                    <Badge className="bg-primary/10 text-primary border-primary/20">
+   701→                      <Star className="h-3 w-3 mr-1 fill-primary" /> Featured
+   702→                    </Badge>
+   703→                  </div>
+   704→                  <Separator />
+   705→                  <p className="text-sm text-muted-foreground">
+   706→                    This example combines Avatar, Badge, Separator, Button, and Card components
+   707→                    into a cohesive user card layout. Each component maintains its own
+   708→                    accessibility and styling while composing seamlessly together.
+   709→                  </p>
+   710→                  <div className="flex gap-2">
+   711→                    <Button size="sm"><Bell className="h-3.5 w-3.5" /> Follow</Button>
+   712→                    <Button size="sm" variant="outline"><Mail className="h-3.5 w-3.5" /> Message</Button>
+   713→                  </div>
+   714→                </div>
+   715→              </CardContent>
+   716→            </Card>
+   717→          </motion.section>
+   718→
+   719→          {/* Bottom spacing */}
+   720→          <div className="h-8" />
+   721→        </div>
+   722→      </main>
+   723→    </div>
+   724→  );
+   725→}
+   726→

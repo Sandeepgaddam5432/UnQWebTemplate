@@ -1210,10 +1210,10 @@ export default function ExplorerPage() {
   }, []);
 
   return (
-    <div className="min-h-screen flex bg-background">
+    <div className="min-h-dvh flex bg-background">
       <SidebarNav />
 
-      <main className="flex-1 min-h-screen" ref={scrollRef}>
+      <main className="flex-1 min-h-dvh overflow-x-hidden pt-16 md:pt-0" ref={scrollRef}>
         {/* ── Hero Header ─────────────────────────────────────────── */}
         <div className="relative overflow-hidden border-b border-border/50">
           {/* Background pattern */}
@@ -1287,7 +1287,7 @@ export default function ExplorerPage() {
               <div className="relative">
                 <Button
                   variant="outline"
-                  size="sm"
+                 
                   onClick={() => setShowSourceFilter(!showSourceFilter)}
                   className={cn(
                     "gap-1.5 h-9 text-xs border-border/50",
@@ -1415,7 +1415,7 @@ export default function ExplorerPage() {
                 </p>
                 <Button
                   variant="outline"
-                  size="sm"
+                 
                   className="mt-4"
                   onClick={() => {
                     setSearch("");

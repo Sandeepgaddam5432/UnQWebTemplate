@@ -285,9 +285,9 @@ const showcasePages = [
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen bg-background">
+    <div className="flex min-h-dvh bg-background">
       <SidebarNav />
-      <main className="flex-1 overflow-y-auto">
+      <main className="flex-1 overflow-y-auto overflow-x-hidden pt-16 md:pt-0">
         {/* ===== SECTION 1: CINEMATIC HERO ===== */}
         <section className="relative">
           <HeroGeometric
@@ -317,7 +317,7 @@ export default function Home() {
               <Button
                 asChild
                 size="lg"
-                className="gap-2 bg-primary hover:bg-primary/90 text-primary-foreground px-8 text-base cursor-pointer"
+                className="gap-2 bg-primary hover:bg-primary/90 text-primary-foreground px-8 text-base cursor-pointer touch-target"
               >
                 <Link href="/components">
                   Explore Showcase <ArrowRight className="h-4 w-4" />
@@ -327,7 +327,7 @@ export default function Home() {
                 asChild
                 variant="outline"
                 size="lg"
-                className="gap-2 border-white/20 text-white/70 hover:text-white hover:border-white/40 hover:bg-white/5 px-8 text-base cursor-pointer"
+                className="gap-2 border-white/20 text-white/70 hover:text-white hover:border-white/40 hover:bg-white/5 px-8 text-base cursor-pointer touch-target"
               >
                 <Link href="/animations">View Animations</Link>
               </Button>
@@ -341,7 +341,7 @@ export default function Home() {
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
           variants={sectionVariants}
-          className="px-4 md:px-8 lg:px-16 py-24"
+          className="section-padding py-24"
         >
           <div className="mb-12 text-center">
             <motion.div
@@ -354,10 +354,10 @@ export default function Home() {
               <Zap className="h-3.5 w-3.5 text-primary" />
               <span className="text-sm text-primary font-medium">Showcase Pages</span>
             </motion.div>
-            <h2 className="text-4xl sm:text-5xl font-bold text-foreground mb-4 tracking-tight">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4 tracking-tight text-balance">
               Explore Every Detail
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto text-pretty">
               Dive deep into each aspect of UnQWebTemplate — from interactive components
               to cinematic animations and stunning card layouts.
             </p>
@@ -367,7 +367,7 @@ export default function Home() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6"
           >
             {showcasePages.map((page) => {
               const Icon = page.icon;
@@ -376,7 +376,7 @@ export default function Home() {
                   <Link href={page.href} className="block group">
                     <motion.div
                       whileHover={{ y: -6, transition: { duration: 0.25 } }}
-                      className="rounded-2xl border bg-card p-6 h-full transition-colors hover:border-primary/30"
+                      className="card-hover rounded-2xl border bg-card p-6 h-full transition-colors hover:border-primary/30"
                     >
                       <div className={`h-12 w-12 rounded-xl bg-gradient-to-br ${page.gradient} flex items-center justify-center mb-4`}>
                         <Icon className="h-6 w-6 text-primary" />
@@ -406,7 +406,7 @@ export default function Home() {
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
           variants={sectionVariants}
-          className="px-4 md:px-8 lg:px-16 py-12"
+          className="section-padding py-12"
         >
           <div className="mb-12 text-center">
             <motion.div
@@ -419,10 +419,10 @@ export default function Home() {
               <Sparkles className="h-3.5 w-3.5 text-primary" />
               <span className="text-sm text-primary font-medium">Packed with Features</span>
             </motion.div>
-            <h2 className="text-4xl sm:text-5xl font-bold text-foreground mb-4 tracking-tight">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4 tracking-tight text-balance">
               Everything You Need
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto text-pretty">
               A complete toolkit with pre-built pages, rich components, AI
               integration, and cinematic animations — all production-ready.
             </p>
@@ -436,7 +436,7 @@ export default function Home() {
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
           variants={fadeInVariants}
-          className="px-4 md:px-8 lg:px-16 py-12"
+          className="section-padding py-12"
         >
           <FeatureSection />
         </motion.section>
@@ -464,7 +464,7 @@ export default function Home() {
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
           variants={sectionVariants}
-          className="relative w-full py-24 px-4 overflow-hidden bg-black"
+          className="relative w-full py-24 section-padding overflow-hidden bg-black"
         >
           <div className="max-w-lg mx-auto text-center mb-10">
             <motion.div
@@ -477,8 +477,8 @@ export default function Home() {
               <Heart className="h-3.5 w-3.5 text-primary fill-primary" />
               <span className="text-sm text-primary font-medium">Community Voices</span>
             </motion.div>
-            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-3">What People Say</h2>
-            <p className="text-white/50 text-base">Swipe through testimonials from our community</p>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-3 text-balance">What People Say</h2>
+            <p className="text-white/50 text-base text-pretty">Swipe through testimonials from our community</p>
           </div>
           <div className="max-w-lg mx-auto" style={{ minHeight: "350px" }}>
             <TestimonialStack testimonials={glassTestimonials} />
@@ -491,7 +491,7 @@ export default function Home() {
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
           variants={sectionVariants}
-          className="px-4 md:px-8 lg:px-16 py-24"
+          className="section-padding py-24"
         >
           <div className="max-w-4xl mx-auto text-center mb-12">
             <motion.div
@@ -504,10 +504,10 @@ export default function Home() {
               <Sparkles className="h-3.5 w-3.5 text-primary" />
               <span className="text-sm text-primary font-medium">Interactive Effects</span>
             </motion.div>
-            <h2 className="text-4xl sm:text-5xl font-bold text-foreground mb-4 tracking-tight">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4 tracking-tight text-balance">
               Mesmerizing Particle Effects
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto text-pretty">
               Canvas-powered particle text that morphs between words in real
               time. Right-click and hold to destroy particles — pure magic.
             </p>
@@ -523,17 +523,17 @@ export default function Home() {
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
           variants={sectionVariants}
-          className="px-4 md:px-8 lg:px-16 py-24"
+          className="section-padding py-24"
         >
           <div className="relative max-w-4xl mx-auto rounded-3xl overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-primary/10 to-orange-500/10" />
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(201,100,66,0.15),transparent_70%)]" />
             <div className="absolute inset-0 border border-primary/20 rounded-3xl" />
             <div className="relative px-8 py-16 md:px-16 md:py-20 text-center">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-6 tracking-tight">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-6 tracking-tight text-balance">
                 Ready to Build Something <span className="text-primary">UnQ</span>?
               </h2>
-              <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-10">
+              <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto mb-10 text-pretty">
                 Stop building from scratch. Start with a template that&apos;s
                 production-ready, beautifully designed, and endlessly customizable.
               </p>
@@ -541,7 +541,7 @@ export default function Home() {
                 <Button
                   asChild
                   size="lg"
-                  className="gap-2 bg-primary hover:bg-primary/90 text-primary-foreground px-8 text-base cursor-pointer"
+                  className="gap-2 bg-primary hover:bg-primary/90 text-primary-foreground px-8 text-base cursor-pointer touch-target"
                 >
                   <Link href="/components">
                     Explore Components <ArrowRight className="h-4 w-4" />
@@ -551,7 +551,7 @@ export default function Home() {
                   asChild
                   variant="outline"
                   size="lg"
-                  className="gap-2 px-8 text-base cursor-pointer"
+                  className="gap-2 px-8 text-base cursor-pointer touch-target"
                 >
                   <Link href="/animations">View Animations</Link>
                 </Button>

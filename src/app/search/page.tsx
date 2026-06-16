@@ -159,7 +159,7 @@ function FilterSearch() {
           <Button
             key={filter}
             variant={activeFilter === filter ? "default" : "outline"}
-            size="sm"
+           
             onClick={() => setActiveFilter(filter)}
             className={
               activeFilter === filter
@@ -236,7 +236,7 @@ function RecentSearches() {
         {recentSearches.length > 0 && (
           <Button
             variant="ghost"
-            size="sm"
+           
             onClick={() => setRecentSearches([])}
             className="text-xs text-muted-foreground h-6"
           >
@@ -345,7 +345,7 @@ function SearchResultsPage() {
               <div className="mt-0.5">
                 <FileText className="h-4 w-4 text-primary" />
               </div>
-              <div className="flex-1 min-w-0">
+              <div className="flex-1 min-w-0 overflow-x-hidden pt-16 md:pt-0">
                 <div className="flex items-center gap-2 mb-1">
                   <h4 className="text-sm font-semibold group-hover:text-primary transition-colors">
                     {result.title}
@@ -387,11 +387,11 @@ export default function SearchPage() {
   }, []);
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-dvh">
       <SidebarNav />
-      <main className="flex-1 overflow-y-auto">
+      <main className="flex-1 overflow-y-auto overflow-x-hidden pt-16 md:pt-0">
         {/* Hero Section */}
-        <div className="relative overflow-hidden bg-background py-20 px-6 md:px-12">
+        <div className="relative overflow-hidden bg-background py-20 section-padding">
           <motion.div
             className="absolute inset-0"
             style={{
@@ -412,7 +412,7 @@ export default function SearchPage() {
               <Search className="h-3 w-3 mr-1" />
               Search & Command
             </Badge>
-            <h1 className="text-4xl md:text-6xl font-bold mb-4">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
               Search <span className="text-primary">&amp; Command</span>
             </h1>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
@@ -426,7 +426,7 @@ export default function SearchPage() {
           </motion.div>
         </div>
 
-        <div className="p-6 md:p-12 space-y-12">
+        <div className="section-padding py-6 sm:py-12 space-y-12">
           {/* Action Search Bar */}
           <motion.section
             variants={sectionVariants}
@@ -574,7 +574,7 @@ export default function SearchPage() {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            className="text-center py-8 border-t border-border/30"
+            className="text-center py-8 border-t border-border/30 safe-area-bottom"
           >
             <p className="text-muted-foreground text-sm">
               Built with ❤️ by Sandeep Gaddam

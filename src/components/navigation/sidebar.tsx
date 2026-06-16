@@ -32,6 +32,7 @@ import {
   Rocket,
   Megaphone,
   LayoutGrid,
+  Download,
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
@@ -91,8 +92,8 @@ export function SidebarNav() {
     <div className="flex flex-col h-full">
       {/* Logo */}
       <div className="flex items-center gap-3 px-4 py-5 border-b border-border/50">
-        <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-primary/10 border border-primary/20">
-          <span className="text-primary font-bold text-lg">U</span>
+        <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-primary/10 border border-primary/20 overflow-hidden">
+          <img src="/logo.svg" alt="UnQ" className="w-full h-full object-cover" />
         </div>
         <AnimatePresence>
           {!collapsed && (

@@ -1,0 +1,928 @@
+     1→"use client";
+     2→
+     3→import React, { useState } from "react";
+     4→import { motion, AnimatePresence } from "framer-motion";
+     5→import { SidebarNav } from "@/components/navigation/sidebar";
+     6→import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+     7→import { Button } from "@/components/ui/button";
+     8→import { Input } from "@/components/ui/input";
+     9→import { Label } from "@/components/ui/label";
+    10→import { Textarea } from "@/components/ui/textarea";
+    11→import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
+    12→import { Checkbox } from "@/components/ui/checkbox";
+    13→import { Switch } from "@/components/ui/switch";
+    14→import { Slider } from "@/components/ui/slider";
+    15→import { Progress } from "@/components/ui/progress";
+    16→import { Badge } from "@/components/ui/badge";
+    17→import { Separator } from "@/components/ui/separator";
+    18→import {
+    19→  Send,
+    20→  LogIn,
+    21→  UserPlus,
+    22→  Settings,
+    23→  Search,
+    24→  CheckCircle2,
+    25→  Mail,
+    26→  Lock,
+    27→  User,
+    28→  MessageSquare,
+    29→  Globe,
+    30→  Bell,
+    31→  Shield,
+    32→  Palette,
+    33→  ChevronRight,
+    34→  ChevronLeft,
+    35→  Eye,
+    36→  EyeOff,
+    37→  Sparkles,
+    38→  Briefcase,
+    39→  Phone,
+    40→} from "lucide-react";
+    41→import { toast } from "sonner";
+    42→
+    43→// ===== ANIMATION VARIANTS =====
+    44→const sectionVariants = {
+    45→  hidden: { opacity: 0, y: 40 },
+    46→  visible: {
+    47→    opacity: 1,
+    48→    y: 0,
+    49→    transition: { duration: 0.7, ease: [0.25, 0.4, 0.25, 1] },
+    50→  },
+    51→};
+    52→
+    53→const staggerContainer = {
+    54→  hidden: { opacity: 0 },
+    55→  visible: {
+    56→    opacity: 1,
+    57→    transition: { staggerChildren: 0.08, delayChildren: 0.1 },
+    58→  },
+    59→};
+    60→
+    61→const staggerItem = {
+    62→  hidden: { opacity: 0, y: 20 },
+    63→  visible: {
+    64→    opacity: 1,
+    65→    y: 0,
+    66→    transition: { duration: 0.5, ease: "easeOut" },
+    67→  },
+    68→};
+    69→
+    70→// ===== CONTACT FORM =====
+    71→function ContactForm() {
+    72→  const [submitted, setSubmitted] = useState(false);
+    73→
+    74→  const handleSubmit = (e: React.FormEvent) => {
+    75→    e.preventDefault();
+    76→    setSubmitted(true);
+    77→    toast.success("Message sent successfully!", { description: "We'll get back to you within 24 hours." });
+    78→    setTimeout(() => setSubmitted(false), 3000);
+    79→  };
+    80→
+    81→  return (
+    82→    <motion.div variants={staggerItem}>
+    83→      <Card className="border-border/50 bg-card/50 backdrop-blur-sm overflow-hidden">
+    84→        <CardHeader>
+    85→          <div className="flex items-center gap-3">
+    86→            <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-primary/10 border border-primary/20">
+    87→              <Send className="h-5 w-5 text-primary" />
+    88→            </div>
+    89→            <div>
+    90→              <CardTitle className="text-lg">Contact Form</CardTitle>
+    91→              <CardDescription>Full-featured contact form with validation</CardDescription>
+    92→            </div>
+    93→          </div>
+    94→        </CardHeader>
+    95→        <CardContent>
+    96→          <AnimatePresence mode="wait">
+    97→            {submitted ? (
+    98→              <motion.div
+    99→                key="success"
+   100→                initial={{ opacity: 0, scale: 0.9 }}
+   101→                animate={{ opacity: 1, scale: 1 }}
+   102→                exit={{ opacity: 0, scale: 0.9 }}
+   103→                className="flex flex-col items-center justify-center py-12 gap-4"
+   104→              >
+   105→                <div className="w-16 h-16 rounded-full bg-green-500/10 flex items-center justify-center">
+   106→                  <CheckCircle2 className="h-8 w-8 text-green-500" />
+   107→                </div>
+   108→                <h3 className="text-lg font-semibold">Message Sent!</h3>
+   109→                <p className="text-sm text-muted-foreground text-center">We&apos;ll get back to you within 24 hours.</p>
+   110→              </motion.div>
+   111→            ) : (
+   112→              <motion.form
+   113→                key="form"
+   114→                initial={{ opacity: 0 }}
+   115→                animate={{ opacity: 1 }}
+   116→                exit={{ opacity: 0 }}
+   117→                onSubmit={handleSubmit}
+   118→                className="space-y-4"
+   119→              >
+   120→                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+   121→                  <div className="space-y-2">
+   122→                    <Label htmlFor="contact-name">Name</Label>
+   123→                    <div className="relative">
+   124→                      <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+   125→                      <Input id="contact-name" placeholder="Your name" className="pl-10" required />
+   126→                    </div>
+   127→                  </div>
+   128→                  <div className="space-y-2">
+   129→                    <Label htmlFor="contact-email">Email</Label>
+   130→                    <div className="relative">
+   131→                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+   132→                      <Input id="contact-email" type="email" placeholder="you@example.com" className="pl-10" required />
+   133→                    </div>
+   134→                  </div>
+   135→                </div>
+   136→                <div className="space-y-2">
+   137→                  <Label htmlFor="contact-subject">Subject</Label>
+   138→                  <Select>
+   139→                    <SelectTrigger>
+   140→                      <SelectValue placeholder="Select a subject" />
+   141→                    </SelectTrigger>
+   142→                    <SelectContent>
+   143→                      <SelectItem value="general">General Inquiry</SelectItem>
+   144→                      <SelectItem value="support">Technical Support</SelectItem>
+   145→                      <SelectItem value="billing">Billing Question</SelectItem>
+   146→                      <SelectItem value="partnership">Partnership</SelectItem>
+   147→                      <SelectItem value="feedback">Feedback</SelectItem>
+   148→                    </SelectContent>
+   149→                  </Select>
+   150→                </div>
+   151→                <div className="space-y-2">
+   152→                  <Label htmlFor="contact-message">Message</Label>
+   153→                  <Textarea id="contact-message" placeholder="Tell us what you need..." rows={4} required />
+   154→                </div>
+   155→                <div className="flex items-center gap-2">
+   156→                  <Checkbox id="contact-agree" />
+   157→                  <Label htmlFor="contact-agree" className="text-sm text-muted-foreground">
+   158→                    I agree to the privacy policy
+   159→                  </Label>
+   160→                </div>
+   161→                <Button type="submit" className="w-full gap-2">
+   162→                  <Send className="h-4 w-4" /> Send Message
+   163→                </Button>
+   164→              </motion.form>
+   165→            )}
+   166→          </AnimatePresence>
+   167→        </CardContent>
+   168→      </Card>
+   169→    </motion.div>
+   170→  );
+   171→}
+   172→
+   173→// ===== LOGIN FORM =====
+   174→function LoginForm() {
+   175→  const [showPassword, setShowPassword] = useState(false);
+   176→
+   177→  const handleSubmit = (e: React.FormEvent) => {
+   178→    e.preventDefault();
+   179→    toast.success("Login successful!", { description: "Welcome back to UnQWebTemplate." });
+   180→  };
+   181→
+   182→  return (
+   183→    <motion.div variants={staggerItem}>
+   184→      <Card className="border-border/50 bg-card/50 backdrop-blur-sm">
+   185→        <CardHeader>
+   186→          <div className="flex items-center gap-3">
+   187→            <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-primary/10 border border-primary/20">
+   188→              <LogIn className="h-5 w-5 text-primary" />
+   189→            </div>
+   190→            <div>
+   191→              <CardTitle className="text-lg">Login Form</CardTitle>
+   192→              <CardDescription>Email + Password with remember me</CardDescription>
+   193→            </div>
+   194→          </div>
+   195→        </CardHeader>
+   196→        <CardContent>
+   197→          <form onSubmit={handleSubmit} className="space-y-4">
+   198→            <div className="space-y-2">
+   199→              <Label htmlFor="login-email">Email</Label>
+   200→              <div className="relative">
+   201→                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+   202→                <Input id="login-email" type="email" placeholder="you@example.com" className="pl-10" required />
+   203→              </div>
+   204→            </div>
+   205→            <div className="space-y-2">
+   206→              <div className="flex items-center justify-between">
+   207→                <Label htmlFor="login-password">Password</Label>
+   208→                <button type="button" className="text-xs text-primary hover:text-primary/80 transition-colors cursor-pointer">
+   209→                  Forgot password?
+   210→                </button>
+   211→              </div>
+   212→              <div className="relative">
+   213→                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+   214→                <Input
+   215→                  id="login-password"
+   216→                  type={showPassword ? "text" : "password"}
+   217→                  placeholder="Enter your password"
+   218→                  className="pl-10 pr-10"
+   219→                  required
+   220→                />
+   221→                <button
+   222→                  type="button"
+   223→                  onClick={() => setShowPassword(!showPassword)}
+   224→                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+   225→                >
+   226→                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+   227→                </button>
+   228→              </div>
+   229→            </div>
+   230→            <div className="flex items-center gap-2">
+   231→              <Checkbox id="login-remember" />
+   232→              <Label htmlFor="login-remember" className="text-sm text-muted-foreground">
+   233→                Remember me for 30 days
+   234→              </Label>
+   235→            </div>
+   236→            <Button type="submit" className="w-full gap-2">
+   237→              <LogIn className="h-4 w-4" /> Sign In
+   238→            </Button>
+   239→            <div className="relative my-4">
+   240→              <Separator />
+   241→              <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-card px-3 text-xs text-muted-foreground">
+   242→                or continue with
+   243→              </span>
+   244→            </div>
+   245→            <div className="grid grid-cols-2 gap-3">
+   246→              <Button type="button" variant="outline" className="gap-2">
+   247→                <Globe className="h-4 w-4" /> Google
+   248→              </Button>
+   249→              <Button type="button" variant="outline" className="gap-2">
+   250→                <Sparkles className="h-4 w-4" /> GitHub
+   251→              </Button>
+   252→            </div>
+   253→          </form>
+   254→        </CardContent>
+   255→      </Card>
+   256→    </motion.div>
+   257→  );
+   258→}
+   259→
+   260→// ===== REGISTRATION FORM =====
+   261→function RegistrationForm() {
+   262→  const [step, setStep] = useState(1);
+   263→  const totalSteps = 3;
+   264→
+   265→  const handleSubmit = (e: React.FormEvent) => {
+   266→    e.preventDefault();
+   267→    if (step < totalSteps) {
+   268→      setStep(step + 1);
+   269→    } else {
+   270→      toast.success("Account created!", { description: "Welcome to UnQWebTemplate." });
+   271→      setStep(1);
+   272→    }
+   273→  };
+   274→
+   275→  return (
+   276→    <motion.div variants={staggerItem}>
+   277→      <Card className="border-border/50 bg-card/50 backdrop-blur-sm">
+   278→        <CardHeader>
+   279→          <div className="flex items-center gap-3">
+   280→            <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-primary/10 border border-primary/20">
+   281→              <UserPlus className="h-5 w-5 text-primary" />
+   282→            </div>
+   283→            <div>
+   284→              <CardTitle className="text-lg">Registration Form</CardTitle>
+   285→              <CardDescription>Multi-field form with validation states</CardDescription>
+   286→            </div>
+   287→          </div>
+   288→        </CardHeader>
+   289→        <CardContent>
+   290→          {/* Step indicators */}
+   291→          <div className="flex items-center gap-2 mb-6">
+   292→            {Array.from({ length: totalSteps }).map((_, i) => (
+   293→              <div key={i} className="flex-1 flex items-center gap-2">
+   294→                <div
+   295→                  className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
+   296→                    i + 1 <= step
+   297→                      ? "bg-primary text-primary-foreground"
+   298→                      : "bg-muted text-muted-foreground"
+   299→                  }`}
+   300→                >
+   301→                  {i + 1}
+   302→                </div>
+   303→                {i < totalSteps - 1 && (
+   304→                  <div className="flex-1 h-1 rounded-full bg-muted overflow-hidden">
+   305→                    <motion.div
+   306→                      className="h-full bg-primary rounded-full"
+   307→                      initial={{ width: "0%" }}
+   308→                      animate={{ width: i + 1 < step ? "100%" : "0%" }}
+   309→                      transition={{ duration: 0.5 }}
+   310→                    />
+   311→                  </div>
+   312→                )}
+   313→              </div>
+   314→            ))}
+   315→          </div>
+   316→
+   317→          <form onSubmit={handleSubmit} className="space-y-4">
+   318→            <AnimatePresence mode="wait">
+   319→              {step === 1 && (
+   320→                <motion.div
+   321→                  key="step1"
+   322→                  initial={{ opacity: 0, x: 20 }}
+   323→                  animate={{ opacity: 1, x: 0 }}
+   324→                  exit={{ opacity: 0, x: -20 }}
+   325→                  className="space-y-4"
+   326→                >
+   327→                  <div className="grid grid-cols-2 gap-4">
+   328→                    <div className="space-y-2">
+   329→                      <Label htmlFor="reg-first">First Name</Label>
+   330→                      <Input id="reg-first" placeholder="John" required />
+   331→                    </div>
+   332→                    <div className="space-y-2">
+   333→                      <Label htmlFor="reg-last">Last Name</Label>
+   334→                      <Input id="reg-last" placeholder="Doe" required />
+   335→                    </div>
+   336→                  </div>
+   337→                  <div className="space-y-2">
+   338→                    <Label htmlFor="reg-email">Email Address</Label>
+   339→                    <Input id="reg-email" type="email" placeholder="john@example.com" required />
+   340→                  </div>
+   341→                  <div className="space-y-2">
+   342→                    <Label htmlFor="reg-phone">Phone Number</Label>
+   343→                    <div className="relative">
+   344→                      <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+   345→                      <Input id="reg-phone" placeholder="+1 (555) 000-0000" className="pl-10" />
+   346→                    </div>
+   347→                  </div>
+   348→                </motion.div>
+   349→              )}
+   350→
+   351→              {step === 2 && (
+   352→                <motion.div
+   353→                  key="step2"
+   354→                  initial={{ opacity: 0, x: 20 }}
+   355→                  animate={{ opacity: 1, x: 0 }}
+   356→                  exit={{ opacity: 0, x: -20 }}
+   357→                  className="space-y-4"
+   358→                >
+   359→                  <div className="space-y-2">
+   360→                    <Label htmlFor="reg-company">Company</Label>
+   361→                    <div className="relative">
+   362→                      <Briefcase className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+   363→                      <Input id="reg-company" placeholder="Your company name" className="pl-10" />
+   364→                    </div>
+   365→                  </div>
+   366→                  <div className="space-y-2">
+   367→                    <Label htmlFor="reg-role">Role</Label>
+   368→                    <Select>
+   369→                      <SelectTrigger>
+   370→                        <SelectValue placeholder="Select your role" />
+   371→                      </SelectTrigger>
+   372→                      <SelectContent>
+   373→                        <SelectItem value="developer">Developer</SelectItem>
+   374→                        <SelectItem value="designer">Designer</SelectItem>
+   375→                        <SelectItem value="pm">Product Manager</SelectItem>
+   376→                        <SelectItem value="executive">Executive</SelectItem>
+   377→                        <SelectItem value="other">Other</SelectItem>
+   378→                      </SelectContent>
+   379→                    </Select>
+   380→                  </div>
+   381→                  <div className="space-y-2">
+   382→                    <Label htmlFor="reg-exp">Experience Level</Label>
+   383→                    <Select>
+   384→                      <SelectTrigger>
+   385→                        <SelectValue placeholder="Select experience level" />
+   386→                      </SelectTrigger>
+   387→                      <SelectContent>
+   388→                        <SelectItem value="junior">Junior (0-2 years)</SelectItem>
+   389→                        <SelectItem value="mid">Mid-level (3-5 years)</SelectItem>
+   390→                        <SelectItem value="senior">Senior (6-10 years)</SelectItem>
+   391→                        <SelectItem value="lead">Lead (10+ years)</SelectItem>
+   392→                      </SelectContent>
+   393→                    </Select>
+   394→                  </div>
+   395→                </motion.div>
+   396→              )}
+   397→
+   398→              {step === 3 && (
+   399→                <motion.div
+   400→                  key="step3"
+   401→                  initial={{ opacity: 0, x: 20 }}
+   402→                  animate={{ opacity: 1, x: 0 }}
+   403→                  exit={{ opacity: 0, x: -20 }}
+   404→                  className="space-y-4"
+   405→                >
+   406→                  <div className="space-y-2">
+   407→                    <Label htmlFor="reg-password">Password</Label>
+   408→                    <div className="relative">
+   409→                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+   410→                      <Input id="reg-password" type="password" placeholder="Create a strong password" className="pl-10" required />
+   411→                    </div>
+   412→                    <div className="space-y-1.5 mt-2">
+   413→                      <div className="flex items-center gap-2 text-xs">
+   414→                        <div className="w-2 h-2 rounded-full bg-green-500" />
+   415→                        <span className="text-muted-foreground">8+ characters</span>
+   416→                      </div>
+   417→                      <div className="flex items-center gap-2 text-xs">
+   418→                        <div className="w-2 h-2 rounded-full bg-green-500" />
+   419→                        <span className="text-muted-foreground">One uppercase letter</span>
+   420→                      </div>
+   421→                      <div className="flex items-center gap-2 text-xs">
+   422→                        <div className="w-2 h-2 rounded-full bg-yellow-500" />
+   423→                        <span className="text-muted-foreground">One number</span>
+   424→                      </div>
+   425→                    </div>
+   426→                  </div>
+   427→                  <div className="space-y-2">
+   428→                    <Label htmlFor="reg-confirm">Confirm Password</Label>
+   429→                    <div className="relative">
+   430→                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+   431→                      <Input id="reg-confirm" type="password" placeholder="Repeat your password" className="pl-10" required />
+   432→                    </div>
+   433→                  </div>
+   434→                  <div className="flex items-center gap-2 pt-2">
+   435→                    <Checkbox id="reg-terms" />
+   436→                    <Label htmlFor="reg-terms" className="text-sm text-muted-foreground">
+   437→                      I agree to the Terms of Service and Privacy Policy
+   438→                    </Label>
+   439→                  </div>
+   440→                </motion.div>
+   441→              )}
+   442→            </AnimatePresence>
+   443→
+   444→            <div className="flex items-center justify-between pt-2">
+   445→              <Button
+   446→                type="button"
+   447→                variant="outline"
+   448→                onClick={() => setStep(Math.max(1, step - 1))}
+   449→                disabled={step === 1}
+   450→                className="gap-1"
+   451→              >
+   452→                <ChevronLeft className="h-4 w-4" /> Back
+   453→              </Button>
+   454→              <Button type="submit" className="gap-1">
+   455→                {step === totalSteps ? (
+   456→                  <>
+   457→                    <UserPlus className="h-4 w-4" /> Create Account
+   458→                  </>
+   459→                ) : (
+   460→                  <>
+   461→                    Next <ChevronRight className="h-4 w-4" />
+   462→                  </>
+   463→                )}
+   464→              </Button>
+   465→            </div>
+   466→          </form>
+   467→        </CardContent>
+   468→      </Card>
+   469→    </motion.div>
+   470→  );
+   471→}
+   472→
+   473→// ===== SETTINGS FORM =====
+   474→function SettingsForm() {
+   475→  const [emailNotif, setEmailNotif] = useState(true);
+   476→  const [pushNotif, setPushNotif] = useState(false);
+   477→  const [darkMode, setDarkMode] = useState(true);
+   478→  const [volume, setVolume] = useState([75]);
+   479→  const [fontSize, setFontSize] = useState([16]);
+   480→
+   481→  return (
+   482→    <motion.div variants={staggerItem}>
+   483→      <Card className="border-border/50 bg-card/50 backdrop-blur-sm">
+   484→        <CardHeader>
+   485→          <div className="flex items-center gap-3">
+   486→            <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-primary/10 border border-primary/20">
+   487→              <Settings className="h-5 w-5 text-primary" />
+   488→            </div>
+   489→            <div>
+   490→              <CardTitle className="text-lg">Settings Form</CardTitle>
+   491→              <CardDescription>Toggles, Selects, Sliders for preferences</CardDescription>
+   492→            </div>
+   493→          </div>
+   494→        </CardHeader>
+   495→        <CardContent className="space-y-6">
+   496→          {/* Notification Settings */}
+   497→          <div className="space-y-4">
+   498→            <div className="flex items-center gap-2">
+   499→              <Bell className="h-4 w-4 text-primary" />
+   500→              <h4 className="text-sm font-semibold">Notifications</h4>
+   501→            </div>
+   502→            <div className="space-y-3">
+   503→              <div className="flex items-center justify-between p-3 rounded-lg bg-muted/30">
+   504→                <div>
+   505→                  <p className="text-sm font-medium">Email Notifications</p>
+   506→                  <p className="text-xs text-muted-foreground">Receive updates via email</p>
+   507→                </div>
+   508→                <Switch checked={emailNotif} onCheckedChange={setEmailNotif} />
+   509→              </div>
+   510→              <div className="flex items-center justify-between p-3 rounded-lg bg-muted/30">
+   511→                <div>
+   512→                  <p className="text-sm font-medium">Push Notifications</p>
+   513→                  <p className="text-xs text-muted-foreground">Browser push alerts</p>
+   514→                </div>
+   515→                <Switch checked={pushNotif} onCheckedChange={setPushNotif} />
+   516→              </div>
+   517→            </div>
+   518→          </div>
+   519→
+   520→          <Separator />
+   521→
+   522→          {/* Appearance */}
+   523→          <div className="space-y-4">
+   524→            <div className="flex items-center gap-2">
+   525→              <Palette className="h-4 w-4 text-primary" />
+   526→              <h4 className="text-sm font-semibold">Appearance</h4>
+   527→            </div>
+   528→            <div className="space-y-3">
+   529→              <div className="flex items-center justify-between p-3 rounded-lg bg-muted/30">
+   530→                <div>
+   531→                  <p className="text-sm font-medium">Dark Mode</p>
+   532→                  <p className="text-xs text-muted-foreground">Toggle dark theme</p>
+   533→                </div>
+   534→                <Switch checked={darkMode} onCheckedChange={setDarkMode} />
+   535→              </div>
+   536→              <div className="space-y-2 p-3 rounded-lg bg-muted/30">
+   537→                <div className="flex items-center justify-between">
+   538→                  <p className="text-sm font-medium">Font Size</p>
+   539→                  <Badge variant="secondary">{fontSize[0]}px</Badge>
+   540→                </div>
+   541→                <Slider
+   542→                  value={fontSize}
+   543→                  onValueChange={setFontSize}
+   544→                  min={12}
+   545→                  max={24}
+   546→                  step={1}
+   547→                />
+   548→              </div>
+   549→            </div>
+   550→          </div>
+   551→
+   552→          <Separator />
+   553→
+   554→          {/* Privacy */}
+   555→          <div className="space-y-4">
+   556→            <div className="flex items-center gap-2">
+   557→              <Shield className="h-4 w-4 text-primary" />
+   558→              <h4 className="text-sm font-semibold">Privacy & Security</h4>
+   559→            </div>
+   560→            <div className="space-y-3">
+   561→              <div className="space-y-2 p-3 rounded-lg bg-muted/30">
+   562→                <div className="flex items-center justify-between">
+   563→                  <p className="text-sm font-medium">Profile Visibility</p>
+   564→                </div>
+   565→                <Select>
+   566→                  <SelectTrigger>
+   567→                    <SelectValue placeholder="Who can see your profile" />
+   568→                  </SelectTrigger>
+   569→                  <SelectContent>
+   570→                    <SelectItem value="public">Public</SelectItem>
+   571→                    <SelectItem value="friends">Friends Only</SelectItem>
+   572→                    <SelectItem value="private">Private</SelectItem>
+   573→                  </SelectContent>
+   574→                </Select>
+   575→              </div>
+   576→              <div className="space-y-2 p-3 rounded-lg bg-muted/30">
+   577→                <div className="flex items-center justify-between">
+   578→                  <p className="text-sm font-medium">Volume</p>
+   579→                  <Badge variant="secondary">{volume[0]}%</Badge>
+   580→                </div>
+   581→                <Slider
+   582→                  value={volume}
+   583→                  onValueChange={setVolume}
+   584→                  max={100}
+   585→                  step={1}
+   586→                />
+   587→              </div>
+   588→            </div>
+   589→          </div>
+   590→
+   591→          <Button className="w-full gap-2" onClick={() => toast.success("Settings saved!")}>
+   592→            <Settings className="h-4 w-4" /> Save Settings
+   593→          </Button>
+   594→        </CardContent>
+   595→      </Card>
+   596→    </motion.div>
+   597→  );
+   598→}
+   599→
+   600→// ===== SEARCH FORM =====
+   601→function SearchForm() {
+   602→  const [searchValue, setSearchValue] = useState("");
+   603→  const suggestions = [
+   604→    "Next.js Documentation",
+   605→    "Tailwind CSS Plugins",
+   606→    "shadcn/ui Components",
+   607→    "Framer Motion Animations",
+   608→    "TypeScript Best Practices",
+   609→    "React Server Components",
+   610→    "Prisma ORM Guide",
+   611→    "Zustand State Management",
+   612→  ];
+   613→  const filtered = searchValue
+   614→    ? suggestions.filter((s) => s.toLowerCase().includes(searchValue.toLowerCase()))
+   615→    : [];
+   616→
+   617→  return (
+   618→    <motion.div variants={staggerItem}>
+   619→      <Card className="border-border/50 bg-card/50 backdrop-blur-sm">
+   620→        <CardHeader>
+   621→          <div className="flex items-center gap-3">
+   622→            <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-primary/10 border border-primary/20">
+   623→              <Search className="h-5 w-5 text-primary" />
+   624→            </div>
+   625→            <div>
+   626→              <CardTitle className="text-lg">Search Form</CardTitle>
+   627→              <CardDescription>With autocomplete-style dropdown</CardDescription>
+   628→            </div>
+   629→          </div>
+   630→        </CardHeader>
+   631→        <CardContent>
+   632→          <div className="relative">
+   633→            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+   634→            <Input
+   635→              placeholder="Search components, docs, guides..."
+   636→              className="pl-10"
+   637→              value={searchValue}
+   638→              onChange={(e) => setSearchValue(e.target.value)}
+   639→            />
+   640→            <AnimatePresence>
+   641→              {filtered.length > 0 && (
+   642→                <motion.div
+   643→                  initial={{ opacity: 0, y: -8 }}
+   644→                  animate={{ opacity: 1, y: 0 }}
+   645→                  exit={{ opacity: 0, y: -8 }}
+   646→                  className="absolute top-full mt-2 w-full bg-popover border border-border rounded-xl shadow-lg overflow-hidden z-10"
+   647→                >
+   648→                  {filtered.map((item, i) => (
+   649→                    <motion.button
+   650→                      key={item}
+   651→                      initial={{ opacity: 0, x: -10 }}
+   652→                      animate={{ opacity: 1, x: 0 }}
+   653→                      transition={{ delay: i * 0.05 }}
+   654→                      className="flex items-center gap-3 w-full px-4 py-3 text-sm hover:bg-muted/50 transition-colors text-left cursor-pointer"
+   655→                      onClick={() => {
+   656→                        setSearchValue(item);
+   657→                        toast.info(`Selected: ${item}`);
+   658→                      }}
+   659→                    >
+   660→                      <Search className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />
+   661→                      <span>{item}</span>
+   662→                      <ChevronRight className="h-3.5 w-3.5 text-muted-foreground ml-auto" />
+   663→                    </motion.button>
+   664→                  ))}
+   665→                </motion.div>
+   666→              )}
+   667→            </AnimatePresence>
+   668→          </div>
+   669→          <div className="mt-4 flex flex-wrap gap-2">
+   670→            {["Components", "Animations", "Templates", "Hooks", "API"].map((tag) => (
+   671→              <Badge
+   672→                key={tag}
+   673→                variant="secondary"
+   674→                className="cursor-pointer hover:bg-primary/10 hover:text-primary transition-colors"
+   675→                onClick={() => {
+   676→                  setSearchValue(tag);
+   677→                  toast.info(`Searching for: ${tag}`);
+   678→                }}
+   679→              >
+   680→                {tag}
+   681→              </Badge>
+   682→            ))}
+   683→          </div>
+   684→        </CardContent>
+   685→      </Card>
+   686→    </motion.div>
+   687→  );
+   688→}
+   689→
+   690→// ===== MULTI-STEP FORM WITH PROGRESS =====
+   691→function MultiStepForm() {
+   692→  const [step, setStep] = useState(0);
+   693→  const steps = [
+   694→    { title: "Personal Info", icon: User },
+   695→    { title: "Preferences", icon: Palette },
+   696→    { title: "Review", icon: CheckCircle2 },
+   697→    { title: "Complete", icon: Sparkles },
+   698→  ];
+   699→  const progress = ((step + 1) / steps.length) * 100;
+   700→
+   701→  const handleNext = () => {
+   702→    if (step < steps.length - 1) {
+   703→      setStep(step + 1);
+   704→      if (step === steps.length - 2) {
+   705→        toast.success("Form submitted successfully!");
+   706→      }
+   707→    } else {
+   708→      setStep(0);
+   709→    }
+   710→  };
+   711→
+   712→  return (
+   713→    <motion.div variants={staggerItem}>
+   714→      <Card className="border-border/50 bg-card/50 backdrop-blur-sm">
+   715→        <CardHeader>
+   716→          <div className="flex items-center gap-3">
+   717→            <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-primary/10 border border-primary/20">
+   718→              <MessageSquare className="h-5 w-5 text-primary" />
+   719→            </div>
+   720→            <div>
+   721→              <CardTitle className="text-lg">Multi-Step Form</CardTitle>
+   722→              <CardDescription>With progress indicator and step navigation</CardDescription>
+   723→            </div>
+   724→          </div>
+   725→        </CardHeader>
+   726→        <CardContent className="space-y-6">
+   727→          {/* Progress */}
+   728→          <div className="space-y-3">
+   729→            <div className="flex justify-between text-sm">
+   730→              <span className="text-muted-foreground">Step {step + 1} of {steps.length}</span>
+   731→              <span className="font-medium">{Math.round(progress)}%</span>
+   732→            </div>
+   733→            <Progress value={progress} className="h-2" />
+   734→          </div>
+   735→
+   736→          {/* Step Indicators */}
+   737→          <div className="flex items-center justify-between">
+   738→            {steps.map((s, i) => {
+   739→              const Icon = s.icon;
+   740→              return (
+   741→                <div key={i} className="flex flex-col items-center gap-1.5">
+   742→                  <motion.div
+   743→                    className={`w-10 h-10 rounded-full flex items-center justify-center border-2 transition-colors ${
+   744→                      i <= step
+   745→                        ? "border-primary bg-primary/10 text-primary"
+   746→                        : "border-border text-muted-foreground"
+   747→                    }`}
+   748→                    animate={{ scale: i === step ? 1.1 : 1 }}
+   749→                    transition={{ type: "spring", stiffness: 300 }}
+   750→                  >
+   751→                    <Icon className="h-4 w-4" />
+   752→                  </motion.div>
+   753→                  <span className={`text-xs hidden sm:block ${i <= step ? "text-primary font-medium" : "text-muted-foreground"}`}>
+   754→                    {s.title}
+   755→                  </span>
+   756→                </div>
+   757→              );
+   758→            })}
+   759→          </div>
+   760→
+   761→          {/* Step Content */}
+   762→          <AnimatePresence mode="wait">
+   763→            <motion.div
+   764→              key={step}
+   765→              initial={{ opacity: 0, y: 10 }}
+   766→              animate={{ opacity: 1, y: 0 }}
+   767→              exit={{ opacity: 0, y: -10 }}
+   768→              transition={{ duration: 0.3 }}
+   769→            >
+   770→              {step === 0 && (
+   771→                <div className="space-y-3">
+   772→                  <div className="space-y-2">
+   773→                    <Label>Full Name</Label>
+   774→                    <Input placeholder="Enter your full name" />
+   775→                  </div>
+   776→                  <div className="space-y-2">
+   777→                    <Label>Email Address</Label>
+   778→                    <Input type="email" placeholder="you@example.com" />
+   779→                  </div>
+   780→                </div>
+   781→              )}
+   782→              {step === 1 && (
+   783→                <div className="space-y-3">
+   784→                  <div className="space-y-2">
+   785→                    <Label>Preferred Language</Label>
+   786→                    <Select>
+   787→                      <SelectTrigger>
+   788→                        <SelectValue placeholder="Select language" />
+   789→                      </SelectTrigger>
+   790→                      <SelectContent>
+   791→                        <SelectItem value="en">English</SelectItem>
+   792→                        <SelectItem value="es">Spanish</SelectItem>
+   793→                        <SelectItem value="fr">French</SelectItem>
+   794→                        <SelectItem value="de">German</SelectItem>
+   795→                      </SelectContent>
+   796→                    </Select>
+   797→                  </div>
+   798→                  <div className="flex items-center justify-between p-3 rounded-lg bg-muted/30">
+   799→                    <span className="text-sm">Enable notifications</span>
+   800→                    <Switch defaultChecked />
+   801→                  </div>
+   802→                </div>
+   803→              )}
+   804→              {step === 2 && (
+   805→                <div className="space-y-3 p-4 rounded-lg bg-muted/30">
+   806→                  <h4 className="text-sm font-semibold">Review Your Information</h4>
+   807→                  <div className="space-y-2 text-sm text-muted-foreground">
+   808→                    <p>Name: John Doe</p>
+   809→                    <p>Email: john@example.com</p>
+   810→                    <p>Language: English</p>
+   811→                    <p>Notifications: Enabled</p>
+   812→                  </div>
+   813→                </div>
+   814→              )}
+   815→              {step === 3 && (
+   816→                <div className="flex flex-col items-center py-6 gap-3">
+   817→                  <div className="w-14 h-14 rounded-full bg-green-500/10 flex items-center justify-center">
+   818→                    <CheckCircle2 className="h-7 w-7 text-green-500" />
+   819→                  </div>
+   820→                  <h4 className="font-semibold">All Done!</h4>
+   821→                  <p className="text-sm text-muted-foreground text-center">Your information has been submitted.</p>
+   822→                </div>
+   823→              )}
+   824→            </motion.div>
+   825→          </AnimatePresence>
+   826→
+   827→          <div className="flex justify-between">
+   828→            <Button
+   829→              variant="outline"
+   830→              onClick={() => setStep(Math.max(0, step - 1))}
+   831→              disabled={step === 0}
+   832→            >
+   833→              Previous
+   834→            </Button>
+   835→            <Button onClick={handleNext} className="gap-2">
+   836→              {step === steps.length - 1 ? (
+   837→                <>
+   838→                  <Sparkles className="h-4 w-4" /> Restart
+   839→                </>
+   840→              ) : step === steps.length - 2 ? (
+   841→                <>
+   842→                  <CheckCircle2 className="h-4 w-4" /> Submit
+   843→                </>
+   844→              ) : (
+   845→                <>
+   846→                  Next <ChevronRight className="h-4 w-4" />
+   847→                </>
+   848→              )}
+   849→            </Button>
+   850→          </div>
+   851→        </CardContent>
+   852→      </Card>
+   853→    </motion.div>
+   854→  );
+   855→}
+   856→
+   857→// ===== MAIN PAGE =====
+   858→export default function FormsPage() {
+   859→  return (
+   860→    <div className="flex min-h-screen">
+   861→      <SidebarNav />
+   862→      <main className="flex-1 overflow-y-auto">
+   863→        {/* Hero */}
+   864→        <div className="relative overflow-hidden border-b border-border/50">
+   865→          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent" />
+   866→          <div className="relative px-6 md:px-10 py-12 md:py-16 max-w-7xl mx-auto">
+   867→            <motion.div
+   868→              initial={{ opacity: 0, y: 30 }}
+   869→              animate={{ opacity: 1, y: 0 }}
+   870→              transition={{ duration: 0.8, ease: [0.25, 0.4, 0.25, 1] }}
+   871→            >
+   872→              <Badge variant="secondary" className="mb-4 gap-1.5 px-3 py-1">
+   873→                <Sparkles className="h-3 w-3" /> Forms Showcase
+   874→              </Badge>
+   875→              <h1 className="text-3xl md:text-5xl font-bold tracking-tight mb-3">
+   876→                Form <span className="text-primary">Components</span>
+   877→              </h1>
+   878→              <p className="text-muted-foreground text-lg max-w-2xl">
+   879→                Interactive form examples built with shadcn/ui components. From simple contact forms to multi-step wizards with progress tracking.
+   880→              </p>
+   881→            </motion.div>
+   882→          </div>
+   883→        </div>
+   884→
+   885→        {/* Forms Grid */}
+   886→        <div className="px-6 md:px-10 py-10 max-w-7xl mx-auto">
+   887→          <motion.div
+   888→            variants={staggerContainer}
+   889→            initial="hidden"
+   890→            whileInView="visible"
+   891→            viewport={{ once: true, margin: "-50px" }}
+   892→            className="grid grid-cols-1 lg:grid-cols-2 gap-6"
+   893→          >
+   894→            <ContactForm />
+   895→            <LoginForm />
+   896→            <RegistrationForm />
+   897→            <SettingsForm />
+   898→          </motion.div>
+   899→
+   900→          {/* Full-width sections */}
+   901→          <motion.div
+   902→            variants={staggerContainer}
+   903→            initial="hidden"
+   904→            whileInView="visible"
+   905→            viewport={{ once: true, margin: "-50px" }}
+   906→            className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6"
+   907→          >
+   908→            <SearchForm />
+   909→            <MultiStepForm />
+   910→          </motion.div>
+   911→        </div>
+   912→
+   913→        {/* Footer attribution */}
+   914→        <div className="px-6 md:px-10 py-8 border-t border-border/50 text-center">
+   915→          <motion.p
+   916→            initial={{ opacity: 0 }}
+   917→            whileInView={{ opacity: 1 }}
+   918→            viewport={{ once: true }}
+   919→            className="text-sm text-muted-foreground"
+   920→          >
+   921→            UnQWebTemplate — Built with ❤️ by Sandeep Gaddam
+   922→          </motion.p>
+   923→        </div>
+   924→      </main>
+   925→    </div>
+   926→  );
+   927→}
+   928→

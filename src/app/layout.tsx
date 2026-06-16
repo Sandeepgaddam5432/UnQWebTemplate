@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/theme-provider";
+import { PWAInstallPrompt } from "@/components/pwa-install";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,12 +28,14 @@ export const metadata: Metadata = {
     "UI Components",
     "Framer Motion",
     "Glassmorphism",
+    "PWA",
     "UnQWebTemplate",
   ],
   authors: [{ name: "Sandeep Gaddam" }],
   icons: {
     icon: "/logo.svg",
   },
+  manifest: "/manifest.json",
 };
 
 export default function RootLayout({
@@ -42,6 +45,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="theme-color" content="#262624" />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
       >
@@ -53,6 +62,7 @@ export default function RootLayout({
         >
           {children}
           <Toaster />
+          <PWAInstallPrompt />
         </ThemeProvider>
       </body>
     </html>

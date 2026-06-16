@@ -391,7 +391,7 @@ function SkeletonSection() {
           </div>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {/* Card Skeleton */}
             <div className="space-y-3">
               <p className="text-xs text-muted-foreground font-semibold uppercase tracking-wider">Card Skeleton</p>
@@ -400,7 +400,7 @@ function SkeletonSection() {
                 <Skeleton className="h-4 w-3/4" />
                 <Skeleton className="h-4 w-1/2" />
                 <div className="flex items-center gap-3">
-                  <Skeleton className="h-8 w-8 rounded-full" />
+                  <Skeleton className="h-8 touch-target w-8 rounded-full" />
                   <div className="space-y-2 flex-1">
                     <Skeleton className="h-3 w-1/3" />
                     <Skeleton className="h-3 w-1/4" />
@@ -455,8 +455,8 @@ function SkeletonSection() {
                 <Skeleton className="h-5 w-32" />
                 <Skeleton className="h-3 w-48" />
                 <div className="flex gap-4 w-full justify-center">
-                  <Skeleton className="h-8 w-20 rounded-md" />
-                  <Skeleton className="h-8 w-20 rounded-md" />
+                  <Skeleton className="h-8 touch-target w-20 rounded-md" />
+                  <Skeleton className="h-8 touch-target w-20 rounded-md" />
                 </div>
               </div>
             </div>
@@ -752,13 +752,13 @@ function TooltipSection() {
 // ===== MAIN PAGE =====
 export default function FeedbackPage() {
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-dvh">
       <SidebarNav />
-      <main className="flex-1 overflow-y-auto">
+      <main className="flex-1 overflow-y-auto overflow-x-hidden pt-16 md:pt-0">
         {/* Hero */}
         <div className="relative overflow-hidden border-b border-border/50">
           <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent" />
-          <div className="relative px-6 md:px-10 py-12 md:py-16 max-w-7xl mx-auto">
+          <div className="relative section-padding py-12 md:py-16 max-w-7xl mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
@@ -777,7 +777,7 @@ export default function FeedbackPage() {
           </div>
         </div>
 
-        <div className="px-6 md:px-10 py-10 max-w-7xl mx-auto space-y-6">
+        <div className="section-padding py-10 max-w-7xl mx-auto space-y-6">
           {/* Alert Banners */}
           <motion.div
             variants={staggerContainer}
@@ -826,7 +826,7 @@ export default function FeedbackPage() {
         </div>
 
         {/* Footer */}
-        <div className="px-6 md:px-10 py-8 border-t border-border/50 text-center">
+        <div className="section-padding py-8 border-t border-border/50 text-center">
           <motion.p
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}

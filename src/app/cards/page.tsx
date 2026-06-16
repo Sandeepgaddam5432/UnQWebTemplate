@@ -150,7 +150,7 @@ const bentoFeatures: BentoFeature[] = [
         <div className="w-20 h-20 rounded-lg bg-gradient-to-br from-primary/20 to-primary/5 flex-shrink-0 flex items-center justify-center">
           <BookOpen className="h-6 w-6 text-primary/50" />
         </div>
-        <div className="flex-1 min-w-0">
+        <div className="flex-1 min-w-0 overflow-x-hidden pt-16 md:pt-0">
           <p className="text-sm font-medium truncate">Getting Started Guide</p>
           <p className="text-xs text-muted-foreground mt-1">5 min read · Tutorial</p>
         </div>
@@ -256,12 +256,12 @@ const postData = [
 
 export default function CardsShowcase() {
   return (
-    <div className="flex min-h-screen bg-background">
+    <div className="flex min-h-dvh bg-background">
       <SidebarNav />
-      <main className="flex-1 overflow-y-auto">
+      <main className="flex-1 overflow-y-auto overflow-x-hidden pt-16 md:pt-0">
         {/* Page Header */}
         <div className="border-b border-border/50 bg-background/80 backdrop-blur-xl sticky top-0 z-20">
-          <div className="px-6 md:px-10 py-8">
+          <div className="section-padding py-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -283,7 +283,7 @@ export default function CardsShowcase() {
           </div>
         </div>
 
-        <div className="px-6 md:px-10 py-8 space-y-12">
+        <div className="section-padding py-8 space-y-12">
           {/* ===== BENTO GRID SECTION ===== */}
           <motion.section
             initial="hidden"
@@ -293,7 +293,7 @@ export default function CardsShowcase() {
           >
             <div className="mb-6">
               <div className="flex items-center gap-3 mb-3">
-                <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                <div className="h-8 touch-target w-8 rounded-lg bg-primary/10 flex items-center justify-center">
                   <Layers className="h-4 w-4 text-primary" />
                 </div>
                 <div>
@@ -314,7 +314,7 @@ export default function CardsShowcase() {
           >
             <div className="mb-6">
               <div className="flex items-center gap-3 mb-3">
-                <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                <div className="h-8 touch-target w-8 rounded-lg bg-primary/10 flex items-center justify-center">
                   <Globe className="h-4 w-4 text-primary" />
                 </div>
                 <div>
@@ -335,7 +335,7 @@ export default function CardsShowcase() {
           >
             <div className="mb-6">
               <div className="flex items-center gap-3 mb-3">
-                <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                <div className="h-8 touch-target w-8 rounded-lg bg-primary/10 flex items-center justify-center">
                   <Sparkles className="h-4 w-4 text-primary" />
                 </div>
                 <div>
@@ -344,7 +344,7 @@ export default function CardsShowcase() {
                 </div>
               </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {[
                 {
                   title: "Frosted Glass",
@@ -398,7 +398,7 @@ export default function CardsShowcase() {
             <Card className="overflow-hidden border-border/50">
               <CardHeader>
                 <div className="flex items-center gap-2">
-                  <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <div className="h-8 touch-target w-8 rounded-lg bg-primary/10 flex items-center justify-center">
                     <Palette className="h-4 w-4 text-primary" />
                   </div>
                   <div>
@@ -408,7 +408,7 @@ export default function CardsShowcase() {
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
                   {[
                     { title: "Terracotta", gradient: "from-[#c96442] to-[#d97757]", icon: Rocket },
                     { title: "Emerald", gradient: "from-emerald-500 to-teal-600", icon: Globe },
@@ -423,7 +423,7 @@ export default function CardsShowcase() {
                         className={`rounded-2xl bg-gradient-to-br ${card.gradient} p-6 text-white relative overflow-hidden cursor-pointer`}
                       >
                         <div className="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full -translate-y-12 translate-x-12" />
-                        <Icon className="h-8 w-8 mb-4 opacity-80" />
+                        <Icon className="h-8 touch-target w-8 mb-4 opacity-80" />
                         <h3 className="text-lg font-bold">{card.title}</h3>
                         <p className="text-white/70 text-sm mt-1">Gradient card</p>
                       </motion.div>
@@ -444,7 +444,7 @@ export default function CardsShowcase() {
             <Card className="overflow-hidden border-border/50">
               <CardHeader>
                 <div className="flex items-center gap-2">
-                  <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <div className="h-8 touch-target w-8 rounded-lg bg-primary/10 flex items-center justify-center">
                     <MousePointerClick className="h-4 w-4 text-primary" />
                   </div>
                   <div>
@@ -454,7 +454,7 @@ export default function CardsShowcase() {
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   {[
                     {
                       title: "Lift Effect",
@@ -495,7 +495,7 @@ export default function CardsShowcase() {
                           <Icon className="h-6 w-6 text-primary" />
                         </div>
                         <h3 className="font-semibold mb-2">{card.title}</h3>
-                        <p className="text-sm text-muted-foreground leading-relaxed">{card.description}</p>
+                        <p className="text-sm text-muted-foreground leading-relaxed text-pretty">{card.description}</p>
                       </motion.div>
                     );
                   })}
@@ -513,7 +513,7 @@ export default function CardsShowcase() {
           >
             <div className="mb-6">
               <div className="flex items-center gap-3 mb-3">
-                <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                <div className="h-8 touch-target w-8 rounded-lg bg-primary/10 flex items-center justify-center">
                   <BookOpen className="h-4 w-4 text-primary" />
                 </div>
                 <div>
@@ -522,7 +522,7 @@ export default function CardsShowcase() {
                 </div>
               </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {postData.map((post, i) => (
                 <motion.article
                   key={i}
@@ -551,7 +551,7 @@ export default function CardsShowcase() {
                     <Separator className="mb-4" />
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <Avatar className="h-7 w-7">
+                        <Avatar className="h-7 touch-target w-7">
                           <AvatarImage src={post.authorImg} alt={post.author} />
                           <AvatarFallback className="text-[10px]">{post.author.charAt(0)}</AvatarFallback>
                         </Avatar>
@@ -582,7 +582,7 @@ export default function CardsShowcase() {
             <Card className="overflow-hidden border-border/50">
               <CardHeader>
                 <div className="flex items-center gap-2">
-                  <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <div className="h-8 touch-target w-8 rounded-lg bg-primary/10 flex items-center justify-center">
                     <BarChart3 className="h-4 w-4 text-primary" />
                   </div>
                   <div>
@@ -597,7 +597,7 @@ export default function CardsShowcase() {
                   initial="hidden"
                   whileInView="visible"
                   viewport={{ once: true }}
-                  className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
+                  className="grid grid-cols-1 sm:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4"
                 >
                   {statsData.map((stat, i) => {
                     const Icon = stat.icon;
@@ -636,7 +636,7 @@ export default function CardsShowcase() {
             <Card className="overflow-hidden border-border/50 bg-gradient-to-br from-primary/5 via-transparent to-primary/5">
               <CardHeader>
                 <div className="flex items-center gap-2">
-                  <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <div className="h-8 touch-target w-8 rounded-lg bg-primary/10 flex items-center justify-center">
                     <Component className="h-4 w-4 text-primary" />
                   </div>
                   <div>
@@ -646,7 +646,7 @@ export default function CardsShowcase() {
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {/* Icon Card */}
                   <motion.div
                     whileHover={{ y: -4, transition: { duration: 0.2 } }}
@@ -712,7 +712,7 @@ export default function CardsShowcase() {
           >
             <div className="mb-6">
               <div className="flex items-center gap-3 mb-3">
-                <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                <div className="h-8 touch-target w-8 rounded-lg bg-primary/10 flex items-center justify-center">
                   <Wand2 className="h-4 w-4 text-primary" />
                 </div>
                 <div>
@@ -721,7 +721,7 @@ export default function CardsShowcase() {
                 </div>
               </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               <MagicCard
                 className="cursor-pointer rounded-2xl"
                 gradientFrom="#c96442"
@@ -791,7 +791,7 @@ export default function CardsShowcase() {
           >
             <div className="mb-6">
               <div className="flex items-center gap-3 mb-3">
-                <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                <div className="h-8 touch-target w-8 rounded-lg bg-primary/10 flex items-center justify-center">
                   <Flame className="h-4 w-4 text-primary" />
                 </div>
                 <div>
@@ -800,7 +800,7 @@ export default function CardsShowcase() {
                 </div>
               </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div className="relative rounded-2xl border border-white/10 bg-black p-8 overflow-hidden min-h-[260px]">
                 <Meteors number={12} />
                 <div className="relative z-10">

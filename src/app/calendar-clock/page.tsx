@@ -251,7 +251,7 @@ function EventScheduler() {
           <div
             className={`w-1 h-full min-h-[40px] rounded-full ${event.color} flex-shrink-0`}
           />
-          <div className="flex-1 min-w-0">
+          <div className="flex-1 min-w-0 overflow-x-hidden pt-16 md:pt-0">
             <p className="text-sm font-semibold truncate group-hover:text-primary transition-colors">
               {event.title}
             </p>
@@ -380,11 +380,11 @@ export default function CalendarClockPage() {
   const [date, setDate] = useState<Date | undefined>(new Date());
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-dvh">
       <SidebarNav />
-      <main className="flex-1 overflow-y-auto">
+      <main className="flex-1 overflow-y-auto overflow-x-hidden pt-16 md:pt-0">
         {/* Hero Section */}
-        <div className="relative overflow-hidden bg-background py-20 px-6 md:px-12">
+        <div className="relative overflow-hidden bg-background py-20 section-padding">
           <motion.div
             className="absolute inset-0"
             style={{
@@ -405,7 +405,7 @@ export default function CalendarClockPage() {
               <CalendarDays className="h-3 w-3 mr-1" />
               Time & Date
             </Badge>
-            <h1 className="text-4xl md:text-6xl font-bold mb-4">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
               Calendar <span className="text-primary">&amp; Clock</span>
             </h1>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
@@ -415,7 +415,7 @@ export default function CalendarClockPage() {
           </motion.div>
         </div>
 
-        <div className="p-6 md:p-12 space-y-12">
+        <div className="section-padding py-6 sm:py-12 space-y-12">
           {/* GlassCalendar + GlassClock */}
           <motion.section
             variants={sectionVariants}
@@ -559,8 +559,8 @@ export default function CalendarClockPage() {
                     </CardTitle>
                     <Button
                       variant="outline"
-                      size="sm"
-                      className="h-7 text-xs gap-1 border-primary/30 text-primary hover:bg-primary/10"
+                     
+                      className="h-7 touch-target text-xs gap-1 border-primary/30 text-primary hover:bg-primary/10"
                     >
                       <Plus className="h-3 w-3" />
                       Add Event
@@ -590,7 +590,7 @@ export default function CalendarClockPage() {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            className="text-center py-8 border-t border-border/30"
+            className="text-center py-8 border-t border-border/30 safe-area-bottom"
           >
             <p className="text-muted-foreground text-sm">
               Built with ❤️ by Sandeep Gaddam

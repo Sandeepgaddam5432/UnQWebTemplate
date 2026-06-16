@@ -1,0 +1,736 @@
+     1→"use client";
+     2→
+     3→import React, { useRef } from "react";
+     4→import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+     5→import { SidebarNav } from "@/components/navigation/sidebar";
+     6→import { HeroGeometric } from "@/components/ui/shape-landing-hero";
+     7→import {
+     8→  AnimatedTestimonials,
+     9→  type Testimonial,
+    10→} from "@/components/ui/animated-testimonials";
+    11→import {
+    12→  TestimonialStack,
+    13→  type GlassTestimonial,
+    14→} from "@/components/ui/glass-testimonial-swiper";
+    15→import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+    16→import { Badge } from "@/components/ui/badge";
+    17→import { Button } from "@/components/ui/button";
+    18→import { WordRotate } from "@/components/ui/word-rotate";
+    19→import { NumberTicker } from "@/components/ui/number-ticker";
+    20→import { BlurFade } from "@/components/ui/blur-fade";
+    21→import { HyperText } from "@/components/ui/hyper-text";
+    22→import {
+    23→  Sparkles,
+    24→  MousePointerClick,
+    25→  Layers,
+    26→  Zap,
+    27→  Move3d,
+    28→  Wind,
+    29→  Globe,
+    30→  Palette,
+    31→  Rocket,
+    32→  Star,
+    33→  Heart,
+    34→  ArrowRight,
+    35→  ChevronRight,
+    36→  Hash,
+    37→  Type,
+    38→  AlignCenter,
+    39→} from "lucide-react";
+    40→
+    41→// ===== DATA =====
+    42→const testimonials: Testimonial[] = [
+    43→  {
+    44→    id: 1,
+    45→    name: "Alex Rivera",
+    46→    role: "Full Stack Developer",
+    47→    company: "TechForge",
+    48→    content:
+    49→      "The animation system in UnQWebTemplate is breathtaking. Every transition feels intentional, every micro-interaction feels alive. It's like having a motion designer built into the framework.",
+    50→    rating: 5,
+    51→    avatar: "https://randomuser.me/api/portraits/men/32.jpg",
+    52→  },
+    53→  {
+    54→    id: 2,
+    55→    name: "Priya Sharma",
+    56→    role: "Frontend Engineer",
+    57→    company: "DesignCraft",
+    58→    content:
+    59→      "Framer Motion integration is seamless. The stagger animations, spring physics, and scroll-triggered effects make every page feel cinematic without any performance overhead.",
+    60→    rating: 5,
+    61→    avatar: "https://randomuser.me/api/portraits/women/44.jpg",
+    62→  },
+    63→  {
+    64→    id: 3,
+    65→    name: "Marcus Chen",
+    66→    role: "Motion Designer",
+    67→    company: "InnovateLabs",
+    68→    content:
+    69→      "As a motion designer, I'm incredibly impressed. The morphing cards, parallax scrolling, and particle effects rival what I'd normally build in After Effects. In a web template? Unheard of.",
+    70→    rating: 5,
+    71→    avatar: "https://randomuser.me/api/portraits/men/46.jpg",
+    72→  },
+    73→];
+    74→
+    75→const glassTestimonials: GlassTestimonial[] = [
+    76→  {
+    77→    id: 1,
+    78→    initials: "AR",
+    79→    name: "Alex Rivera",
+    80→    role: "Full Stack Developer at TechForge",
+    81→    quote:
+    82→      "The animation library is incredibly polished. Spring physics, stagger effects, and morphing transitions — everything feels premium.",
+    83→    tags: [
+    84→      { text: "Framer Motion", type: "featured" },
+    85→      { text: "Animations", type: "default" },
+    86→    ],
+    87→    stats: [
+    88→      { icon: () => <Sparkles className="h-3.5 w-3.5" />, text: "60+ animations" },
+    89→      { icon: () => <Zap className="h-3.5 w-3.5" />, text: "60fps" },
+    90→    ],
+    91→    avatarGradient: "linear-gradient(135deg, #c96442, #d97757)",
+    92→  },
+    93→  {
+    94→    id: 2,
+    95→    initials: "PS",
+    96→    name: "Priya Sharma",
+    97→    role: "Frontend Engineer at DesignCraft",
+    98→    quote:
+    99→      "The parallax and scroll-triggered animations are buttery smooth. No jank, no layout shifts — just pure cinematic motion.",
+   100→    tags: [
+   101→      { text: "Scroll", type: "default" },
+   102→      { text: "Parallax", type: "featured" },
+   103→    ],
+   104→    stats: [
+   105→      { icon: () => <Move3d className="h-3.5 w-3.5" />, text: "3D effects" },
+   106→      { icon: () => <Wind className="h-3.5 w-3.5" />, text: "Smooth" },
+   107→    ],
+   108→    avatarGradient: "linear-gradient(135deg, #10b981, #059669)",
+   109→  },
+   110→  {
+   111→    id: 3,
+   112→    initials: "MC",
+   113→    name: "Marcus Chen",
+   114→    role: "Motion Designer at InnovateLabs",
+   115→    quote:
+   116→      "The morphing card animations and spring physics demo are exactly what modern web experiences need. This template gets motion right.",
+   117→    tags: [
+   118→      { text: "Morphing", type: "featured" },
+   119→      { text: "Spring", type: "default" },
+   120→    ],
+   121→    stats: [
+   122→      { icon: () => <Palette className="h-3.5 w-3.5" />, text: "Beautiful" },
+   123→      { icon: () => <Rocket className="h-3.5 w-3.5" />, text: "Fast" },
+   124→    ],
+   125→    avatarGradient: "linear-gradient(135deg, #ec4899, #d946ef)",
+   126→  },
+   127→];
+   128→
+   129→// ===== ANIMATION VARIANTS =====
+   130→const sectionVariants = {
+   131→  hidden: { opacity: 0, y: 40 },
+   132→  visible: {
+   133→    opacity: 1,
+   134→    y: 0,
+   135→    transition: { duration: 0.7, ease: [0.25, 0.4, 0.25, 1] },
+   136→  },
+   137→};
+   138→
+   139→const staggerContainer = {
+   140→  hidden: { opacity: 0 },
+   141→  visible: {
+   142→    opacity: 1,
+   143→    transition: { staggerChildren: 0.1, delayChildren: 0.1 },
+   144→  },
+   145→};
+   146→
+   147→const staggerItem = {
+   148→  hidden: { opacity: 0, y: 30, scale: 0.95 },
+   149→  visible: {
+   150→    opacity: 1,
+   151→    y: 0,
+   152→    scale: 1,
+   153→    transition: { duration: 0.5, ease: [0.25, 0.4, 0.25, 1] },
+   154→  },
+   155→};
+   156→
+   157→// ===== MORPHING CARD COMPONENT =====
+   158→function MorphingCard({ title, description, icon: Icon, gradient }: {
+   159→  title: string;
+   160→  description: string;
+   161→  icon: React.ComponentType<{ className?: string }>;
+   162→  gradient: string;
+   163→}) {
+   164→  const [isFlipped, setIsFlipped] = React.useState(false);
+   165→
+   166→  return (
+   167→    <div
+   168→      className="relative h-72 cursor-pointer perspective-1000"
+   169→      onClick={() => setIsFlipped(!isFlipped)}
+   170→    >
+   171→      <motion.div
+   172→        className="absolute inset-0 w-full h-full"
+   173→        animate={{ rotateY: isFlipped ? 180 : 0 }}
+   174→        transition={{ duration: 0.6, ease: [0.25, 0.4, 0.25, 1] }}
+   175→        style={{ transformStyle: "preserve-3d" }}
+   176→      >
+   177→        {/* Front */}
+   178→        <div
+   179→          className="absolute inset-0 rounded-2xl p-6 flex flex-col justify-between"
+   180→          style={{
+   181→            backfaceVisibility: "hidden",
+   182→            background: gradient,
+   183→          }}
+   184→        >
+   185→          <div>
+   186→            <div className="h-12 w-12 rounded-xl bg-white/10 backdrop-blur-sm flex items-center justify-center mb-4">
+   187→              <Icon className="h-6 w-6 text-white" />
+   188→            </div>
+   189→            <h3 className="text-xl font-bold text-white mb-2">{title}</h3>
+   190→          </div>
+   191→          <p className="text-white/60 text-sm">Click to flip →</p>
+   192→        </div>
+   193→
+   194→        {/* Back */}
+   195→        <div
+   196→          className="absolute inset-0 rounded-2xl p-6 flex flex-col justify-center bg-card border"
+   197→          style={{
+   198→            backfaceVisibility: "hidden",
+   199→            transform: "rotateY(180deg)",
+   200→          }}
+   201→        >
+   202→          <p className="text-muted-foreground text-sm leading-relaxed">{description}</p>
+   203→          <div className="mt-4">
+   204→            <Badge variant="outline" className="text-primary border-primary/30">
+   205→              <Sparkles className="h-3 w-3 mr-1" /> Morphed
+   206→            </Badge>
+   207→          </div>
+   208→        </div>
+   209→      </motion.div>
+   210→    </div>
+   211→  );
+   212→}
+   213→
+   214→// ===== SPRING BUTTON COMPONENT =====
+   215→function SpringButton({ children, color }: { children: React.ReactNode; color: string }) {
+   216→  const x = useSpring(0, { stiffness: 300, damping: 15 });
+   217→  const scale = useSpring(1, { stiffness: 400, damping: 20 });
+   218→
+   219→  return (
+   220→    <motion.div
+   221→      style={{ x, scale }}
+   222→      onMouseDown={() => { scale.set(0.9); }}
+   223→      onMouseUp={() => { scale.set(1); x.set(x.get() === 0 ? 8 : 0); }}
+   224→      onMouseLeave={() => { scale.set(1); x.set(0); }}
+   225→      className="px-6 py-3 rounded-xl text-white font-medium text-sm cursor-pointer shadow-lg select-none"
+   226→      whileHover={{ scale: 1.05 }}
+   227→      whileTap={{ scale: 0.95 }}
+   228→    >
+   229→      <div
+   230→        className="rounded-xl px-6 py-3 text-center"
+   231→        style={{ background: color }}
+   232→      >
+   233→        {children}
+   234→      </div>
+   235→    </motion.div>
+   236→  );
+   237→}
+   238→
+   239→// ===== PARALLAX SECTION =====
+   240→function ParallaxSection() {
+   241→  const ref = useRef<HTMLDivElement>(null);
+   242→  const { scrollYProgress } = useScroll({
+   243→    target: ref,
+   244→    offset: ["start end", "end start"],
+   245→  });
+   246→
+   247→  const y1 = useTransform(scrollYProgress, [0, 1], [100, -100]);
+   248→  const y2 = useTransform(scrollYProgress, [0, 1], [50, -50]);
+   249→  const y3 = useTransform(scrollYProgress, [0, 1], [150, -150]);
+   250→  const rotate = useTransform(scrollYProgress, [0, 1], [0, 45]);
+   251→  const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0.3, 1, 1, 0.3]);
+   252→
+   253→  const rotate2 = useTransform(scrollYProgress, [0, 1], [0, -30]);
+   254→
+   255→  return (
+   256→    <div ref={ref} className="relative h-[500px] rounded-2xl overflow-hidden bg-gradient-to-b from-background via-muted/30 to-background border">
+   257→      <motion.div
+   258→        style={{ y: y1, rotate }}
+   259→        className="absolute left-[10%] top-[20%] w-32 h-32 rounded-2xl bg-primary/10 border border-primary/20"
+   260→      />
+   261→      <motion.div
+   262→        style={{ y: y2 }}
+   263→        className="absolute right-[15%] top-[10%] w-24 h-24 rounded-full bg-primary/15 border border-primary/20"
+   264→      />
+   265→      <motion.div
+   266→        style={{ y: y3, rotate: rotate2 }}
+   267→        className="absolute left-[50%] top-[40%] w-40 h-40 rounded-3xl bg-primary/8 border border-primary/15"
+   268→      />
+   269→      <motion.div
+   270→        style={{ y: y2 }}
+   271→        className="absolute right-[30%] bottom-[15%] w-20 h-20 rounded-xl bg-primary/10 border border-primary/20"
+   272→      />
+   273→      <motion.div
+   274→        style={{ opacity, y: y2 }}
+   275→        className="absolute inset-0 flex items-center justify-center"
+   276→      >
+   277→        <div className="text-center px-4">
+   278→          <h3 className="text-2xl md:text-3xl font-bold mb-2">Parallax Scroll</h3>
+   279→          <p className="text-muted-foreground max-w-md">
+   280→            Elements move at different speeds as you scroll, creating a sense of depth and dimension.
+   281→          </p>
+   282→        </div>
+   283→      </motion.div>
+   284→    </div>
+   285→  );
+   286→}
+   287→
+   288→export default function AnimationsShowcase() {
+   289→  return (
+   290→    <div className="flex min-h-screen bg-background">
+   291→      <SidebarNav />
+   292→      <main className="flex-1 overflow-y-auto">
+   293→        {/* ===== HERO SECTION ===== */}
+   294→        <HeroGeometric
+   295→          badge="Animation Showcase"
+   296→          title1="Motion That"
+   297→          title2="Feels Alive"
+   298→        />
+   299→        <div className="absolute bottom-0 left-0 right-0 z-20 flex flex-col items-center pb-16 pointer-events-none"
+   300→          style={{ position: "relative", marginTop: "-120px" }}
+   301→        >
+   302→          <motion.div
+   303→            initial={{ opacity: 0, y: 20 }}
+   304→            animate={{ opacity: 1, y: 0 }}
+   305→            transition={{ delay: 1.4, duration: 0.8 }}
+   306→            className="text-center"
+   307→          >
+   308→            <Badge className="bg-primary/10 text-primary border-primary/20 mb-4">
+   309→              <Sparkles className="h-3 w-3 mr-1" /> Powered by Framer Motion
+   310→            </Badge>
+   311→            <p className="text-muted-foreground max-w-lg mx-auto">
+   312→              Explore stunning animations, transitions, and motion design patterns
+   313→              that bring your Next.js applications to life.
+   314→            </p>
+   315→          </motion.div>
+   316→        </div>
+   317→
+   318→        <div className="px-6 md:px-10 py-12 space-y-12">
+   319→          {/* ===== MORPHING CARDS SECTION ===== */}
+   320→          <motion.section
+   321→            initial="hidden"
+   322→            whileInView="visible"
+   323→            viewport={{ once: true, margin: "-50px" }}
+   324→            variants={sectionVariants}
+   325→          >
+   326→            <div className="mb-6">
+   327→              <div className="flex items-center gap-3 mb-3">
+   328→                <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+   329→                  <MousePointerClick className="h-4 w-4 text-primary" />
+   330→                </div>
+   331→                <div>
+   332→                  <h2 className="text-2xl font-bold">Morphing Cards</h2>
+   333→                  <p className="text-muted-foreground text-sm">Click cards to flip with 3D transform animations</p>
+   334→                </div>
+   335→              </div>
+   336→            </div>
+   337→            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+   338→              <MorphingCard
+   339→                title="Spring Physics"
+   340→                description="Animations that feel natural with spring-based motion. Configure stiffness, damping, and mass for precise control over every interaction."
+   341→                icon={Zap}
+   342→                gradient="linear-gradient(135deg, #c96442, #d97757)"
+   343→              />
+   344→              <MorphingCard
+   345→                title="3D Transforms"
+   346→                description="Perspective-based 3D card flips with backface visibility and preserve-3d. Create immersive flip-card interactions."
+   347→                icon={Globe}
+   348→                gradient="linear-gradient(135deg, #10b981, #059669)"
+   349→              />
+   350→              <MorphingCard
+   351→                title="Layout Animations"
+   352→                description="Shared layout animations that smoothly transition elements between states. LayoutId-powered transitions that wow users."
+   353→                icon={Layers}
+   354→                gradient="linear-gradient(135deg, #ec4899, #d946ef)"
+   355→              />
+   356→            </div>
+   357→          </motion.section>
+   358→
+   359→          {/* ===== STAGGER ANIMATION SECTION ===== */}
+   360→          <motion.section
+   361→            initial="hidden"
+   362→            whileInView="visible"
+   363→            viewport={{ once: true, margin: "-50px" }}
+   364→            variants={sectionVariants}
+   365→          >
+   366→            <Card className="overflow-hidden border-border/50">
+   367→              <CardHeader>
+   368→                <div className="flex items-center gap-2">
+   369→                  <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+   370→                    <Layers className="h-4 w-4 text-primary" />
+   371→                  </div>
+   372→                  <div>
+   373→                    <CardTitle>Stagger Animation</CardTitle>
+   374→                    <CardDescription>
+   375→                      Items animate in sequence with configurable delays for a cascading effect
+   376→                    </CardDescription>
+   377→                  </div>
+   378→                </div>
+   379→              </CardHeader>
+   380→              <CardContent>
+   381→                <motion.div
+   382→                  variants={staggerContainer}
+   383→                  initial="hidden"
+   384→                  whileInView="visible"
+   385→                  viewport={{ once: true }}
+   386→                  className="grid grid-cols-2 md:grid-cols-4 gap-4"
+   387→                >
+   388→                  {[
+   389→                    { icon: Sparkles, label: "Entrance", color: "from-primary/20 to-primary/5" },
+   390→                    { icon: Zap, label: "Spring", color: "from-amber-500/20 to-amber-500/5" },
+   391→                    { icon: Move3d, label: "3D Motion", color: "from-emerald-500/20 to-emerald-500/5" },
+   392→                    { icon: Wind, label: "Parallax", color: "from-rose-500/20 to-rose-500/5" },
+   393→                    { icon: Globe, label: "Orbit", color: "from-violet-500/20 to-violet-500/5" },
+   394→                    { icon: Palette, label: "Color Shift", color: "from-cyan-500/20 to-cyan-500/5" },
+   395→                    { icon: Rocket, label: "Launch", color: "from-orange-500/20 to-orange-500/5" },
+   396→                    { icon: Star, label: "Shimmer", color: "from-teal-500/20 to-teal-500/5" },
+   397→                  ].map((item, i) => {
+   398→                    const Icon = item.icon;
+   399→                    return (
+   400→                      <motion.div
+   401→                        key={i}
+   402→                        variants={staggerItem}
+   403→                        whileHover={{ scale: 1.05, y: -4 }}
+   404→                        className={`rounded-xl bg-gradient-to-br ${item.color} p-5 flex flex-col items-center gap-3 border border-border/30 cursor-pointer transition-colors hover:border-primary/30`}
+   405→                      >
+   406→                        <Icon className="h-6 w-6 text-foreground/70" />
+   407→                        <span className="text-sm font-medium">{item.label}</span>
+   408→                      </motion.div>
+   409→                    );
+   410→                  })}
+   411→                </motion.div>
+   412→              </CardContent>
+   413→            </Card>
+   414→          </motion.section>
+   415→
+   416→          {/* ===== PARALLAX SCROLL SECTION ===== */}
+   417→          <motion.section
+   418→            initial="hidden"
+   419→            whileInView="visible"
+   420→            viewport={{ once: true, margin: "-50px" }}
+   421→            variants={sectionVariants}
+   422→          >
+   423→            <div className="mb-6">
+   424→              <div className="flex items-center gap-3 mb-3">
+   425→                <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+   426→                  <Move3d className="h-4 w-4 text-primary" />
+   427→                </div>
+   428→                <div>
+   429→                  <h2 className="text-2xl font-bold">Parallax Scroll</h2>
+   430→                  <p className="text-muted-foreground text-sm">Scroll-triggered depth with multi-layer parallax effects</p>
+   431→                </div>
+   432→              </div>
+   433→            </div>
+   434→            <ParallaxSection />
+   435→          </motion.section>
+   436→
+   437→          {/* ===== SPRING ANIMATION SECTION ===== */}
+   438→          <motion.section
+   439→            initial="hidden"
+   440→            whileInView="visible"
+   441→            viewport={{ once: true, margin: "-50px" }}
+   442→            variants={sectionVariants}
+   443→          >
+   444→            <Card className="overflow-hidden border-border/50">
+   445→              <CardHeader>
+   446→                <div className="flex items-center gap-2">
+   447→                  <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+   448→                    <Zap className="h-4 w-4 text-primary" />
+   449→                  </div>
+   450→                  <div>
+   451→                    <CardTitle>Spring Physics</CardTitle>
+   452→                    <CardDescription>
+   453→                      Click the buttons to see spring-based animations with natural physics
+   454→                    </CardDescription>
+   455→                  </div>
+   456→                </div>
+   457→              </CardHeader>
+   458→              <CardContent>
+   459→                <div className="flex flex-wrap gap-4 mb-8">
+   460→                  <SpringButton color="linear-gradient(135deg, #c96442, #d97757)">
+   461→                    Terracotta
+   462→                  </SpringButton>
+   463→                  <SpringButton color="linear-gradient(135deg, #10b981, #059669)">
+   464→                    Emerald
+   465→                  </SpringButton>
+   466→                  <SpringButton color="linear-gradient(135deg, #ec4899, #d946ef)">
+   467→                    Rose
+   468→                  </SpringButton>
+   469→                  <SpringButton color="linear-gradient(135deg, #f59e0b, #d97706)">
+   470→                    Amber
+   471→                  </SpringButton>
+   472→                </div>
+   473→                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+   474→                  {[
+   475→                    { stiffness: 100, damping: 10, label: "Bouncy" },
+   476→                    { stiffness: 300, damping: 20, label: "Snappy" },
+   477→                    { stiffness: 150, damping: 25, label: "Gentle" },
+   478→                  ].map((spring, i) => (
+   479→                    <motion.div
+   480→                      key={i}
+   481→                      className="rounded-xl border bg-card p-6 text-center"
+   482→                      whileHover={{
+   483→                        scale: 1.03,
+   484→                        transition: {
+   485→                          type: "spring",
+   486→                          stiffness: spring.stiffness,
+   487→                          damping: spring.damping,
+   488→                        },
+   489→                      }}
+   490→                      whileTap={{
+   491→                        scale: 0.97,
+   492→                        transition: {
+   493→                          type: "spring",
+   494→                          stiffness: spring.stiffness,
+   495→                          damping: spring.damping,
+   496→                        },
+   497→                      }}
+   498→                    >
+   499→                      <p className="font-semibold mb-1">{spring.label}</p>
+   500→                      <p className="text-xs text-muted-foreground mb-3">
+   501→                        stiffness: {spring.stiffness} / damping: {spring.damping}
+   502→                      </p>
+   503→                      <div className="flex justify-center gap-2 text-[10px] text-muted-foreground">
+   504→                        <Badge variant="outline" className="font-mono text-[10px]">k={spring.stiffness}</Badge>
+   505→                        <Badge variant="outline" className="font-mono text-[10px]">d={spring.damping}</Badge>
+   506→                      </div>
+   507→                    </motion.div>
+   508→                  ))}
+   509→                </div>
+   510→              </CardContent>
+   511→            </Card>
+   512→          </motion.section>
+   513→
+   514→          {/* ===== ANIMATED TESTIMONIALS SECTION ===== */}
+   515→          <motion.section
+   516→            initial="hidden"
+   517→            whileInView="visible"
+   518→            viewport={{ once: true, margin: "-100px" }}
+   519→            variants={sectionVariants}
+   520→          >
+   521→            <AnimatedTestimonials
+   522→              title="Motion Masters"
+   523→              subtitle="Developers who appreciate the art of animation share their experience with UnQWebTemplate's motion system."
+   524→              badgeText="Animation Enthusiasts"
+   525→              testimonials={testimonials}
+   526→              trustedCompanies={["Vercel", "Stripe", "Figma", "Linear"]}
+   527→              trustedCompaniesTitle="Trusted by animation-forward teams"
+   528→            />
+   529→          </motion.section>
+   530→
+   531→          {/* ===== GLASS TESTIMONIAL SWIPER SECTION ===== */}
+   532→          <motion.section
+   533→            initial="hidden"
+   534→            whileInView="visible"
+   535→            viewport={{ once: true, margin: "-50px" }}
+   536→            variants={sectionVariants}
+   537→            className="relative w-full py-12 px-0 overflow-hidden bg-black rounded-2xl"
+   538→          >
+   539→            <div className="max-w-lg mx-auto text-center mb-10 px-6">
+   540→              <Badge className="bg-primary/10 text-primary border-primary/20 mb-4">
+   541→                <Heart className="h-3 w-3 mr-1 fill-primary" /> Swipeable
+   542→              </Badge>
+   543→              <h2 className="text-3xl font-bold text-white mb-3">Glass Testimonial Stack</h2>
+   544→              <p className="text-white/50 text-sm">Drag or swipe to navigate through glassmorphism testimonial cards</p>
+   545→            </div>
+   546→            <div className="max-w-lg mx-auto px-6" style={{ minHeight: "350px" }}>
+   547→              <TestimonialStack testimonials={glassTestimonials} />
+   548→            </div>
+   549→          </motion.section>
+   550→
+   551→          {/* Word Rotate */}
+   552→          <motion.section
+   553→            initial="hidden"
+   554→            whileInView="visible"
+   555→            viewport={{ once: true, margin: "-50px" }}
+   556→            variants={sectionVariants}
+   557→          >
+   558→            <div className="mb-6">
+   559→              <div className="flex items-center gap-3 mb-3">
+   560→                <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+   561→                  <Type className="h-4 w-4 text-primary" />
+   562→                </div>
+   563→                <div>
+   564→                  <h2 className="text-2xl font-bold">Word Rotate</h2>
+   565→                  <p className="text-muted-foreground text-sm">Cycling through words with smooth animated transitions</p>
+   566→                </div>
+   567→              </div>
+   568→            </div>
+   569→            <Card className="overflow-hidden border-border/50">
+   570→              <CardContent className="p-8 flex flex-col items-center justify-center text-center min-h-[280px]">
+   571→                <p className="text-muted-foreground text-sm mb-4">We build</p>
+   572→                <div className="flex items-center gap-3 text-4xl md:text-5xl font-bold">
+   573→                  <span className="text-foreground">Amazing</span>
+   574→                  <WordRotate
+   575→                    words={["Websites", "Apps", "Experiences", "Platforms", "Products"]}
+   576→                    className="text-primary text-4xl md:text-5xl font-bold"
+   577→                    duration={2000}
+   578→                  />
+   579→                </div>
+   580→                <p className="text-muted-foreground text-sm mt-4">that users love</p>
+   581→              </CardContent>
+   582→            </Card>
+   583→          </motion.section>
+   584→
+   585→          {/* Number Ticker */}
+   586→          <motion.section
+   587→            initial="hidden"
+   588→            whileInView="visible"
+   589→            viewport={{ once: true, margin: "-50px" }}
+   590→            variants={sectionVariants}
+   591→          >
+   592→            <div className="mb-6">
+   593→              <div className="flex items-center gap-3 mb-3">
+   594→                <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+   595→                  <Hash className="h-4 w-4 text-primary" />
+   596→                </div>
+   597→                <div>
+   598→                  <h2 className="text-2xl font-bold">Number Ticker</h2>
+   599→                  <p className="text-muted-foreground text-sm">Animated number counters that spring into view</p>
+   600→                </div>
+   601→              </div>
+   602→            </div>
+   603→            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+   604→              {[
+   605→                { label: "Components", value: 60, suffix: "+", color: "text-primary" },
+   606→                { label: "Downloads", value: 12, suffix: "K+", color: "text-emerald-500" },
+   607→                { label: "Stars", value: 8400, suffix: "", color: "text-amber-500" },
+   608→                { label: "Contributors", value: 156, suffix: "", color: "text-purple-500" },
+   609→              ].map((stat, i) => (
+   610→                <Card key={stat.label} className="border-border/50 text-center">
+   611→                  <CardContent className="p-6 flex flex-col items-center">
+   612→                    <NumberTicker
+   613→                      value={stat.value}
+   614→                      className={`text-3xl md:text-4xl font-bold tabular-nums ${stat.color}`}
+   615→                      delay={i * 0.3}
+   616→                    />
+   617→                    <p className="text-sm text-muted-foreground mt-2">{stat.label}</p>
+   618→                    {stat.suffix && (
+   619→                      <Badge variant="outline" className="mt-2 text-xs">{stat.suffix}</Badge>
+   620→                    )}
+   621→                  </CardContent>
+   622→                </Card>
+   623→              ))}
+   624→            </div>
+   625→          </motion.section>
+   626→
+   627→          {/* Blur Fade */}
+   628→          <motion.section
+   629→            initial="hidden"
+   630→            whileInView="visible"
+   631→            viewport={{ once: true, margin: "-50px" }}
+   632→            variants={sectionVariants}
+   633→          >
+   634→            <div className="mb-6">
+   635→              <div className="flex items-center gap-3 mb-3">
+   636→                <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+   637→                  <AlignCenter className="h-4 w-4 text-primary" />
+   638→                </div>
+   639→                <div>
+   640→                  <h2 className="text-2xl font-bold">Blur Fade</h2>
+   641→                  <p className="text-muted-foreground text-sm">Elements fade in with a blur-to-clear animation on scroll</p>
+   642→                </div>
+   643→              </div>
+   644→            </div>
+   645→            <Card className="overflow-hidden border-border/50">
+   646→              <CardContent className="p-8 space-y-6">
+   647→                <BlurFade delay={0} inView>
+   648→                  <h3 className="text-2xl font-bold text-foreground">Bring Your Content to Life</h3>
+   649→                </BlurFade>
+   650→                <BlurFade delay={0.15} inView direction="left">
+   651→                  <p className="text-muted-foreground max-w-lg">
+   652→                    BlurFade animates elements from blurred to clear, creating a cinematic reveal effect
+   653→                    that draws attention to your most important content.
+   654→                  </p>
+   655→                </BlurFade>
+   656→                <BlurFade delay={0.3} inView direction="right">
+   657→                  <div className="flex gap-3">
+   658→                    <Badge className="bg-primary/10 text-primary border-primary/20">
+   659→                      <Sparkles className="h-3 w-3 mr-1" /> Blur Reveal
+   660→                    </Badge>
+   661→                    <Badge variant="outline" className="border-primary/20 text-primary">Directional</Badge>
+   662→                    <Badge variant="outline" className="border-primary/20 text-primary">Staggered</Badge>
+   663→                  </div>
+   664→                </BlurFade>
+   665→                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+   666→                  {["Direction: Up", "Direction: Left", "Direction: Right"].map((label, i) => (
+   667→                    <BlurFade
+   668→                      key={label}
+   669→                      delay={0.4 + i * 0.15}
+   670→                      inView
+   671→                      direction={i === 0 ? "up" : i === 1 ? "left" : "right"}
+   672→                    >
+   673→                      <div className="rounded-xl border border-border/50 bg-muted/30 p-4 text-center">
+   674→                        <p className="text-sm font-medium text-foreground">{label}</p>
+   675→                        <p className="text-xs text-muted-foreground mt-1">Animated with blur fade</p>
+   676→                      </div>
+   677→                    </BlurFade>
+   678→                  ))}
+   679→                </div>
+   680→              </CardContent>
+   681→            </Card>
+   682→          </motion.section>
+   683→
+   684→          {/* HyperText */}
+   685→          <motion.section
+   686→            initial="hidden"
+   687→            whileInView="visible"
+   688→            viewport={{ once: true, margin: "-50px" }}
+   689→            variants={sectionVariants}
+   690→          >
+   691→            <div className="mb-6">
+   692→              <div className="flex items-center gap-3 mb-3">
+   693→                <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+   694→                  <Zap className="h-4 w-4 text-primary" />
+   695→                </div>
+   696→                <div>
+   697→                  <h2 className="text-2xl font-bold">HyperText</h2>
+   698→                  <p className="text-muted-foreground text-sm">Text scramble animation with character-by-character reveal</p>
+   699→                </div>
+   700→              </div>
+   701→            </div>
+   702→            <Card className="overflow-hidden border-border/50">
+   703→              <CardContent className="p-8 flex flex-col items-center justify-center text-center min-h-[320px] space-y-6">
+   704→                <HyperText
+   705→                  className="text-3xl md:text-4xl font-bold text-foreground"
+   706→                  duration={1000}
+   707→                  startOnView
+   708→                  animateOnHover
+   709→                >
+   710→                  UnQWebTemplate
+   711→                </HyperText>
+   712→                <HyperText
+   713→                  className="text-xl md:text-2xl font-semibold text-primary"
+   714→                  duration={800}
+   715→                  startOnView
+   716→                  animateOnHover
+   717→                  as="h2"
+   718→                >
+   719→                  Magic UI Components
+   720→                </HyperText>
+   721→                <p className="text-sm text-muted-foreground max-w-md">
+   722→                  Hover over the text above to trigger the scramble animation again.
+   723→                  Characters randomize before resolving to the final letter.
+   724→                </p>
+   725→              </CardContent>
+   726→            </Card>
+   727→          </motion.section>
+   728→
+   729→          {/* Bottom spacing */}
+   730→          <div className="h-8" />
+   731→        </div>
+   732→      </main>
+   733→    </div>
+   734→  );
+   735→}
+   736→

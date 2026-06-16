@@ -287,9 +287,9 @@ function ParallaxSection() {
 
 export default function AnimationsShowcase() {
   return (
-    <div className="flex min-h-screen bg-background">
+    <div className="flex min-h-dvh bg-background">
       <SidebarNav />
-      <main className="flex-1 overflow-y-auto">
+      <main className="flex-1 overflow-y-auto overflow-x-hidden pt-16 md:pt-0">
         {/* ===== HERO SECTION ===== */}
         <HeroGeometric
           badge="Animation Showcase"
@@ -308,14 +308,14 @@ export default function AnimationsShowcase() {
             <Badge className="bg-primary/10 text-primary border-primary/20 mb-4">
               <Sparkles className="h-3 w-3 mr-1" /> Powered by Framer Motion
             </Badge>
-            <p className="text-muted-foreground max-w-lg mx-auto">
+            <p className="text-muted-foreground max-w-lg mx-auto text-pretty">
               Explore stunning animations, transitions, and motion design patterns
               that bring your Next.js applications to life.
             </p>
           </motion.div>
         </div>
 
-        <div className="px-6 md:px-10 py-12 space-y-12">
+        <div className="section-padding py-12 space-y-12">
           {/* ===== MORPHING CARDS SECTION ===== */}
           <motion.section
             initial="hidden"
@@ -325,7 +325,7 @@ export default function AnimationsShowcase() {
           >
             <div className="mb-6">
               <div className="flex items-center gap-3 mb-3">
-                <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                <div className="h-8 touch-target w-8 rounded-lg bg-primary/10 flex items-center justify-center">
                   <MousePointerClick className="h-4 w-4 text-primary" />
                 </div>
                 <div>
@@ -334,7 +334,7 @@ export default function AnimationsShowcase() {
                 </div>
               </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               <MorphingCard
                 title="Spring Physics"
                 description="Animations that feel natural with spring-based motion. Configure stiffness, damping, and mass for precise control over every interaction."
@@ -366,7 +366,7 @@ export default function AnimationsShowcase() {
             <Card className="overflow-hidden border-border/50">
               <CardHeader>
                 <div className="flex items-center gap-2">
-                  <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <div className="h-8 touch-target w-8 rounded-lg bg-primary/10 flex items-center justify-center">
                     <Layers className="h-4 w-4 text-primary" />
                   </div>
                   <div>
@@ -422,7 +422,7 @@ export default function AnimationsShowcase() {
           >
             <div className="mb-6">
               <div className="flex items-center gap-3 mb-3">
-                <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                <div className="h-8 touch-target w-8 rounded-lg bg-primary/10 flex items-center justify-center">
                   <Move3d className="h-4 w-4 text-primary" />
                 </div>
                 <div>
@@ -444,7 +444,7 @@ export default function AnimationsShowcase() {
             <Card className="overflow-hidden border-border/50">
               <CardHeader>
                 <div className="flex items-center gap-2">
-                  <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <div className="h-8 touch-target w-8 rounded-lg bg-primary/10 flex items-center justify-center">
                     <Zap className="h-4 w-4 text-primary" />
                   </div>
                   <div>
@@ -470,7 +470,7 @@ export default function AnimationsShowcase() {
                     Amber
                   </SpringButton>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {[
                     { stiffness: 100, damping: 10, label: "Bouncy" },
                     { stiffness: 300, damping: 20, label: "Snappy" },
@@ -557,7 +557,7 @@ export default function AnimationsShowcase() {
           >
             <div className="mb-6">
               <div className="flex items-center gap-3 mb-3">
-                <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                <div className="h-8 touch-target w-8 rounded-lg bg-primary/10 flex items-center justify-center">
                   <Type className="h-4 w-4 text-primary" />
                 </div>
                 <div>
@@ -591,7 +591,7 @@ export default function AnimationsShowcase() {
           >
             <div className="mb-6">
               <div className="flex items-center gap-3 mb-3">
-                <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                <div className="h-8 touch-target w-8 rounded-lg bg-primary/10 flex items-center justify-center">
                   <Hash className="h-4 w-4 text-primary" />
                 </div>
                 <div>
@@ -633,7 +633,7 @@ export default function AnimationsShowcase() {
           >
             <div className="mb-6">
               <div className="flex items-center gap-3 mb-3">
-                <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                <div className="h-8 touch-target w-8 rounded-lg bg-primary/10 flex items-center justify-center">
                   <AlignCenter className="h-4 w-4 text-primary" />
                 </div>
                 <div>
@@ -662,7 +662,7 @@ export default function AnimationsShowcase() {
                     <Badge variant="outline" className="border-primary/20 text-primary">Staggered</Badge>
                   </div>
                 </BlurFade>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pt-2">
                   {["Direction: Up", "Direction: Left", "Direction: Right"].map((label, i) => (
                     <BlurFade
                       key={label}
@@ -690,7 +690,7 @@ export default function AnimationsShowcase() {
           >
             <div className="mb-6">
               <div className="flex items-center gap-3 mb-3">
-                <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                <div className="h-8 touch-target w-8 rounded-lg bg-primary/10 flex items-center justify-center">
                   <Zap className="h-4 w-4 text-primary" />
                 </div>
                 <div>

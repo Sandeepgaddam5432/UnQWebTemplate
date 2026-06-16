@@ -122,13 +122,13 @@ export default function ToolsPage() {
   };
 
   return (
-    <div className="flex min-h-screen bg-background">
+    <div className="flex min-h-dvh bg-background">
       <SidebarNav />
 
-      <main className="flex-1 min-w-0">
+      <main className="flex-1 min-w-0 overflow-x-hidden pt-16 md:pt-0">
         {/* Page Header */}
         <div className="border-b border-border/50 bg-card/30 backdrop-blur-sm sticky top-0 z-20">
-          <div className="px-6 md:px-8 py-6">
+          <div className="section-padding py-6">
             <motion.div
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -137,7 +137,7 @@ export default function ToolsPage() {
             >
               <div>
                 <div className="flex items-center gap-3 mb-1">
-                  <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">
+                  <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-foreground">
                     AI Tools & Playground
                   </h1>
                   <Badge variant="default" className="text-xs">
@@ -163,7 +163,7 @@ export default function ToolsPage() {
           </div>
         </div>
 
-        <div className="px-6 md:px-8 py-8 space-y-8">
+        <div className="section-padding py-8 space-y-8">
           {/* AI Multi-Modal Generation */}
           <AnimatedSection>
             <div className="flex items-center gap-2 mb-4">
@@ -205,7 +205,7 @@ export default function ToolsPage() {
                 {toolCategories.length} categories
               </Badge>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
               {toolCategories.map((category, index) => {
                 const Icon = category.icon;
                 return (
@@ -216,13 +216,13 @@ export default function ToolsPage() {
                     viewport={{ once: true }}
                     transition={{ duration: 0.4, delay: index * 0.1 }}
                   >
-                    <Card className="group hover:shadow-lg transition-all duration-300 border-border/50 hover:border-primary/30">
+                    <Card className="group hover:shadow-lg transition-all card-hover duration-300 border-border/50 hover:border-primary/30">
                       <CardContent className="p-5">
                         <div className="flex items-start gap-4">
                           <div className={`p-3 rounded-xl ${category.bgColor} shrink-0`}>
                             <Icon className={`h-6 w-6 ${category.color}`} />
                           </div>
-                          <div className="flex-1 min-w-0">
+                          <div className="flex-1 min-w-0 overflow-x-hidden pt-16 md:pt-0">
                             <h3 className="font-semibold text-foreground mb-1">
                               {category.title}
                             </h3>
@@ -317,7 +317,7 @@ export default function ToolsPage() {
                     </motion.div>
                   ) : (
                     <div className="text-center">
-                      <Sparkles className="h-8 w-8 text-muted-foreground/40 mx-auto mb-2" />
+                      <Sparkles className="h-8 touch-target w-8 text-muted-foreground/40 mx-auto mb-2" />
                       <p className="text-sm text-muted-foreground">
                         Select a tool above to see its details
                       </p>
@@ -407,7 +407,7 @@ export default function ToolsPage() {
                 )}
                 {!Object.values(visibleAlerts).some(Boolean) && (
                   <div className="text-center py-8">
-                    <Bell className="h-8 w-8 text-muted-foreground/40 mx-auto mb-2" />
+                    <Bell className="h-8 touch-target w-8 text-muted-foreground/40 mx-auto mb-2" />
                     <p className="text-sm text-muted-foreground">
                       All alerts dismissed. Refresh to see them again.
                     </p>

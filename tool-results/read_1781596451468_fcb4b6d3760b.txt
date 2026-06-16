@@ -1,0 +1,801 @@
+     1→"use client";
+     2→
+     3→import { useState, useEffect, useRef } from "react";
+     4→import { motion, useInView } from "framer-motion";
+     5→import { NumberTicker } from "@/components/ui/number-ticker";
+     6→import { Terminal, TypingAnimation, AnimatedSpan } from "@/components/ui/terminal";
+     7→import { Marquee } from "@/components/ui/marquee";
+     8→import {
+     9→  Users,
+    10→  DollarSign,
+    11→  ShoppingBag,
+    12→  TrendingUp,
+    13→  ArrowUpRight,
+    14→  ArrowDownRight,
+    15→  Calendar,
+    16→  Activity,
+    17→  Clock,
+    18→  BarChart3,
+    19→  TerminalSquare,
+    20→  Hash,
+    21→} from "lucide-react";
+    22→import {
+    23→  LineChart,
+    24→  Line,
+    25→  BarChart,
+    26→  Bar,
+    27→  XAxis,
+    28→  YAxis,
+    29→  CartesianGrid,
+    30→  Tooltip,
+    31→  ResponsiveContainer,
+    32→  Area,
+    33→  AreaChart,
+    34→} from "recharts";
+    35→import { SidebarNav } from "@/components/navigation/sidebar";
+    36→import { GlassCalendar } from "@/components/ui/glass-calendar";
+    37→import { GlassClock } from "@/components/ui/glass-clock";
+    38→import { DataTable, type DataTableColumn } from "@/components/ui/basic-data-table";
+    39→import { Timeline, type TimelineItemData } from "@/components/ui/timeline";
+    40→import {
+    41→  Card,
+    42→  CardContent,
+    43→  CardHeader,
+    44→  CardTitle,
+    45→  CardDescription,
+    46→} from "@/components/ui/card";
+    47→import { Badge } from "@/components/ui/badge";
+    48→
+    49→// ─── Animated Counter ────────────────────────────────────────────────────────
+    50→function AnimatedCounter({
+    51→  target,
+    52→  prefix = "",
+    53→  suffix = "",
+    54→  duration = 2,
+    55→}: {
+    56→  target: number;
+    57→  prefix?: string;
+    58→  suffix?: string;
+    59→  duration?: number;
+    60→}) {
+    61→  const [count, setCount] = useState(0);
+    62→  const ref = useRef<HTMLSpanElement>(null);
+    63→  const isInView = useInView(ref, { once: true });
+    64→
+    65→  useEffect(() => {
+    66→    if (!isInView) return;
+    67→    let start = 0;
+    68→    const end = target;
+    69→    const incrementTime = (duration * 1000) / end;
+    70→    const step = Math.max(1, Math.floor(end / 60));
+    71→
+    72→    const timer = setInterval(() => {
+    73→      start += step;
+    74→      if (start >= end) {
+    75→        setCount(end);
+    76→        clearInterval(timer);
+    77→      } else {
+    78→        setCount(start);
+    79→      }
+    80→    }, incrementTime * step);
+    81→
+    82→    return () => clearInterval(timer);
+    83→  }, [isInView, target, duration]);
+    84→
+    85→  return (
+    86→    <span ref={ref}>
+    87→      {prefix}
+    88→      {count.toLocaleString()}
+    89→      {suffix}
+    90→    </span>
+    91→  );
+    92→}
+    93→
+    94→// ─── Section Wrapper ─────────────────────────────────────────────────────────
+    95→function AnimatedSection({
+    96→  children,
+    97→  className = "",
+    98→  delay = 0,
+    99→}: {
+   100→  children: React.ReactNode;
+   101→  className?: string;
+   102→  delay?: number;
+   103→}) {
+   104→  return (
+   105→    <motion.div
+   106→      initial={{ opacity: 0, y: 30 }}
+   107→      whileInView={{ opacity: 1, y: 0 }}
+   108→      viewport={{ once: true, margin: "-50px" }}
+   109→      transition={{ duration: 0.6, delay, ease: "easeOut" }}
+   110→      className={className}
+   111→    >
+   112→      {children}
+   113→    </motion.div>
+   114→  );
+   115→}
+   116→
+   117→// ─── Sample Data ─────────────────────────────────────────────────────────────
+   118→const revenueData = [
+   119→  { name: "Jan", revenue: 4000, users: 240 },
+   120→  { name: "Feb", revenue: 3000, users: 198 },
+   121→  { name: "Mar", revenue: 5000, users: 305 },
+   122→  { name: "Apr", revenue: 4500, users: 278 },
+   123→  { name: "May", revenue: 6000, users: 389 },
+   124→  { name: "Jun", revenue: 5500, users: 342 },
+   125→  { name: "Jul", revenue: 7000, users: 445 },
+   126→  { name: "Aug", revenue: 6500, users: 410 },
+   127→  { name: "Sep", revenue: 8000, users: 502 },
+   128→  { name: "Oct", revenue: 7500, users: 478 },
+   129→  { name: "Nov", revenue: 9000, users: 560 },
+   130→  { name: "Dec", revenue: 9500, users: 598 },
+   131→];
+   132→
+   133→const ordersData = [
+   134→  { name: "Jan", orders: 186, returns: 12 },
+   135→  { name: "Feb", orders: 205, returns: 18 },
+   136→  { name: "Mar", orders: 237, returns: 15 },
+   137→  { name: "Apr", orders: 203, returns: 20 },
+   138→  { name: "May", orders: 289, returns: 22 },
+   139→  { name: "Jun", orders: 264, returns: 17 },
+   140→  { name: "Jul", orders: 312, returns: 25 },
+   141→  { name: "Aug", orders: 298, returns: 19 },
+   142→  { name: "Sep", orders: 345, returns: 28 },
+   143→  { name: "Oct", orders: 321, returns: 21 },
+   144→  { name: "Nov", orders: 378, returns: 30 },
+   145→  { name: "Dec", orders: 402, returns: 24 },
+   146→];
+   147→
+   148→type UserData = {
+   149→  name: string;
+   150→  email: string;
+   151→  role: string;
+   152→  status: string;
+   153→  joined: string;
+   154→};
+   155→
+   156→const userData: UserData[] = [
+   157→  { name: "Ava Reynolds", email: "ava.reynolds@company.io", role: "Admin", status: "Active", joined: "2024-01-15" },
+   158→  { name: "Marcus Chen", email: "marcus.chen@company.io", role: "Developer", status: "Active", joined: "2024-02-20" },
+   159→  { name: "Isla Nakamura", email: "isla.n@company.io", role: "Designer", status: "On Leave", joined: "2024-03-10" },
+   160→  { name: "Leo Patel", email: "leo.patel@company.io", role: "Developer", status: "Active", joined: "2024-04-05" },
+   161→  { name: "Zara Okonkwo", email: "zara.o@company.io", role: "Manager", status: "Active", joined: "2024-05-12" },
+   162→  { name: "Ethan Moreau", email: "ethan.m@company.io", role: "Developer", status: "Inactive", joined: "2024-06-18" },
+   163→  { name: "Priya Sharma", email: "priya.s@company.io", role: "Analyst", status: "Active", joined: "2024-07-22" },
+   164→  { name: "Noah Kim", email: "noah.kim@company.io", role: "Designer", status: "Active", joined: "2024-08-30" },
+   165→  { name: "Sofia Rivera", email: "sofia.r@company.io", role: "Developer", status: "On Leave", joined: "2024-09-14" },
+   166→  { name: "Oliver Tanaka", email: "oliver.t@company.io", role: "Admin", status: "Active", joined: "2024-10-01" },
+   167→];
+   168→
+   169→const userColumns: DataTableColumn<UserData>[] = [
+   170→  {
+   171→    key: "name",
+   172→    header: "Name",
+   173→    sortable: true,
+   174→    render: (value: string) => (
+   175→      <span className="font-medium text-foreground">{value}</span>
+   176→    ),
+   177→  },
+   178→  {
+   179→    key: "email",
+   180→    header: "Email",
+   181→    sortable: true,
+   182→    render: (value: string) => (
+   183→      <span className="text-muted-foreground">{value}</span>
+   184→    ),
+   185→  },
+   186→  {
+   187→    key: "role",
+   188→    header: "Role",
+   189→    sortable: true,
+   190→    filterable: true,
+   191→    render: (value: string) => (
+   192→      <Badge variant="outline" className="text-xs font-medium">
+   193→        {value}
+   194→      </Badge>
+   195→    ),
+   196→  },
+   197→  {
+   198→    key: "status",
+   199→    header: "Status",
+   200→    sortable: true,
+   201→    filterable: true,
+   202→    render: (value: string) => {
+   203→      const variant =
+   204→        value === "Active"
+   205→          ? "default"
+   206→          : value === "On Leave"
+   207→          ? "secondary"
+   208→          : "destructive";
+   209→      return (
+   210→        <Badge variant={variant} className="text-xs">
+   211→          {value}
+   212→        </Badge>
+   213→      );
+   214→    },
+   215→  },
+   216→  {
+   217→    key: "joined",
+   218→    header: "Joined",
+   219→    sortable: true,
+   220→    render: (value: string) => (
+   221→      <span className="text-muted-foreground text-xs">{value}</span>
+   222→    ),
+   223→  },
+   224→];
+   225→
+   226→const projectTimeline: TimelineItemData[] = [
+   227→  {
+   228→    id: "1",
+   229→    title: "Project Kickoff",
+   230→    description: "Initial planning and architecture design completed. Team assembled and roles assigned.",
+   231→    date: "Jan 15",
+   232→    status: "completed",
+   233→    metadata: { team: "Core", priority: "High" },
+   234→  },
+   235→  {
+   236→    id: "2",
+   237→    title: "Design System Setup",
+   238→    description: "Component library, tokens, and design patterns established. Figma handoff complete.",
+   239→    date: "Feb 3",
+   240→    status: "completed",
+   241→    metadata: { team: "Design", priority: "High" },
+   242→  },
+   243→  {
+   244→    id: "3",
+   245→    title: "Backend API Development",
+   246→    description: "RESTful API endpoints, database schema, and authentication layer implemented.",
+   247→    date: "Mar 20",
+   248→    status: "completed",
+   249→    metadata: { team: "Backend", priority: "Critical" },
+   250→  },
+   251→  {
+   252→    id: "4",
+   253→    title: "Frontend Integration",
+   254→    description: "Connecting UI components with API endpoints. State management and error handling in progress.",
+   255→    date: "Apr 12",
+   256→    status: "in-progress",
+   257→    metadata: { team: "Frontend", priority: "High" },
+   258→  },
+   259→  {
+   260→    id: "5",
+   261→    title: "QA & Testing",
+   262→    description: "Comprehensive testing phase including unit, integration, and e2e tests.",
+   263→    date: "May 1",
+   264→    status: "pending",
+   265→    metadata: { team: "QA", priority: "Medium" },
+   266→  },
+   267→  {
+   268→    id: "6",
+   269→    title: "Production Launch",
+   270→    description: "Final deployment, monitoring setup, and launch to production environment.",
+   271→    date: "May 20",
+   272→    status: "pending",
+   273→    metadata: { team: "DevOps", priority: "Critical" },
+   274→  },
+   275→];
+   276→
+   277→// ─── Stat Card Config ────────────────────────────────────────────────────────
+   278→const stats = [
+   279→  {
+   280→    title: "Total Users",
+   281→    value: 12847,
+   282→    prefix: "",
+   283→    suffix: "",
+   284→    change: "+12.5%",
+   285→    isPositive: true,
+   286→    icon: Users,
+   287→    color: "text-chart-1",
+   288→    bgColor: "bg-chart-1/10",
+   289→  },
+   290→  {
+   291→    title: "Revenue",
+   292→    value: 84520,
+   293→    prefix: "$",
+   294→    suffix: "",
+   295→    change: "+8.2%",
+   296→    isPositive: true,
+   297→    icon: DollarSign,
+   298→    color: "text-chart-2",
+   299→    bgColor: "bg-chart-2/10",
+   300→  },
+   301→  {
+   302→    title: "Orders",
+   303→    value: 3439,
+   304→    prefix: "",
+   305→    suffix: "",
+   306→    change: "+23.1%",
+   307→    isPositive: true,
+   308→    icon: ShoppingBag,
+   309→    color: "text-chart-5",
+   310→    bgColor: "bg-chart-5/10",
+   311→  },
+   312→  {
+   313→    title: "Growth Rate",
+   314→    value: 18,
+   315→    prefix: "",
+   316→    suffix: "%",
+   317→    change: "-2.4%",
+   318→    isPositive: false,
+   319→    icon: TrendingUp,
+   320→    color: "text-chart-4",
+   321→    bgColor: "bg-chart-4/10",
+   322→  },
+   323→];
+   324→
+   325→// ─── Custom Tooltip for Charts ───────────────────────────────────────────────
+   326→function CustomTooltip({
+   327→  active,
+   328→  payload,
+   329→  label,
+   330→}: {
+   331→  active?: boolean;
+   332→  payload?: Array<{ value: number; dataKey: string; color: string }>;
+   333→  label?: string;
+   334→}) {
+   335→  if (!active || !payload?.length) return null;
+   336→  return (
+   337→    <div className="rounded-lg border border-border/50 bg-popover/95 backdrop-blur-lg px-3 py-2 shadow-xl">
+   338→      <p className="text-xs font-medium text-muted-foreground mb-1">{label}</p>
+   339→      {payload.map((item) => (
+   340→        <div key={item.dataKey} className="flex items-center gap-2">
+   341→          <div
+   342→            className="h-2 w-2 rounded-full"
+   343→            style={{ backgroundColor: item.color }}
+   344→          />
+   345→          <span className="text-xs text-foreground font-medium">
+   346→            {item.dataKey}: {item.value.toLocaleString()}
+   347→          </span>
+   348→        </div>
+   349→      ))}
+   350→    </div>
+   351→  );
+   352→}
+   353→
+   354→// ─── Dashboard Page ──────────────────────────────────────────────────────────
+   355→export default function DashboardPage() {
+   356→  const today = new Date();
+   357→  const formattedDate = today.toLocaleDateString("en-US", {
+   358→    weekday: "long",
+   359→    year: "numeric",
+   360→    month: "long",
+   361→    day: "numeric",
+   362→  });
+   363→
+   364→  return (
+   365→    <div className="flex min-h-screen bg-background">
+   366→      <SidebarNav />
+   367→
+   368→      <main className="flex-1 min-w-0">
+   369→        {/* Page Header */}
+   370→        <div className="border-b border-border/50 bg-card/30 backdrop-blur-sm sticky top-0 z-20">
+   371→          <div className="px-6 md:px-8 py-6">
+   372→            <motion.div
+   373→              initial={{ opacity: 0, y: -20 }}
+   374→              animate={{ opacity: 1, y: 0 }}
+   375→              transition={{ duration: 0.5 }}
+   376→              className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+   377→            >
+   378→              <div>
+   379→                <div className="flex items-center gap-3 mb-1">
+   380→                  <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">
+   381→                    Dashboard
+   382→                  </h1>
+   383→                  <Badge variant="default" className="text-xs">
+   384→                    Live
+   385→                  </Badge>
+   386→                </div>
+   387→                <p className="text-muted-foreground text-sm">
+   388→                  Monitor your platform performance and key metrics in real-time.
+   389→                </p>
+   390→              </div>
+   391→              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+   392→                <Calendar className="h-4 w-4" />
+   393→                <span>{formattedDate}</span>
+   394→              </div>
+   395→            </motion.div>
+   396→          </div>
+   397→        </div>
+   398→
+   399→        <div className="px-6 md:px-8 py-8 space-y-8">
+   400→          {/* Stats Row */}
+   401→          <AnimatedSection>
+   402→            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+   403→              {stats.map((stat, index) => {
+   404→                const Icon = stat.icon;
+   405→                return (
+   406→                  <motion.div
+   407→                    key={stat.title}
+   408→                    initial={{ opacity: 0, y: 20 }}
+   409→                    whileInView={{ opacity: 1, y: 0 }}
+   410→                    viewport={{ once: true }}
+   411→                    transition={{ duration: 0.4, delay: index * 0.1 }}
+   412→                  >
+   413→                    <Card className="relative overflow-hidden group hover:shadow-lg transition-shadow duration-300 border-border/50">
+   414→                      <CardContent className="p-5">
+   415→                        <div className="flex items-start justify-between">
+   416→                          <div className={`p-2.5 rounded-xl ${stat.bgColor}`}>
+   417→                            <Icon className={`h-5 w-5 ${stat.color}`} />
+   418→                          </div>
+   419→                          <div
+   420→                            className={`flex items-center gap-1 text-xs font-medium ${
+   421→                              stat.isPositive
+   422→                                ? "text-green-500"
+   423→                                : "text-red-500"
+   424→                            }`}
+   425→                          >
+   426→                            {stat.isPositive ? (
+   427→                              <ArrowUpRight className="h-3 w-3" />
+   428→                            ) : (
+   429→                              <ArrowDownRight className="h-3 w-3" />
+   430→                            )}
+   431→                            {stat.change}
+   432→                          </div>
+   433→                        </div>
+   434→                        <div className="mt-4">
+   435→                          <p className="text-2xl font-bold tracking-tight text-foreground">
+   436→                            <AnimatedCounter
+   437→                              target={stat.value}
+   438→                              prefix={stat.prefix}
+   439→                              suffix={stat.suffix}
+   440→                            />
+   441→                          </p>
+   442→                          <p className="text-sm text-muted-foreground mt-0.5">
+   443→                            {stat.title}
+   444→                          </p>
+   445→                        </div>
+   446→                        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+   447→                      </CardContent>
+   448→                    </Card>
+   449→                  </motion.div>
+   450→                );
+   451→              })}
+   452→            </div>
+   453→          </AnimatedSection>
+   454→
+   455→          {/* Charts Section */}
+   456→          <AnimatedSection delay={0.1}>
+   457→            <div className="flex items-center gap-2 mb-4">
+   458→              <BarChart3 className="h-5 w-5 text-primary" />
+   459→              <h2 className="text-lg font-semibold text-foreground">Analytics</h2>
+   460→              <Badge variant="outline" className="text-xs">
+   461→                Real-time
+   462→              </Badge>
+   463→            </div>
+   464→            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+   465→              {/* Revenue Line Chart */}
+   466→              <Card className="border-border/50">
+   467→                <CardHeader className="pb-2">
+   468→                  <div className="flex items-center justify-between">
+   469→                    <div>
+   470→                      <CardTitle className="text-base">Revenue Trend</CardTitle>
+   471→                      <CardDescription>Monthly revenue over the past year</CardDescription>
+   472→                    </div>
+   473→                    <Badge variant="secondary" className="text-xs">
+   474→                      <TrendingUp className="h-3 w-3 mr-1" />
+   475→                      +137%
+   476→                    </Badge>
+   477→                  </div>
+   478→                </CardHeader>
+   479→                <CardContent>
+   480→                  <div className="h-[300px] w-full">
+   481→                    <ResponsiveContainer width="100%" height="100%">
+   482→                      <AreaChart
+   483→                        data={revenueData}
+   484→                        margin={{ top: 10, right: 10, left: -10, bottom: 0 }}
+   485→                      >
+   486→                        <defs>
+   487→                          <linearGradient id="revenueGradient" x1="0" y1="0" x2="0" y2="1">
+   488→                            <stop offset="5%" stopColor="var(--color-primary)" stopOpacity={0.3} />
+   489→                            <stop offset="95%" stopColor="var(--color-primary)" stopOpacity={0} />
+   490→                          </linearGradient>
+   491→                        </defs>
+   492→                        <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" opacity={0.3} />
+   493→                        <XAxis
+   494→                          dataKey="name"
+   495→                          tick={{ fill: "var(--color-muted-foreground)", fontSize: 12 }}
+   496→                          axisLine={false}
+   497→                          tickLine={false}
+   498→                        />
+   499→                        <YAxis
+   500→                          tick={{ fill: "var(--color-muted-foreground)", fontSize: 12 }}
+   501→                          axisLine={false}
+   502→                          tickLine={false}
+   503→                          tickFormatter={(v) => `$${v / 1000}k`}
+   504→                        />
+   505→                        <Tooltip content={<CustomTooltip />} />
+   506→                        <Area
+   507→                          type="monotone"
+   508→                          dataKey="revenue"
+   509→                          stroke="var(--color-primary)"
+   510→                          strokeWidth={2.5}
+   511→                          fill="url(#revenueGradient)"
+   512→                          dot={false}
+   513→                          activeDot={{ r: 5, fill: "var(--color-primary)", stroke: "var(--color-background)", strokeWidth: 2 }}
+   514→                        />
+   515→                      </AreaChart>
+   516→                    </ResponsiveContainer>
+   517→                  </div>
+   518→                </CardContent>
+   519→              </Card>
+   520→
+   521→              {/* Orders Bar Chart */}
+   522→              <Card className="border-border/50">
+   523→                <CardHeader className="pb-2">
+   524→                  <div className="flex items-center justify-between">
+   525→                    <div>
+   526→                      <CardTitle className="text-base">Orders Overview</CardTitle>
+   527→                      <CardDescription>Monthly orders and returns</CardDescription>
+   528→                    </div>
+   529→                    <Badge variant="secondary" className="text-xs">
+   530→                      <ShoppingBag className="h-3 w-3 mr-1" />
+   531→                      3,439 total
+   532→                    </Badge>
+   533→                  </div>
+   534→                </CardHeader>
+   535→                <CardContent>
+   536→                  <div className="h-[300px] w-full">
+   537→                    <ResponsiveContainer width="100%" height="100%">
+   538→                      <BarChart
+   539→                        data={ordersData}
+   540→                        margin={{ top: 10, right: 10, left: -10, bottom: 0 }}
+   541→                      >
+   542→                        <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" opacity={0.3} />
+   543→                        <XAxis
+   544→                          dataKey="name"
+   545→                          tick={{ fill: "var(--color-muted-foreground)", fontSize: 12 }}
+   546→                          axisLine={false}
+   547→                          tickLine={false}
+   548→                        />
+   549→                        <YAxis
+   550→                          tick={{ fill: "var(--color-muted-foreground)", fontSize: 12 }}
+   551→                          axisLine={false}
+   552→                          tickLine={false}
+   553→                        />
+   554→                        <Tooltip content={<CustomTooltip />} />
+   555→                        <Bar
+   556→                          dataKey="orders"
+   557→                          fill="var(--color-primary)"
+   558→                          radius={[4, 4, 0, 0]}
+   559→                          maxBarSize={40}
+   560→                        />
+   561→                        <Bar
+   562→                          dataKey="returns"
+   563→                          fill="var(--color-chart-2)"
+   564→                          radius={[4, 4, 0, 0]}
+   565→                          maxBarSize={40}
+   566→                          opacity={0.7}
+   567→                        />
+   568→                      </BarChart>
+   569→                    </ResponsiveContainer>
+   570→                  </div>
+   571→                </CardContent>
+   572→              </Card>
+   573→            </div>
+   574→          </AnimatedSection>
+   575→
+   576→          {/* Glass Calendar + Glass Clock */}
+   577→          <AnimatedSection delay={0.15}>
+   578→            <div className="flex items-center gap-2 mb-4">
+   579→              <Calendar className="h-5 w-5 text-primary" />
+   580→              <h2 className="text-lg font-semibold text-foreground">Time & Calendar</h2>
+   581→              <Badge variant="outline" className="text-xs">
+   582→                Glass UI
+   583→              </Badge>
+   584→            </div>
+   585→            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+   586→              <Card className="border-border/50 overflow-hidden">
+   587→                <CardContent className="p-6 flex items-center justify-center bg-black/5 dark:bg-black/20">
+   588→                  <GlassCalendar />
+   589→                </CardContent>
+   590→              </Card>
+   591→              <Card className="border-border/50 overflow-hidden">
+   592→                <CardHeader className="pb-2">
+   593→                  <div className="flex items-center justify-between">
+   594→                    <div className="flex items-center gap-2">
+   595→                      <Clock className="h-4 w-4 text-primary" />
+   596→                      <CardTitle className="text-base">Live Clock</CardTitle>
+   597→                    </div>
+   598→                    <Badge variant="outline" className="text-xs">
+   599→                      Real-time
+   600→                    </Badge>
+   601→                  </div>
+   602→                </CardHeader>
+   603→                <CardContent className="flex items-center justify-center bg-black/5 dark:bg-black/20 rounded-b-xl p-4">
+   604→                  <GlassClock />
+   605→                </CardContent>
+   606→              </Card>
+   607→            </div>
+   608→          </AnimatedSection>
+   609→
+   610→          {/* Data Table */}
+   611→          <AnimatedSection delay={0.2}>
+   612→            <div className="flex items-center gap-2 mb-4">
+   613→              <Users className="h-5 w-5 text-primary" />
+   614→              <h2 className="text-lg font-semibold text-foreground">Team Members</h2>
+   615→              <Badge variant="outline" className="text-xs">
+   616→                {userData.length} members
+   617→              </Badge>
+   618→            </div>
+   619→            <Card className="border-border/50 overflow-hidden">
+   620→              <CardContent className="p-0">
+   621→                <DataTable
+   622→                  data={userData}
+   623→                  columns={userColumns}
+   624→                  searchable
+   625→                  searchPlaceholder="Search members..."
+   626→                  itemsPerPage={5}
+   627→                  showPagination
+   628→                  hoverable
+   629→                  bordered={false}
+   630→                />
+   631→              </CardContent>
+   632→            </Card>
+   633→          </AnimatedSection>
+   634→
+   635→          {/* Timeline */}
+   636→          <AnimatedSection delay={0.25}>
+   637→            <div className="flex items-center gap-2 mb-4">
+   638→              <Activity className="h-5 w-5 text-primary" />
+   639→              <h2 className="text-lg font-semibold text-foreground">Project Timeline</h2>
+   640→              <Badge variant="outline" className="text-xs">
+   641→                In Progress
+   642→              </Badge>
+   643→            </div>
+   644→            <Card className="border-border/50">
+   645→              <CardContent className="p-6">
+   646→                <Timeline
+   647→                  items={projectTimeline}
+   648→                  variant="spacious"
+   649→                  showConnector
+   650→                />
+   651→              </CardContent>
+   652→            </Card>
+   653→          </AnimatedSection>
+   654→          {/* Number Ticker Stats */}
+   655→          <AnimatedSection delay={0.3}>
+   656→            <div className="flex items-center gap-2 mb-4">
+   657→              <Hash className="h-5 w-5 text-primary" />
+   658→              <h2 className="text-lg font-semibold text-foreground">Animated Stats</h2>
+   659→              <Badge variant="outline" className="text-xs">
+   660→                Number Ticker
+   661→              </Badge>
+   662→            </div>
+   663→            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+   664→              {[
+   665→                { title: "Page Views", value: 284593, prefix: "", suffix: "", change: "+18.7%", isPositive: true, color: "text-primary", bgColor: "bg-primary/10" },
+   666→                { title: "Bounce Rate", value: 24, prefix: "", suffix: "%", change: "-3.2%", isPositive: true, color: "text-emerald-500", bgColor: "bg-emerald-500/10" },
+   667→                { title: "Avg Session", value: 4, prefix: "", suffix: "m 32s", change: "+0.8%", isPositive: true, color: "text-amber-500", bgColor: "bg-amber-500/10" },
+   668→                { title: "Conversions", value: 1284, prefix: "", suffix: "", change: "+31.4%", isPositive: true, color: "text-purple-500", bgColor: "bg-purple-500/10" },
+   669→              ].map((stat, index) => (
+   670→                <motion.div
+   671→                  key={stat.title}
+   672→                  initial={{ opacity: 0, y: 20 }}
+   673→                  whileInView={{ opacity: 1, y: 0 }}
+   674→                  viewport={{ once: true }}
+   675→                  transition={{ duration: 0.4, delay: index * 0.1 }}
+   676→                >
+   677→                  <Card className="relative overflow-hidden group hover:shadow-lg transition-shadow duration-300 border-border/50">
+   678→                    <CardContent className="p-5">
+   679→                      <div className="flex items-start justify-between">
+   680→                        <div className={`p-2.5 rounded-xl ${stat.bgColor}`}>
+   681→                          <Hash className={`h-5 w-5 ${stat.color}`} />
+   682→                        </div>
+   683→                        <div
+   684→                          className={`flex items-center gap-1 text-xs font-medium ${
+   685→                            stat.isPositive ? "text-green-500" : "text-red-500"
+   686→                          }`}
+   687→                        >
+   688→                          {stat.isPositive ? (
+   689→                            <ArrowUpRight className="h-3 w-3" />
+   690→                          ) : (
+   691→                            <ArrowDownRight className="h-3 w-3" />
+   692→                          )}
+   693→                          {stat.change}
+   694→                        </div>
+   695→                      </div>
+   696→                      <div className="mt-4">
+   697→                        <p className="text-2xl font-bold tracking-tight text-foreground">
+   698→                          <NumberTicker
+   699→                            value={stat.value}
+   700→                            className="text-2xl font-bold tracking-tight"
+   701→                            delay={index * 0.15}
+   702→                          />
+   703→                          <span className="text-lg text-muted-foreground">{stat.suffix}</span>
+   704→                        </p>
+   705→                        <p className="text-sm text-muted-foreground mt-0.5">
+   706→                          {stat.title}
+   707→                        </p>
+   708→                      </div>
+   709→                    </CardContent>
+   710→                  </Card>
+   711→                </motion.div>
+   712→              ))}
+   713→            </div>
+   714→          </AnimatedSection>
+   715→
+   716→          {/* Terminal */}
+   717→          <AnimatedSection delay={0.35}>
+   718→            <div className="flex items-center gap-2 mb-4">
+   719→              <TerminalSquare className="h-5 w-5 text-primary" />
+   720→              <h2 className="text-lg font-semibold text-foreground">Terminal</h2>
+   721→              <Badge variant="outline" className="text-xs">
+   722→                Interactive
+   723→              </Badge>
+   724→            </div>
+   725→            <Card className="border-border/50 overflow-hidden">
+   726→              <CardContent className="p-6 flex justify-center">
+   727→                <Terminal className="max-w-full" startOnView>
+   728→                  <TypingAnimation>&gt; npx create-unq-app@latest my-project</TypingAnimation>
+   729→                  <AnimatedSpan delay={0.5}>
+   730→                    <span className="text-emerald-500">✓</span> Creating project in ./my-project
+   731→                  </AnimatedSpan>
+   732→                  <AnimatedSpan delay={0.3}>
+   733→                    <span className="text-emerald-500">✓</span> Installing dependencies: next, react, typescript
+   734→                  </AnimatedSpan>
+   735→                  <AnimatedSpan delay={0.3}>
+   736→                    <span className="text-emerald-500">✓</span> Setting up Tailwind CSS & shadcn/ui
+   737→                  </AnimatedSpan>
+   738→                  <AnimatedSpan delay={0.3}>
+   739→                    <span className="text-emerald-500">✓</span> Configuring Framer Motion animations
+   740→                  </AnimatedSpan>
+   741→                  <AnimatedSpan delay={0.3}>
+   742→                    <span className="text-emerald-500">✓</span> Adding Magic UI components
+   743→                  </AnimatedSpan>
+   744→                  <TypingAnimation delay={500}>&gt; cd my-project && bun dev</TypingAnimation>
+   745→                  <AnimatedSpan delay={0.5}>
+   746→                    <span className="text-primary">⚡</span> Ready on http://localhost:3000
+   747→                  </AnimatedSpan>
+   748→                  <AnimatedSpan delay={0.3}>
+   749→                    <span className="text-muted-foreground">  21st.dev components loaded ✓</span>
+   750→                  </AnimatedSpan>
+   751→                </Terminal>
+   752→              </CardContent>
+   753→            </Card>
+   754→          </AnimatedSection>
+   755→
+   756→          {/* Marquee Activity Feed */}
+   757→          <AnimatedSection delay={0.4}>
+   758→            <div className="flex items-center gap-2 mb-4">
+   759→              <Activity className="h-5 w-5 text-primary" />
+   760→              <h2 className="text-lg font-semibold text-foreground">Live Activity</h2>
+   761→              <Badge variant="default" className="text-xs">
+   762→                Streaming
+   763→              </Badge>
+   764→            </div>
+   765→            <Card className="border-border/50 overflow-hidden">
+   766→              <CardContent className="p-4">
+   767→                <Marquee pauseOnHover className="[--duration:40s] [--gap:1rem]">
+   768→                  {[
+   769→                    { user: "Alex R.", action: "deployed to production", time: "2m ago", color: "bg-emerald-500" },
+   770→                    { user: "Priya S.", action: "merged PR #1847", time: "5m ago", color: "bg-primary" },
+   771→                    { user: "Marcus C.", action: "updated design system", time: "8m ago", color: "bg-purple-500" },
+   772→                    { user: "Zara O.", action: "closed 12 issues", time: "12m ago", color: "bg-amber-500" },
+   773→                    { user: "Noah K.", action: "pushed 3 commits", time: "15m ago", color: "bg-cyan-500" },
+   774→                    { user: "Sofia R.", action: "reviewed PR #1843", time: "18m ago", color: "bg-rose-500" },
+   775→                    { user: "Leo P.", action: "released v2.4.0", time: "22m ago", color: "bg-blue-500" },
+   776→                    { user: "Isla N.", action: "updated Figma tokens", time: "25m ago", color: "bg-teal-500" },
+   777→                  ].map((item, i) => (
+   778→                    <div
+   779→                      key={i}
+   780→                      className="flex items-center gap-3 px-4 py-3 rounded-xl border border-border/50 bg-muted/30 min-w-[280px]"
+   781→                    >
+   782→                      <div className={`h-2 w-2 rounded-full ${item.color} shrink-0`} />
+   783→                      <div className="flex-1 min-w-0">
+   784→                        <p className="text-sm text-foreground truncate">
+   785→                          <span className="font-medium">{item.user}</span>{" "}
+   786→                          <span className="text-muted-foreground">{item.action}</span>
+   787→                        </p>
+   788→                      </div>
+   789→                      <span className="text-xs text-muted-foreground shrink-0">{item.time}</span>
+   790→                    </div>
+   791→                  ))}
+   792→                </Marquee>
+   793→              </CardContent>
+   794→            </Card>
+   795→          </AnimatedSection>
+   796→        </div>
+   797→      </main>
+   798→    </div>
+   799→  );
+   800→}
+   801→

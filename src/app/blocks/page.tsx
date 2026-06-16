@@ -130,17 +130,17 @@ function HeroGeometric() {
 function HeroMinimal() {
   return (
     <div className="p-8 flex flex-col items-center justify-center text-center min-h-[220px]">
-      <h3 className="text-2xl font-bold tracking-tight">
+      <h3 className="text-2xl font-bold tracking-tight text-balance">
         Simple. Powerful. <span className="text-primary">Yours.</span>
       </h3>
       <p className="text-xs text-muted-foreground mt-3 max-w-[220px]">
         Everything you need, nothing you don&apos;t.
       </p>
       <div className="mt-5 flex gap-2">
-        <Button size="sm" className="h-8 text-xs">
+        <Button size="sm" className="h-8 touch-target text-xs">
           Start Free
         </Button>
-        <Button size="sm" variant="outline" className="h-8 text-xs">
+        <Button size="sm" variant="outline" className="h-8 touch-target text-xs">
           Learn More
         </Button>
       </div>
@@ -164,7 +164,7 @@ function HeroSplit() {
       </div>
       <div className="bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
         <div className="p-4 rounded-xl bg-background/60 backdrop-blur-sm border border-border/50">
-          <Code2 className="h-8 w-8 text-primary" />
+          <Code2 className="h-8 touch-target w-8 text-primary" />
         </div>
       </div>
     </div>
@@ -192,7 +192,7 @@ function HeroCentered() {
           Unify your stack. Amplify your impact.
         </p>
         <div className="relative mt-4 inline-block">
-          <Button size="sm" className="h-8 text-xs">
+          <Button size="sm" className="h-8 touch-target text-xs">
             Get Started
           </Button>
           <BorderBeam size={40} duration={4} colorFrom="#c96442" colorTo="#d97757" />
@@ -317,8 +317,8 @@ function CTASimple() {
       <h4 className="text-lg font-bold">Start Building Today</h4>
       <p className="text-xs text-muted-foreground mt-2">Free forever for small teams.</p>
       <div className="mt-4 flex gap-2">
-        <Button size="sm" className="h-8 text-xs">Sign Up Free</Button>
-        <Button size="sm" variant="outline" className="h-8 text-xs">View Docs</Button>
+        <Button size="sm" className="h-8 touch-target text-xs">Sign Up Free</Button>
+        <Button size="sm" variant="outline" className="h-8 touch-target text-xs">View Docs</Button>
       </div>
     </div>
   );
@@ -334,7 +334,7 @@ function CTANewsletter() {
         <div className="flex-1 h-7 rounded-md border border-border/50 bg-background px-2 text-[10px] flex items-center text-muted-foreground">
           you@email.com
         </div>
-        <Button size="sm" className="h-7 text-[10px] px-3">Go</Button>
+        <Button size="sm" className="h-7 touch-target text-[10px] px-3">Go</Button>
       </div>
     </div>
   );
@@ -444,7 +444,7 @@ function TestimonialCards() {
                 <Star key={i} className="h-2.5 w-2.5 fill-yellow-500 text-yellow-500" />
               ))}
             </div>
-            <p className="text-[10px] text-muted-foreground leading-relaxed">&ldquo;{t.text}&rdquo;</p>
+            <p className="text-[10px] text-muted-foreground leading-relaxed text-pretty">&ldquo;{t.text}&rdquo;</p>
             <p className="text-[10px] font-semibold mt-2">— {t.name}</p>
           </div>
         ))}
@@ -465,7 +465,7 @@ function TestimonialBanner() {
         &ldquo;This platform has completely transformed how we build products. 10/10 would recommend.&rdquo;
       </p>
       <div className="mt-3 flex items-center gap-2">
-        <div className="h-7 w-7 rounded-full bg-primary/10 flex items-center justify-center">
+        <div className="h-7 touch-target w-7 rounded-full bg-primary/10 flex items-center justify-center">
           <span className="text-[9px] font-bold text-primary">MK</span>
         </div>
         <div className="text-left">
@@ -623,7 +623,7 @@ function SectionHeader({
       <Badge variant="outline" className="mb-3 border-primary/30 text-primary">
         {label}
       </Badge>
-      <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">
+      <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-balance">
         {title} <span className="text-primary">{highlight}</span>
       </h2>
       {description && (
@@ -637,9 +637,9 @@ function SectionHeader({
 
 export default function BlocksPage() {
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-dvh">
       <SidebarNav />
-      <main className="flex-1 overflow-y-auto">
+      <main className="flex-1 overflow-y-auto overflow-x-hidden pt-16 md:pt-0">
         {/* ===== PAGE HEADER ===== */}
         <section className="relative pt-16 pb-12 px-6 overflow-hidden">
           <Particles
@@ -663,13 +663,13 @@ export default function BlocksPage() {
               </Badge>
             </motion.div>
             <BlurFade delay={0.1} inView>
-              <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight">
+              <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-balance">
                 Blocks & Sections{" "}
                 <span className="text-primary">Gallery</span>
               </h1>
             </BlurFade>
             <BlurFade delay={0.2} inView>
-              <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+              <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed text-pretty">
                 A curated collection of beautifully designed, ready-to-use page
                 sections. Copy, customize, and ship.
               </p>
@@ -691,7 +691,7 @@ export default function BlocksPage() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-50px" }}
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"
+              className="grid grid-cols-1 sm:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5"
             >
               <BlockPreview
                 title="Geometric Hero"
@@ -735,7 +735,7 @@ export default function BlocksPage() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-50px" }}
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"
+              className="grid grid-cols-1 sm:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5"
             >
               <BlockPreview
                 title="Feature Grid"
@@ -779,7 +779,7 @@ export default function BlocksPage() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-50px" }}
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"
+              className="grid grid-cols-1 sm:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5"
             >
               <BlockPreview
                 title="Gradient CTA"
